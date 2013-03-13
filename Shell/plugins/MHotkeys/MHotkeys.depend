@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1346295251 source:/home/fil/Development/sieelf-dev/ep3elf/Shell/plugins/MHotkeys/main.c
+	<swilib.h>
+	"../../plg.h"
+	"../../libbasefunc/basefunc.h"
+	"../../call_back.h"
+
+1346021603 /home/fil/Development/sieelf-dev/ep3elf/Shell/plg.h
+	"plg_struct.h"
+
+1346021603 /home/fil/Development/sieelf-dev/ep3elf/Shell/plg_struct.h
+
+1346022557 /home/fil/Development/sieelf-dev/ep3elf/Shell/libbasefunc/basefunc.h
+
+1346333626 /home/fil/Development/sieelf-dev/ep3elf/Shell/call_back.h
+
