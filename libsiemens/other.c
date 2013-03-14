@@ -1,6 +1,4 @@
 #include <swilib.h>
-#include "string_utils.h"
-
 
 void ExecEntrypoint(const char *name)
 {
@@ -17,7 +15,7 @@ void ExecShortcut(const char *name)
 	{
 		typedef void (*voidfunc)(); 
 		#ifdef NEWSGOLD          
-			voidfunc pp = (voidfunc)*(addr+4);
+			voidfunc pp = (voidfunc)*(addr + 4);
 		#else
 			voidfunc pp = (voidfunc)addr; 
 		#endif 
