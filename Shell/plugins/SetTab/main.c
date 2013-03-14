@@ -37,15 +37,15 @@ char *menu2_text2[MENU2_ITEMS];
 
 unsigned int *desk_id_ptr;
 
-void menu2_func1(void){ExecFunc("SETUP_RINGTONES");}
-void menu2_func2(void){ExecFunc("SETUP_DISPLAY");}
-void menu2_func3(void){ExecFunc("VIBRA_LIGHT");}
-void menu2_func4(void){ExecFunc("SETUP_CNCT");}
-void menu2_func5(void){ExecFunc("SETUP_CALL");}
-void menu2_func6(void){ExecFunc("SETUP_PHONE");}
-void menu2_func7(void){ExecFunc("SETUP_CLOCK");}
-void menu2_func8(void){ExecFunc("SETUP_SECURITY");}
-void menu2_func9(void){ExecFunc("SETUP_NETWORK");}
+void menu2_func1(void){ExecShortcut("SETUP_RINGTONES");}
+void menu2_func2(void){ExecShortcut("SETUP_DISPLAY");}
+void menu2_func3(void){ExecShortcut("VIBRA_LIGHT");}
+void menu2_func4(void){ExecShortcut("SETUP_CNCT");}
+void menu2_func5(void){ExecShortcut("SETUP_CALL");}
+void menu2_func6(void){ExecShortcut("SETUP_PHONE");}
+void menu2_func7(void){ExecShortcut("SETUP_CLOCK");}
+void menu2_func8(void){ExecShortcut("SETUP_SECURITY");}
+void menu2_func9(void){ExecShortcut("SETUP_NETWORK");}
 
 void *menu2_procs[MENU2_ITEMS]=
 {

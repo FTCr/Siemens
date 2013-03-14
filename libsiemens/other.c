@@ -1,29 +1,28 @@
 #include <swilib.h>
 #include "string_utils.h"
 
-void ExecFunc(const char *name)
+
+void ExecEntrypoint(const char *name)
 {
-	typedef void (*voidfunc)();
-	voidfunc pp;
-	if (name[0] == '0' && name[1] == 'x') //entrypoint
-	{
-		unsigned int addr = strtoul(name, 0, 16);
-		pp = (voidfunc)addr;
-	}
-	else //shortcut
-	{
-		unsigned int *addr = (unsigned int*)GetFunctionPointer((char*)name);
-		if (addr)
-		{
-			typedef void (*voidfunc)();
-		#ifdef NEWSGOLD
-			pp = (voidfunc)*(addr + 4);
-		#else
-			pp = (voidfunc)addr;
-		#endif
-		}
-	}
+	typedef void (*voidfunc)(); 
+	unsigned int addr = strtoul(name, 0, 16);
+	voidfunc pp = (voidfunc)addr;
 	SUBPROC((void*)pp);
+}
+
+void ExecShortcut(const char *name)
+{
+	unsigned int* addr = (unsigned int*)GetFunctionPointer((char*)name);
+	if (addr)
+	{
+		typedef void (*voidfunc)(); 
+		#ifdef NEWSGOLD          
+			voidfunc pp = (voidfunc)*(addr+4);
+		#else
+			voidfunc pp = (voidfunc)addr; 
+		#endif 
+		SUBPROC((void*)pp);
+	}
 }
 
 void ExecFile(const char *path)

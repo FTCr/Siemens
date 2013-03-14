@@ -60,7 +60,7 @@ void OnKey(int key, int type)
 				}
 				else
 				{
-					ExecFunc("MSG_CREATE_SMS");
+					ExecShortcut("MSG_CREATE_SMS");
 				}
 			break;
 			case RIGHT_SOFT:

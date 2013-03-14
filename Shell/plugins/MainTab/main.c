@@ -33,13 +33,13 @@ void OnKey(int key, int type)
 		switch (key)
 		{
 			case LEFT_SOFT:
-				if (cfg_use_ls) ExecFunc(cfg_ls_func);
+				if (cfg_use_ls) ExecShortcut(cfg_ls_func);
 			break;
 			case RIGHT_SOFT:
-				if (cfg_use_rs) ExecFunc(cfg_rs_func);
+				if (cfg_use_rs) ExecShortcut(cfg_rs_func);
 			break;
 			case GREEN_BUTTON:
-				ExecFunc("REC_DIALED_LIST");
+				ExecShortcut("REC_DIALED_LIST");
 			break;
 		}
 	}

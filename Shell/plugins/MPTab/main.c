@@ -389,7 +389,7 @@ void OnKey(int key, int type)
 		{
 			L_SOFT:
 				case LEFT_SOFT:
-					ExecFunc("MEDIA_PLAYER");
+					ExecShortcut("MEDIA_PLAYER");
 				break;
 		}
 	}
