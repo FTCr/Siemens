@@ -249,12 +249,12 @@ int main(PLUGIN_S4T *plg)
 	//загружаем графику
 	FSTATS fs;
 	unsigned int err;
-	sprintf(path, "%s%s", img_dir, "panel.png");
+	sprintf(path, "%s%s", img_dir, "deskswitcher\\panel.png");
 	if (GetFileStats(path, &fs, &err) == -1) return -1;
 	panel = CreateIMGHDRFromPngFile(path, 0);
 	
 	DIR_ENTRY **de;
-	sprintf(path, "%s%s", img_dir, "panel\\");
+	sprintf(path, "%s%s", img_dir, "deskswitcher\\icons\\");
 	unsigned int total = FindFiles(&de, path, "*.png"); //считаем графику
 
 	if (total == 0) return -1;
@@ -265,10 +265,10 @@ int main(PLUGIN_S4T *plg)
 	icons_sel = malloc(sizeof(IMGHDR*) * (total / 2));
 	while(desk_total < (total / 2))
 	{
-		sprintf(path, "%s%s%s", img_dir, "panel\\", de[desk_total * 2 + 1]->file_name);
+		sprintf(path, "%s%s%s", img_dir, "deskswitcher\\icons\\", de[desk_total * 2 + 1]->file_name);
 		icons_unsel[desk_total] = malloc(sizeof(IMGHDR));
 		icons_unsel[desk_total] = CreateIMGHDRFromPngFile(path, 0);
-		sprintf(path, "%s%s%s", img_dir, "panel\\", de[desk_total * 2]->file_name);
+		sprintf(path, "%s%s%s", img_dir, "deskswitcher\\icons\\", de[desk_total * 2]->file_name);
 		icons_sel[desk_total] = malloc(sizeof(IMGHDR));
 		icons_sel[desk_total++] = CreateIMGHDRFromPngFile(path, 0);
 	}
