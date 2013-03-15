@@ -50,8 +50,10 @@ void OnKey(int key, int type)
 
 void Destroy(void)
 {
-	FreeLang(&lgp);
-	FreeWS(ws);
+	if (lgp)
+		FreeLang(&lgp);
+	if (ws)
+		FreeWS(ws);
 }
 
 void OnMessage(CSM_RAM *data, GBS_MSG *msg)
@@ -66,7 +68,7 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 	}
 }
 
-void main(PLUGIN_S4T *plg)
+int main(PLUGIN_S4T *plg)
 {
 	char path[128];
 	sprintf(path, "%s%s%s", conf_dir, plg->fname, ".bcfg");
@@ -77,11 +79,12 @@ void main(PLUGIN_S4T *plg)
 	plg->Destroy   = (void*)Destroy;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
 
+	sprintf(path, "%s%s", lang_dir, "maintab.txt");
+	if (InitLang(path, &lgp) == -1) return -1;
+
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;
 
-	sprintf(path, "%s%s", lang_dir, "maintab.txt");
-	InitLang(path, &lgp);
-
 	ws = AllocWS(64);
+	return 0;
 }
