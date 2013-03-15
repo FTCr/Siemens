@@ -4,9 +4,12 @@
 extern const unsigned int cfg_desk_id;
 
 extern unsigned int cfg_use_ls;
-extern const char cfg_ls_func[64];
+extern const char cfg_ls_func[16];
 
 extern unsigned int cfg_use_rs;
-extern const char cfg_rs_func[64];
+extern const char cfg_rs_func[16];
+
+extern unsigned int cfg_use_enter;
+extern const char cfg_enter_func[16];
 
 #endif

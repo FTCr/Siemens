@@ -38,6 +38,9 @@ void OnKey(int key, int type)
 			case RIGHT_SOFT:
 				if (cfg_use_rs) ExecShortcut(cfg_rs_func);
 			break;
+			case ENTER_BUTTON:
+				if (cfg_use_enter) ExecShortcut(cfg_enter_func);
+			break;
 			case GREEN_BUTTON:
 				ExecShortcut("REC_DIALED_LIST");
 			break;
