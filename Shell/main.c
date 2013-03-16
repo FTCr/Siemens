@@ -43,8 +43,6 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 {
 	data->gui.state = 0;
-	if (killed)
-		kill_elf();
 }
 
 static void OnFocus(MAIN_GUI *data, void *(*malloc_adr)(int), void (*mfree_adr)(void *))
@@ -88,16 +86,14 @@ static void OnUnFocus(MAIN_GUI *data, void (*mfree_adr)(void *))
 	}
 }
 
-GBSTMR tmr;
-
 void KillELF(void)
 {
 	UploadGraphics();
-	UploadPlugins();
 	DestroyIdleHook();
-	killed = 1;
-	GeneralFunc_flag1(shell_gui_id, 0);
-	DelTimer(&tmr);
+	if (shell_gui_id)
+		GeneralFunc_flag1(shell_gui_id, 0);
+	SUBPROC((void*)UploadPlugins);
+	SUBPROC((void*)kill_elf);
 }
 
 int OnKey(MAIN_GUI *data, GUI_MSG *msg)
@@ -207,7 +203,7 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 				switch (msg->submess)
 				{
 					case 0x01:
-						GBS_StartTimerProc(&tmr, 50, (void*)KillELF);
+						KillELF();
 					break;
 				}
 			}
