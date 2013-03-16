@@ -88,6 +88,8 @@ static void OnUnFocus(MAIN_GUI *data, void (*mfree_adr)(void *))
 	}
 }
 
+GBSTMR tmr;
+
 void KillELF(void)
 {
 	UploadGraphics();
@@ -95,6 +97,7 @@ void KillELF(void)
 	DestroyIdleHook();
 	killed = 1;
 	GeneralFunc_flag1(shell_gui_id, 0);
+	DelTimer(&tmr);
 }
 
 int OnKey(MAIN_GUI *data, GUI_MSG *msg)
@@ -204,7 +207,7 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 				switch (msg->submess)
 				{
 					case 0x01:
-						KillELF();
+						GBS_StartTimerProc(&tmr, 50, (void*)KillELF);
 					break;
 				}
 			}
