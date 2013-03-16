@@ -43,6 +43,12 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 	}
 }
 
+void OnClose(void)
+{
+	if (gui_id)
+		GeneralFunc_flag1(gui_id, 0);
+}
+
 void Destroy(void)
 {
 	if (lgp)
@@ -59,6 +65,7 @@ int main(PLUGIN_S4T *plg)
 	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
 	plg->Destroy   = (void*)Destroy;
+	plg->OnClose   = (void*)OnClose;
 	
 	sprintf(path, "%s%s", lang_dir, "dgui.txt");
 	if (InitLang(path, &lgp) == -1) return -1;

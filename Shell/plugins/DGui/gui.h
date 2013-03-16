@@ -4,5 +4,7 @@
 extern char **lgp;
 
 void CreateDialGUI(const char symbol);
-	
+
+extern unsigned int gui_id;
+
 #endif
