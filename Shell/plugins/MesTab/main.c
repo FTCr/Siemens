@@ -72,10 +72,12 @@ void OnKey(int key, int type)
 
 void Destroy(void)
 {
-	FreeLang(&lgp);
-
-	FreeWS(ws);
-	FreeWS(ws_main);
+	if(lgp)
+		FreeLang(&lgp);
+	if (ws)
+		FreeWS(ws);
+	if (ws)
+		FreeWS(ws_main);
 }
 
 void ProcessUSSD(CSM_RAM* data, GBS_USSD_MSG *msg)
@@ -104,7 +106,7 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 	}
 }
 
-void main(PLUGIN_S4T *plg)
+int main(PLUGIN_S4T *plg)
 {
 	char path[128];
 	sprintf(path, "%s%s%s", conf_dir, plg->fname, ".bcfg");
@@ -119,8 +121,9 @@ void main(PLUGIN_S4T *plg)
 	desk_id_ptr = &plg->desk_id;
 
 	sprintf(path, "%s%s", lang_dir, "mestab.txt");
-	InitLang(path, &lgp);
+	if (InitLang(path, &lgp) == -1) return -1;
 
 	ws      = AllocWS(64);
-	ws_main = AllocWS(256);
+	ws_main = AllocWS(128);
+	return 0;
 }
