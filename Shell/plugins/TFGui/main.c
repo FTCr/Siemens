@@ -53,7 +53,8 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 
 void OnClose(void)
 {
-	GeneralFunc_flag1(gui_id, 0);
+	if (gui_id)
+		GeneralFunc_flag1(gui_id, 0);
 }
 
 void Destroy(void)
