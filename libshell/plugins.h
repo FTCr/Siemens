@@ -9,6 +9,7 @@ typedef struct
 	/*стандартные методы*/
 	void (*OnRedraw)(void);
 	void (*OnCreate)(void);
+	void (*OnClose)(void);
 	void (*OnKey)(unsigned int key, unsigned int type);
 	void (*OnFocus)(void);
 	void (*OnUnFocus)(void);

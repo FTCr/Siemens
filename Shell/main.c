@@ -35,13 +35,19 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 
 	if (plg)
 	{
-		for(int i = 0; plg[i] != NULL; i++)
+		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnCreate && IsUsePlg(plg[i])) plg[i]->OnCreate();
 	}
 }
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 {
+	if (plg)
+	{
+		for (int i = 0; plg[i] != NULL; i++)
+			if (plg[i]->OnClose && IsUsePlg(plg[i])) plg[i]->OnClose();
+	}
+	
 	data->gui.state = 0;
 }
 
