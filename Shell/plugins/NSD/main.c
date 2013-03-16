@@ -6,7 +6,6 @@ CSM_RAM *under_idle;
 
 const int minus11 = -11;
 
-unsigned int csm_id;
 unsigned int killed;
 
 typedef struct
@@ -27,7 +26,7 @@ int maincsm_onmessage(CSM_RAM* data, GBS_MSG* msg)
 				{
 					case 0x01:
 						killed = 1;
-						CloseCSM(csm_id);
+						CloseCSM(data->id);
 					break;
 				}
 			}
@@ -86,7 +85,7 @@ int main(PLUGIN_S4T *plg)
 	LockSched();
 	save_cmpc = CSM_root()->csm_q->current_msg_processing_csm;
 	CSM_root()->csm_q->current_msg_processing_csm = CSM_root()->csm_q->csm.first;
-	csm_id = CreateCSM(&MAINCSM.maincsm,dummy,0);
+	CreateCSM(&MAINCSM.maincsm,dummy,0);
 	CSM_root()->csm_q->current_msg_processing_csm = save_cmpc;
 	UnlockSched();
 	return 0;
