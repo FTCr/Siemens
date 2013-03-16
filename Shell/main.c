@@ -94,10 +94,10 @@ static void OnUnFocus(MAIN_GUI *data, void (*mfree_adr)(void *))
 
 void KillELF(void)
 {
-	UploadGraphics();
 	DestroyIdleHook();
 	if (shell_gui_id)
 		GeneralFunc_flag1(shell_gui_id, 0);
+	SUBPROC((void*)UploadGraphics);
 	SUBPROC((void*)UploadPlugins);
 	SUBPROC((void*)kill_elf);
 }
