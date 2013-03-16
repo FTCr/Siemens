@@ -399,13 +399,15 @@ void Destroy(void)
 {
 	StopUpdate();
 	
-	FreeLang(&lgp);
-
-	FreeWS(ws_title);
-	FreeWS(ws_artist);
-	FreeWS(ws_album);
-	FreeWS(ws_fname);
-	FreeWS(ws);
+	if (lgp)
+	{
+		FreeLang(&lgp);
+		FreeWS(ws_title);
+		FreeWS(ws_artist);
+		FreeWS(ws_album);
+		FreeWS(ws_fname);
+		FreeWS(ws);
+	}
 
 	FreeIMGHDR(next);
 	FreeIMGHDR(next_active);
@@ -435,7 +437,7 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 	}
 }
 
-void main(PLUGIN_S4T *plg)
+int main(PLUGIN_S4T *plg)
 {
 	//чтение конфига
 	char path[128];
@@ -454,7 +456,7 @@ void main(PLUGIN_S4T *plg)
 
 
 	sprintf(path, "%s%s", lang_dir, "mptab.txt");
-	InitLang(path, &lgp);
+	if (InitLang(path, &lgp) == -1) return -1;
 
 	ws_title    = AllocWS(128);
 	ws_artist   = AllocWS(128);
@@ -492,5 +494,5 @@ void main(PLUGIN_S4T *plg)
 
 	plg->desk_id     = cfg_desk_id;
 	desk_id_ptr = &plg->desk_id;
-	//sprintf(covers_dir, "%s%s", root_dir, "Img\\mptab\\covers\\");
+	return 0;
 }
