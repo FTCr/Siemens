@@ -125,12 +125,6 @@ int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 			}
 		}
 	}
-
-	if (Type == LONG_PRESS && Key == RIGHT_SOFT)
-	{
-		//При звонке/ussd gui закрывается...
-		KillELF();
-	}
 	return 0;
 }
 
