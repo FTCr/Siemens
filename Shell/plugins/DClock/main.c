@@ -91,6 +91,8 @@ int LoadPlgGraphics(void)
 void Destroy(void)
 {
 	StopUpdate();
+	if (ws)
+		FreeWS(ws);
 	FreeIMGHDR(bg);
 	for (int i = 0; i < 10; i++)
 		FreeIMGHDR(digits[i]);
@@ -115,8 +117,6 @@ int main(PLUGIN_S4T *plg)
 	sprintf(bcfg, "%s%s%s", conf_dir, plg->fname, ".bcfg");
 	InitConfig(bcfg);
 	
-	ws = AllocWS(16);
-	
 	plg->Destroy   = (void*)Destroy;
 	plg->OnRedraw  = (void*)OnRedraw;
 	plg->OnFocus   = (void*)OnFocus;
@@ -126,6 +126,8 @@ int main(PLUGIN_S4T *plg)
 	plg->StopUpdate  = (void*)StopUpdate;
 	
 	if(LoadPlgGraphics() == -1) return -1;
+	
+	ws = AllocWS(16);
 	
 	plg->desk_id     = cfg_desk_id;
 	desk_id_ptr = &plg->desk_id;
