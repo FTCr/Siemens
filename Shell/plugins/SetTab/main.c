@@ -15,7 +15,14 @@
 #define MENU1_ITEMS 0x05
 #define MENU2_ITEMS 0x09
 
-WSHDR *ws;
+MENU *menu1, *menu2;
+
+IMGHDR *menu1_icons[MENU1_ITEMS];
+IMGHDR *menu2_icons[MENU2_ITEMS];
+char *menu1_text1[MENU1_ITEMS];
+char *menu1_text2[MENU1_ITEMS];
+char *menu2_text1[MENU2_ITEMS];
+char *menu2_text2[MENU2_ITEMS];
 
 enum
 {
@@ -26,16 +33,10 @@ enum
 
 char **lgp;
 
-MENU *menu1, *menu2;
-
-IMGHDR *menu1_icons[MENU1_ITEMS];
-IMGHDR *menu2_icons[MENU2_ITEMS];
-char *menu1_text1[MENU1_ITEMS];
-char *menu1_text2[MENU1_ITEMS];
-char *menu2_text1[MENU2_ITEMS];
-char *menu2_text2[MENU2_ITEMS];
+WSHDR *ws;
 
 unsigned int *desk_id_ptr;
+unsigned int plugin_id;
 
 void menu2_func1(void){ExecShortcut("SETUP_RINGTONES");}
 void menu2_func2(void){ExecShortcut("SETUP_DISPLAY");}
@@ -111,9 +112,9 @@ void Destroy(void)
 	FreeWS(ws);
 }
 
-void OnKey(unsigned int key, unsigned int style)
+void OnKey(unsigned int key, unsigned int type)
 {
-	if (style == KEY_DOWN)
+	if (type == KEY_DOWN)
 	{
 		if (key == UP_BUTTON)
 		{
@@ -145,11 +146,12 @@ void OnKey(unsigned int key, unsigned int style)
 			}
 		}
 	}
-	else if (style == LONG_PRESS)
+	else if (type == LONG_PRESS)
 	{
 		if (key == UP_BUTTON)
 		{
 			UP:
+				keyblock_id = plugin_id;
 				if (menu2 == NULL)
 					OnKeySMenu(menu1, MENU_UP);
 				else
@@ -158,11 +160,17 @@ void OnKey(unsigned int key, unsigned int style)
 		else if (key == DOWN_BUTTON)
 		{
 			DOWN:
+				keyblock_id = plugin_id;
 				if (menu2 == NULL)
 					OnKeySMenu(menu1, MENU_DOWN);
 				else
 					OnKeySMenu(menu2, MENU_DOWN);
 		}
+	}
+	else if (type == KEY_UP)
+	{
+		if (key == UP_BUTTON || key == DOWN_BUTTON)
+			keyblock_id = 0;
 	}
 }
 
@@ -219,8 +227,9 @@ int main(PLUGIN_S4T *plg)
 	
 	menu1 = CreateSMenu(ws, menu1_text1, menu1_text2, menu1_icons, MENU_MANY_ICON, menu1_procs, MENU1_ITEMS);
 	
-	plg->desk_id     = cfg_desk_id;
-	desk_id_ptr = &plg->desk_id;
+	plg->desk_id = cfg_desk_id;
+	desk_id_ptr  = &plg->desk_id;
+	plugin_id    = plg->id;
 	
 	return 0;
 }
