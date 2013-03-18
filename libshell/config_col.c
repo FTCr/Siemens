@@ -10,7 +10,7 @@ __root const CFG_HDR colhdr1 = {CFG_COLOR, "Softkeys colour", 0, 0};
 __root const char cfg_col_softkeys[4] = {0xFF,0xFF,0xFF,0x64};
 
 __root const CFG_HDR colhdr2 = {CFG_COLOR, "Basic colour", 0, 0};
-__root const char cfg_col_main[4] = {0x00,0x00,0x00,0x64};
+__root const char cfg_col_main[4] = {0xFF,0xFF,0xFF,0x64};
 
 __root const CFG_HDR colhdr3 = {CFG_COLOR, "Basic menu colour", 0, 0};
 __root const char cfg_col_menu_main[4] = {0xFF,0xFF,0xFF,0x64};

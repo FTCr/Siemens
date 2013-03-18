@@ -4,7 +4,7 @@
 __CFG_BEGIN(2)
 
 __root const CFG_HDR fonthdr0 = {CFG_CBOX, "Header font 1", 0, 6};
-__root const unsigned int cfg_font_header1 = 2;
+__root const unsigned int cfg_font_header1 = 3;
 __root const CFG_CBOX_ITEM cfgcbox0[6] =
 {
 	"Small",

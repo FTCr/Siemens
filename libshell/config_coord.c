@@ -11,7 +11,7 @@ __CFG_BEGIN(3)
 	__root const unsigned int cfg_coord_soft_off_x = 10;
 	
 	__root const CFG_HDR coordhdr3 = {CFG_UINT, "Vertical alignment point", 0, 320};
-	__root const unsigned int cfg_coord_h_mid = 150;
+	__root const unsigned int cfg_coord_h_mid = 155;
 	
 	__root const CFG_HDR coordhdr4 = {CFG_UINT, "Menu max items", 3, 25};
 	__root const unsigned int cfg_coord_max_menu_items = 6;
