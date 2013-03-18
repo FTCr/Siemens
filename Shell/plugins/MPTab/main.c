@@ -323,20 +323,20 @@ void OnKey(int key, int type)
 			switch (key)
 			{
 				case UP_BUTTON:
+					keyblock_id = plugin_id;
 					if (cur_pos != 0)
-					{
-						keyblock_id = plugin_id;
-						cur_pos-=1;
-						DrawButtons(0);
-					}
+						cur_pos -= 1;
+					else
+						cur_pos = 2;
+					DrawButtons(0);
 				break;
 				case DOWN_BUTTON:
+					keyblock_id = plugin_id;
 					if (cur_pos != 2)
-					{
-						keyblock_id = plugin_id;
-						cur_pos+=1;
-						DrawButtons(0);
-					}
+						cur_pos += 1;
+					else
+						cur_pos = 0;
+					DrawButtons(0);
 				break;
 				case ENTER_BUTTON:
 					if (cur_pos == 0)
