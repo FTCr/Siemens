@@ -24,7 +24,7 @@ int maincsm_onmessage(CSM_RAM* data, GBS_MSG* msg)
 			{
 				switch (msg->submess)
 				{
-					case 0x01:
+					case IPC_CLOSE: case IPC_RELOAD:
 						killed = 1;
 						CloseCSM(data->id);
 					break;

@@ -56,7 +56,10 @@ int LoadGraphics(void)
 void UploadGraphics(void)
 {
 	for (int i = 0; i < imgTotal; i++)
+	{
 		FreeIMGHDR(img[i]);
+		img[i] = NULL;
+	}
 }
 
 RECT *GetTextCoord(WSHDR *ws, const unsigned int y, const unsigned int offset_x, const int font, const int align)
