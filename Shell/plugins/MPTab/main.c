@@ -45,10 +45,12 @@ char **lgp;
 
 //char covers_dir[128];
 unsigned int player_csm_id;
-unsigned int *desk_id_ptr;
 unsigned int cur_pos = 1;
 //ибо GetPlayStatus работает медленно
 unsigned int play_status;
+
+unsigned int *desk_id_ptr;
+unsigned int plugin_id;
 
 int GetCoverPath(char *dest, char *album)
 {
@@ -312,6 +314,7 @@ void OnKey(int key, int type)
 				case UP_BUTTON:
 					if (cur_pos != 0)
 					{
+						keyblock_id = plugin_id;
 						cur_pos-=1;
 						DrawButtons(0);
 					}
@@ -319,6 +322,7 @@ void OnKey(int key, int type)
 				case DOWN_BUTTON:
 					if (cur_pos != 2)
 					{
+						keyblock_id = plugin_id;
 						cur_pos+=1;
 						DrawButtons(0);
 					}
@@ -379,6 +383,9 @@ void OnKey(int key, int type)
 				break;
 				case VOL_DOWN_BUTTON:
 					DrawVol(0, key, type);
+				break;
+				case UP_BUTTON: case DOWN_BUTTON:
+					keyblock_id = 0;
 				break;
 			}
 		}
@@ -492,7 +499,8 @@ int main(PLUGIN_S4T *plg)
 	sprintf(path, "%s%s", img_dir, "mptab\\cover_bg.png");
 	cover_bg = CreateIMGHDRFromPngFile(path, 0);
 
-	plg->desk_id     = cfg_desk_id;
-	desk_id_ptr = &plg->desk_id;
+	plg->desk_id = cfg_desk_id;
+	desk_id_ptr  = &plg->desk_id;
+	plugin_id    = plg->id;
 	return 0;
 }
