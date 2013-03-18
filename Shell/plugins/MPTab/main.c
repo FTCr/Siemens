@@ -19,6 +19,8 @@
 char *RamVolumeStep()
 __swi(0x81Fa);
 
+GBSTMR tmr;
+
 enum
 {
 	lgpHeader,
@@ -28,20 +30,29 @@ enum
 	lgpMain
 };
 
-
-GBSTMR tmr;
-
+char **lgp;
 WSHDR *ws_title, *ws_artist, *ws_album, *ws_fname, *ws;
 
-IMGHDR *vol_up, *vol_up_active;
-IMGHDR *vol_down, *vol_down_active;
-IMGHDR *next, *next_active;
-IMGHDR *pause, *pause_active;
-IMGHDR *play, *play_active;
-IMGHDR *prev, *prev_active;
-IMGHDR *cover, *cover_bg;
+enum
+{
+	iconNext,
+	iconNext_active,
+	iconPause,
+	iconPause_active,
+	iconPlay,
+	iconPlay_active,
+	iconPrev,
+	iconPrev_active,
+	iconVol_up,
+	iconVol_up_active,
+	iconVol_down,
+	iconVol_down_active,
+	iconCover_bg,
+	iconsTotal
+};
 
-char **lgp;
+IMGHDR *icons[iconsTotal];
+IMGHDR *cover, *cover_bg;
 
 //char covers_dir[128];
 unsigned int player_csm_id;
@@ -187,51 +198,51 @@ void DrawButtons(int is_on_redraw)
 {
 	if (!is_on_redraw)
 	{
-		DrawSeparateBG(cfg_x_prev, cfg_y_prev, cfg_x_prev + prev->w, cfg_y_prev + prev->h);
-		DrawSeparateBG(cfg_x_pp, cfg_y_pp, cfg_x_pp + pause->w, cfg_y_pp + pause->h);
-		DrawSeparateBG(cfg_x_next, cfg_y_next, cfg_x_next + next->w, cfg_y_next + next->h);
+		DrawSeparateBG(cfg_x_prev, cfg_y_prev, cfg_x_prev + icons[iconPrev]->w, cfg_y_prev + icons[iconPrev]->h);
+		DrawSeparateBG(cfg_x_pp, cfg_y_pp, cfg_x_pp + icons[iconPause]->w, cfg_y_pp + icons[iconPause]->h);
+		DrawSeparateBG(cfg_x_next, cfg_y_next, cfg_x_next + icons[iconNext]->w, cfg_y_next + icons[iconNext]->h);
 	}
 
 	//неактивные кнопки
-	DrawIMGHDR(prev, cfg_x_prev, cfg_y_prev, 0, 0, 0, 0);
+	DrawIMGHDR(icons[iconPrev], cfg_x_prev, cfg_y_prev, 0, 0, 0, 0);
 	if (play_status == MP_PLAY)
-		DrawIMGHDR(pause, cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
+		DrawIMGHDR(icons[iconPause], cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
 	else
-		DrawIMGHDR(play, cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
-	DrawIMGHDR(next, cfg_x_next, cfg_y_next, 0, 0, 0, 0);
+		DrawIMGHDR(icons[iconPlay], cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
+	DrawIMGHDR(icons[iconNext], cfg_x_next, cfg_y_next, 0, 0, 0, 0);
 	//активные кнопки
 	switch (cur_pos)
 	{
 		case 0:
-			DrawIMGHDR(prev_active, cfg_x_prev, cfg_y_prev, 0, 0, 0, 0);
+			DrawIMGHDR(icons[iconPrev_active], cfg_x_prev, cfg_y_prev, 0, 0, 0, 0);
 		break;
 		case 1:
 			if (play_status == MP_PLAY)
-				DrawIMGHDR(pause_active, cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
+				DrawIMGHDR(icons[iconPause_active], cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
 			else
-				DrawIMGHDR(play_active, cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
+				DrawIMGHDR(icons[iconPlay_active], cfg_x_pp, cfg_y_pp, 0, 0, 0, 0);
 		break;
 		case 2:
-			DrawIMGHDR(next_active, cfg_x_next, cfg_y_next, 0, 0, 0, 0);
+			DrawIMGHDR(icons[iconNext_active], cfg_x_next, cfg_y_next, 0, 0, 0, 0);
 		break;
 	}
 }
 
 void DrawVol(int is_on_redraw, int key, int mode)
 {
-	IMGHDR *img1 = vol_up;
-	IMGHDR *img2 = vol_down;
+	IMGHDR *img1 = icons[iconVol_up];
+	IMGHDR *img2 = icons[iconVol_down];
 	wsprintf(ws, "%02d", *RamVolumeStep());
 	unsigned int font = GetFont(fontMain1);
 	if (!is_on_redraw)
 	{
 		DrawSeparateBG(cfg_x_volume, cfg_y_volume, cfg_x_volume + GetWsWidth(ws, font), cfg_y_volume + GetFontYSIZE(font));
-		DrawSeparateBG(cfg_x_vol_up, cfg_y_vol_up, cfg_x_vol_up + vol_up->w, cfg_y_vol_up + vol_up->h);
-		DrawSeparateBG(cfg_x_vol_down, cfg_y_vol_down, cfg_x_vol_down + vol_down->w, cfg_y_vol_down + vol_down->h);
+		DrawSeparateBG(cfg_x_vol_up, cfg_y_vol_up, cfg_x_vol_up + icons[iconVol_up]->w, cfg_y_vol_up + icons[iconVol_up]->h);
+		DrawSeparateBG(cfg_x_vol_down, cfg_y_vol_down, cfg_x_vol_down + icons[iconVol_down]->w, cfg_y_vol_down + icons[iconVol_down]->h);
 		if (key == VOL_UP_BUTTON)
-			img1 = (mode != KEY_UP) ? vol_up_active : vol_up;
+			img1 = (mode != KEY_UP) ? icons[iconVol_up_active] : icons[iconVol_up];
 		else if (key == VOL_DOWN_BUTTON)
-			img2 = (mode != KEY_UP) ? vol_down_active : vol_down;
+			img2 = (mode != KEY_UP) ? icons[iconVol_down_active] : icons[iconVol_down];
 	}
 	DrawIMGHDR(img1, cfg_x_vol_up, cfg_y_vol_up, 0, 0, 0, 0);
 	DrawIMGHDR(img2, cfg_x_vol_down, cfg_y_vol_down, 0, 0, 0, 0);
@@ -407,27 +418,19 @@ void Destroy(void)
 	StopUpdate();
 	
 	if (lgp)
-	{
 		FreeLang(&lgp);
+	if (ws)
+	{
 		FreeWS(ws_title);
 		FreeWS(ws_artist);
 		FreeWS(ws_album);
 		FreeWS(ws_fname);
 		FreeWS(ws);
 	}
-
-	FreeIMGHDR(next);
-	FreeIMGHDR(next_active);
-	FreeIMGHDR(pause);
-	FreeIMGHDR(pause_active);
-	FreeIMGHDR(play);
-	FreeIMGHDR(play_active);
-	FreeIMGHDR(prev);
-	FreeIMGHDR(prev_active);
-	FreeIMGHDR(vol_up);
-	FreeIMGHDR(vol_up_active);
-	FreeIMGHDR(vol_down);
-	FreeIMGHDR(vol_down_active);
+	
+	for (unsigned int i = 0; i < iconsTotal; i++)
+		FreeIMGHDR(icons[i]);
+	
 	FreeIMGHDR(cover);
 	FreeIMGHDR(cover_bg);
 }
@@ -464,41 +467,24 @@ int main(PLUGIN_S4T *plg)
 
 	sprintf(path, "%s%s", lang_dir, "mptab.txt");
 	if (InitLang(path, &lgp) == -1) return -1;
-
+	
+	FSTATS fs;
+	unsigned int err;
+	char *names[iconsTotal] = {"next", "next-active", "pause", "pause-active", "play", "play-active", "prev", "prev-active", "vol_up",
+		"vol_up-active", "vol_down", "vol_down-active", "cover_bg"};
+	for (unsigned int i = 0; i < iconsTotal; i++)
+	{
+		sprintf(path, "%s%s%s%s", img_dir, "mptab\\", names[i], ".png");
+		if (GetFileStats(path, &fs, &err) == -1) return -1;
+		icons[i] = CreateIMGHDRFromPngFile(path, 0);
+	}
+	
 	ws_title    = AllocWS(128);
 	ws_artist   = AllocWS(128);
 	ws_album    = AllocWS(128);
 	ws_fname    = AllocWS(128);
 	ws          = AllocWS(128);
-
-	sprintf(path, "%s%s", img_dir, "mptab\\next.png");
-	next = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\next-active.png");
-	next_active = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\pause.png");
-	pause = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\pause-active.png");
-	pause_active = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\play.png");
-	play = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\play-active.png");
-	play_active = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\prev.png");
-	prev = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\prev-active.png");
-	prev_active = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\vol_up.png");
-	vol_up = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\vol_up-active.png");
-	vol_up_active = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\vol_down.png");
-	vol_down = CreateIMGHDRFromPngFile(path, 0);
-	sprintf(path, "%s%s", img_dir, "mptab\\vol_down-active.png");
-	vol_down_active = CreateIMGHDRFromPngFile(path, 0);
-
-	sprintf(path, "%s%s", img_dir, "mptab\\cover_bg.png");
-	cover_bg = CreateIMGHDRFromPngFile(path, 0);
-
+	
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;
 	plugin_id    = plg->id;
