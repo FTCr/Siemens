@@ -14,7 +14,7 @@ __CFG_BEGIN(0)
 	__root const char cfg_mp_csm_adr[9] = "A087109C";
 
 	__root const CFG_HDR cfghdr3 = {CFG_STR_UTF8, "Covers directory", 0, 127};
-	__root const char cfg_covers_directory[128]="4:\\Pictures\\Covers\\";
+	__root const char cfg_covers_directory[128]="0:\\Pictures\\Covers\\";
 
 	__root const CFG_HDR cfghdr4={CFG_LEVEL, "Coordinaties", 1, 0};
 
