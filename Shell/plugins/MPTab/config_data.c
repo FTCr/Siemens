@@ -4,21 +4,21 @@
 
 __CFG_BEGIN(0)
 
-	__root const CFG_HDR cfghdr0 = {CFG_UINT, "Desktop ID", 0, 100};
+	__root const CFG_HDR cfghdr0 = {CFG_UINT, "Workspace ID", 0, 100};
 	__root const unsigned int cfg_desk_id = 5;
 
-	__root const CFG_HDR cfghdr1 = {CFG_UINT, "Update time (sec)", 0, 60};
+	__root const CFG_HDR cfghdr1 = {CFG_UINT, "Refresh frequency in sec.", 0, 60};
 	__root const unsigned int cfg_update_time = 1;
 
 	__root const CFG_HDR cfghdr2 = {CFG_STR_WIN1251, "Mediaplayer CSM addr", 1, 8};
 	__root const char cfg_mp_csm_adr[9] = "A087109C";
 
-	__root const CFG_HDR cfghdr3 = {CFG_STR_UTF8, "Covers directory", 0, 127};
+	__root const CFG_HDR cfghdr3 = {CFG_STR_UTF8, "Covers path", 0, 127};
 	__root const char cfg_covers_directory[128]="0:\\Pictures\\Covers\\";
 
 	__root const CFG_HDR cfghdr4={CFG_LEVEL, "Coordinaties", 1, 0};
 
-		__root const CFG_HDR cfghdr4_1 = {CFG_RECT, "Cover", 0, 0};
+		__root const CFG_HDR cfghdr4_1 = {CFG_RECT, "Cover position", 0, 0};
 		__root const RECT cfg_rc_cover = {55,65,185,195};
 
 		__root const CFG_HDR cfghdr4_2 = {CFG_UINT, "Title Y", 0, 320};
