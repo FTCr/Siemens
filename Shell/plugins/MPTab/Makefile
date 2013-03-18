@@ -1,6 +1,6 @@
 ID   = 55
 NAME = mptab
-VER  = 0.1
+VER  = 0.2
 
 LNAME   = ${NAME}-${VER}.so
 FNAME   = ${ID}-${LNAME}
