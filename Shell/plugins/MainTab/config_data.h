@@ -4,6 +4,7 @@
 extern const unsigned int cfg_desk_id;
 
 extern unsigned int cfg_use_ls;
+extern unsigned int cfg_draw_me;
 extern const char cfg_ls_func[32];
 
 extern unsigned int cfg_use_rs;
