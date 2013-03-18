@@ -10,7 +10,7 @@ int GetStrDataFromSystemConf(char *dest, const char *path, const char *keyword)
 	if (fp == -1) return -1;
 	
 	char *buffer = malloc(fs.size);
-	if (!_read(fp, buffer, fs.size, &err)) return -1;
+	if (!_read(fp, buffer, fs.size, &err)) goto EXIT;
 	
 	unsigned int i = fs.size - 1;
 	unsigned int j = 1;
@@ -45,7 +45,8 @@ int GetStrDataFromSystemConf(char *dest, const char *path, const char *keyword)
 		END:
 			i--;
 	}
-	mfree(buffer);
-	_close(fp, &err);
-	return -1;
+	EXIT:
+		mfree(buffer);
+		_close(fp, &err);
+		return -1;
 }
