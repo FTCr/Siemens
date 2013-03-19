@@ -9,6 +9,7 @@
 #include "../../../libshell/graphics.h"
 #include "../../../libshell/conf_loader.h"
 #include "../../../libshell/skin_utils.h"
+#include "../../../libshell/config_coord.h"
 #include "conf_loader.h"
 #include "config_data.h"
 
@@ -19,10 +20,8 @@ MENU *menu1, *menu2;
 
 IMGHDR *menu1_icons[MENU1_ITEMS];
 IMGHDR *menu2_icons[MENU2_ITEMS];
-char *menu1_text1[MENU1_ITEMS];
-char *menu1_text2[MENU1_ITEMS];
-char *menu2_text1[MENU2_ITEMS];
-char *menu2_text2[MENU2_ITEMS];
+char *menu1_strings1[MENU1_ITEMS], *menu1_strings2[MENU1_ITEMS];
+char *menu2_strings1[MENU2_ITEMS], *menu2_strings2[MENU2_ITEMS];
 
 enum
 {
@@ -63,7 +62,8 @@ void *menu2_procs[MENU2_ITEMS]=
 
 void menu1_func1(void)
 {
-	menu2 = CreateSMenu(ws, menu2_text1, menu2_text2, menu2_icons, MENU_MANY_ICON, menu2_procs, MENU2_ITEMS);
+	menu2 = CreateSMenu(menu2_strings1, menu2_strings2, MENU_ENC_CP1251, menu2_icons, MENU_MANY_ICONS, menu2_procs, 
+		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU2_ITEMS);
 	DirectRedrawGUI_ID(shell_gui_id);
 }
 void menu1_func2(void){ExecFile(cfg_path);}
@@ -95,6 +95,18 @@ void OnRedraw(void)
 	}
 }
 
+void OnFocus(void)
+{
+	menu1 = CreateSMenu(menu1_strings1, menu1_strings2, MENU_ENC_CP1251, menu1_icons, MENU_MANY_ICONS, menu1_procs,
+		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU1_ITEMS);
+}
+
+void OnUnFocus(void)
+{
+	DestroySMenu(menu1);
+	menu1 = NULL;
+}
+
 void Destroy(void)
 {
 	int i = 0;
@@ -109,7 +121,8 @@ void Destroy(void)
 		DestroySMenu(menu1);
 	if (menu2)
 		DestroySMenu(menu2);
-	FreeWS(ws);
+	if (ws)
+		FreeWS(ws);
 }
 
 void OnKey(unsigned int key, unsigned int type)
@@ -198,7 +211,8 @@ int main(PLUGIN_S4T *plg)
 	plg->OnRedraw  = (void*)OnRedraw;
 	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
-	ws   = AllocWS(128);
+	plg->OnFocus   = (void*)OnFocus;
+	plg->OnUnFocus = (void*)OnUnFocus;
 	
 	//загрузка ленгпака
 	sprintf(path, "%s%s", lang_dir, "settab.txt");
@@ -208,24 +222,23 @@ int main(PLUGIN_S4T *plg)
 	unsigned int lgp_id = 3;
 	while(i < MENU1_ITEMS)
 	{
-		menu1_text1[i] = lgp[lgp_id];
-		menu1_text2[i] = lgp[lgp_id + 1];
+		menu1_strings1[i] = lgp[lgp_id];
+		menu1_strings2[i] = lgp[lgp_id + 1];
 		sprintf(path, "%s%s%d%s", img_dir, "settab\\01_", i + 1, ".png");
 		menu1_icons[i++] = CreateIMGHDRFromPngFile(path, 0);
-		lgp_id+=2;
+		lgp_id += 2;
 	}
 	i = 0;
 	while(i < MENU2_ITEMS)
 	{
-		menu2_text1[i] = lgp[lgp_id];
-		menu2_text2[i] = lgp[lgp_id + 1];
+		menu2_strings1[i] = lgp[lgp_id];
+		menu2_strings2[i] = lgp[lgp_id + 1];
 		sprintf(path, "%s%s%d%s", img_dir, "settab\\02_", i + 1, ".png");
 		menu2_icons[i++] = CreateIMGHDRFromPngFile(path, 0);
-		lgp_id+=2;
+		lgp_id += 2;
 	}
 	
-	
-	menu1 = CreateSMenu(ws, menu1_text1, menu1_text2, menu1_icons, MENU_MANY_ICON, menu1_procs, MENU1_ITEMS);
+	ws  = AllocWS(128);
 	
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;
