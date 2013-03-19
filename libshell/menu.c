@@ -5,36 +5,37 @@
 #include "config_col.h"
 #include "config_coord.h"
 
-MENU *CreateSMenu(WSHDR *ws, char **text1, char **text2, IMGHDR **icons, const unsigned int icon_flag, void **procs,
-					const unsigned int total)
+MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons, int icon_flag, void **procs, int y, int d_items, int total)
 {	
 	MENU *menu = malloc(sizeof(MENU));
+	menu->ws         = AllocWS(128);
 	menu->items      = NULL;
-	menu->ws         = ws;
 	menu->first_item = 1;
-	menu->max        = (total < cfg_coord_max_menu_items) ? total : cfg_coord_max_menu_items;
-	menu->data       = menu->max - 1;
 	menu->cur_id     = 0;
 	menu->total      = total;
+	menu->y          = y;
+	menu->max        = (total < d_items) ? total : d_items;
+	menu->data       = menu->max - 1;
+	menu->enc        = encoding;
 	
 	unsigned int len;
-	for(unsigned int i = 0; i < total; i++)
+	for(int i = 0; i < menu->total; i++)
 	{
 		menu->items = realloc(menu->items, sizeof(MENU_ITEM*) * (i + 2));
 		menu->items[i] = malloc(sizeof(MENU_ITEM));
 		zeromem(menu->items[i], sizeof(MENU_ITEM));
 		menu->items[i + 1] = NULL;
-		if (text1)
+		if (strings1)
 		{
-			menu->items[i]->text1 = text1[i];
+			menu->items[i]->string1 = strings1[i];
 		}
-		if (text2)
+		if (strings2)
 		{
-			menu->items[i]->text2 = text2[i];
+			menu->items[i]->string2 = strings2[i];
 		}
 		if (icons)
 		{
-			if (icon_flag == MENU_MANY_ICON)
+			if (icon_flag == MENU_MANY_ICONS)
 				menu->items[i]->icon = icons[i];
 			else
 				menu->items[i]->icon = icons[0];
@@ -59,6 +60,7 @@ void DestroySMenu(MENU *menu)
 			{
 				mfree(menu->items[i++]);
 			}
+			FreeWS(menu->ws);
 			mfree(menu->items);
 		}
 		mfree(menu);
@@ -118,9 +120,9 @@ void DrawSMenu(MENU *menu)
 	if (menu->items)
 	{
 		const int Height_item = img[imgCursor]->h + 1;
-		const int Start_y  = ICONBAR_H + img[imgHeader]->h + 1;
-		const int Cur_x_off = (ScreenW() - img[imgCursor]->w) / 2;
 		
+		const int Start_y  = menu->y;
+		const int Cur_x_off = (ScreenW() - img[imgCursor]->w) / 2;
 		
 		unsigned int font = FONT_MEDIUM;
 		unsigned int x = Cur_x_off;
@@ -146,12 +148,13 @@ void DrawSMenu(MENU *menu)
 				x = Cur_x_off + 5 + menu->items[n]->icon->w + 5;
 			}
 			//дополнительная строка
-			if (menu->items[n]->text2)
+			if (menu->items[n]->string2)
 			{
 				y = Start_y + Height_item * i + img[imgCursor]->h - GetFontYSIZE(FONT_SMALL);
-				wsprintf(menu->ws, "%t", menu->items[n]->text2);
+				if (menu->enc == MENU_ENC_CP1251)
+					wsprintf(menu->ws, "%t", menu->items[n]->string2);
 				DrawString(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(FONT_SMALL), FONT_SMALL, TEXT_ALIGNLEFT,
-							cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
+						cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
 				font = FONT_SMALL_BOLD;
 				y = Start_y + Height_item * i;
 			}
@@ -161,7 +164,8 @@ void DrawSMenu(MENU *menu)
 				y = Start_y + Height_item * i + (img[imgCursor]->h - GetFontYSIZE(font)) / 2;
 			}
 			//основная строка
-			wsprintf(menu->ws, "%t", menu->items[n]->text1);
+			if (menu->enc == MENU_ENC_CP1251)
+				wsprintf(menu->ws, "%t", menu->items[n]->string1);
 			DrawString(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
 						cfg_col_menu_main, GetPaletteAdrByColorIndex(23));
 			i++;

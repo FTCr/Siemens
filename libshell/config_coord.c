@@ -13,7 +13,16 @@ __CFG_BEGIN(3)
 	__root const CFG_HDR coordhdr3 = {CFG_UINT, "Vertical alignment point", 0, 320};
 	__root const unsigned int cfg_coord_h_mid = 155;
 	
-	__root const CFG_HDR coordhdr4 = {CFG_UINT, "Menu max items", 3, 25};
-	__root const unsigned int cfg_coord_max_menu_items = 6;
+	__root const CFG_HDR coordhdr4 = {CFG_UINT, "Vertical menu 1 indent", 0, 320};
+	__root const unsigned int cfg_coord_menu1_off_y = 2;
+	
+	__root const CFG_HDR coordhdr5 = {CFG_UINT, "Menu 2 max items", 3, 25};
+	__root const unsigned int cfg_coord_max_menu1_items = 6;
+	
+	__root const CFG_HDR coordhdr6 = {CFG_UINT, "Vertical menu 2 indent", 0, 320};
+	__root const unsigned int cfg_coord_menu2_off_y = 2;
+	
+	__root const CFG_HDR coordhdr7 = {CFG_UINT, "Menu 2 max items", 3, 25};
+	__root const unsigned int cfg_coord_max_menu2_items = 6;
 	
 __CFG_END(3)

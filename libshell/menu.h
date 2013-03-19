@@ -4,13 +4,16 @@
 #define MENU_UP   0x00
 #define MENU_DOWN 0x01
 
-#define MENU_ONE_ICON  0x00
-#define MENU_MANY_ICON 0x01
+#define MENU_ONE_ICONS  0x00
+#define MENU_MANY_ICONS 0x01
+
+#define MENU_ENC_CP1251 0x00
+#define MENU_ENC_UTF8   0x01
 
 typedef struct
 {
-	char *text1;
-	char *text2;
+	char *string1;
+	char *string2;
 	IMGHDR *icon;
 	void *proc;
 }MENU_ITEM;
@@ -19,15 +22,18 @@ typedef struct
 {
 	MENU_ITEM **items;
 	WSHDR *ws;
+	
+	int y;
 	int first_item; //первый пункт для отрисовки
-	int max;        //количество возможных пункто для отрисовки за один раз
+	int max;        //количество пунктов для отрисовки
+	int total;      //общее число пунктов
+	
 	int data;       //вспомогательная переменная для перемещения курсора
 	int cur_id;     //позиция курсора
-	int total;      //общее число пунктов
+	int enc;        //кодировка текста
 }MENU;
 
-MENU *CreateSMenu(WSHDR *ws, char **text1, char **text2, IMGHDR **icons, const unsigned int icon_flag, void **procs,
-					const unsigned int total);
+MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons, int icon_flag, void **procs, int y, int d_items, int total);
 void DrawSMenu(MENU *menu);
 void DestroySMenu(MENU *menu);
 void ActionSMenu(MENU *menu);
