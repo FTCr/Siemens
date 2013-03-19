@@ -19,6 +19,7 @@ char **lgp;
 WSHDR *ws;
 
 unsigned int *desk_id_ptr;
+unsigned int plugin_id;
 
 void OnRedraw(void)
 {
@@ -35,13 +36,41 @@ void OnKey(unsigned int key, unsigned int type)
 		switch (key)
 		{
 			case LEFT_SOFT:
-				if (cfg_use_ls) ExecShortcut(cfg_ls_func);
+				if (cfg_use_ls)
+				{
+					keyblock_id = plugin_id;
+					ExecShortcut(cfg_ls_func);
+				}
 			break;
 			case RIGHT_SOFT:
-				if (cfg_use_rs) ExecShortcut(cfg_rs_func);
+				if (cfg_use_rs)
+				{
+					keyblock_id = plugin_id;
+					ExecShortcut(cfg_rs_func);
+				}
 			break;
 			case ENTER_BUTTON:
-				if (cfg_use_enter) ExecShortcut(cfg_enter_func);
+				if (cfg_use_enter)
+				{
+					keyblock_id = plugin_id;
+					ExecShortcut(cfg_enter_func);
+				}
+					
+			break;
+		}
+	}
+	if (type == KEY_UP)
+	{
+		switch (key)
+		{
+			case LEFT_SOFT:
+				if (cfg_use_ls) keyblock_id = 0;
+			break;
+			case RIGHT_SOFT:
+				if (cfg_use_rs) keyblock_id = 0;
+			break;
+			case ENTER_BUTTON:
+				if (cfg_use_enter) keyblock_id = 0;
 			break;
 		}
 	}
@@ -83,7 +112,8 @@ int main(PLUGIN_S4T *plg)
 
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;
-
+	plugin_id    = plg->id;
+	
 	ws = AllocWS(64);
 	return 0;
 }
