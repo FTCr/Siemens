@@ -54,11 +54,6 @@ void UnLock()
 	SetIllumination(0, 1, lp->unk0, 0); //в swlib.h перепутаны поля структуры
 	SetIllumination(1, 1, lp->unk0, 0);
 	//запуск автообновления плагинов
-	if (plg)
-	{
-		for (int i = 0; plg[i] != NULL; i++)
-			if (IsUsePlg(plg[i]) && plg[i]->StartUpdate) plg[i]->StartUpdate();
-	}
 }
 
 static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
