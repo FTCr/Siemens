@@ -1,4 +1,4 @@
-ID   = 70
+ID   = 80
 NAME = dclock
 VER  = 0.1
 
