@@ -48,11 +48,14 @@ void OnKey(unsigned int key, unsigned int type)
 {
 	void Inbox(void)
 	{
-		char *ptr = 0;
-		ptr = RamMissedCalls();
-		*ptr = 0;
-		ptr = RamMissedMes();
-		*ptr = 0;
+		if (IsMissed())
+		{
+			char *ptr = 0;
+			ptr = RamMissedCalls();
+			*ptr = 0;
+			ptr = RamMissedMes();
+			*ptr = 0;
+		}
 		ExecShortcut("DEVICE_INBOX");
 	}
 	
