@@ -8,14 +8,14 @@ __CFG_BEGIN(0)
 	__root const unsigned int cfg_desk_id = 0;
 	
 		//*****************************LEFT_BUTTON**********************************//
-		__root const CFG_HDR cfghdr1 = {CFG_LEVEL, "LEFT_BUTTON", 1, 0};
+		__root const CFG_HDR cfghdr1 = {CFG_LEVEL, "Left button", 1, 0};
 	
-			__root const CFG_HDR cfghdr1_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr1_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_lb  = 0;
 			
 			__root const CFG_HDR cfghdr1_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_lb = 0;
-			__root const CFG_CBOX_ITEM cfgcbox1_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox1_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr1_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_lb = 0;
@@ -28,14 +28,14 @@ __CFG_BEGIN(0)
 	
 		//*****************************RIGHT_BUTTON********************************//
 		
-		__root const CFG_HDR cfghdr2 = {CFG_LEVEL, "RIGHT_BUTTON", 1, 0};
+		__root const CFG_HDR cfghdr2 = {CFG_LEVEL, "Right button", 1, 0};
 	
-			__root const CFG_HDR cfghdr2_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr2_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_rb  = 0;
 			
 			__root const CFG_HDR cfghdr2_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_rb = 0;
-			__root const CFG_CBOX_ITEM cfgcbox2_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox2_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr2_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_rb = 0;
@@ -48,14 +48,14 @@ __CFG_BEGIN(0)
 		
 		//**********************************UP_BUTTON*******************************//
 		
-		__root const CFG_HDR cfghdr3 = {CFG_LEVEL, "UP_BUTTON", 1, 0};
+		__root const CFG_HDR cfghdr3 = {CFG_LEVEL, "Up button", 1, 0};
 	
-			__root const CFG_HDR cfghdr3_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr3_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_ub  = 1;
 			
 			__root const CFG_HDR cfghdr3_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_ub = 0;
-			__root const CFG_CBOX_ITEM cfgcbox3_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox3_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr3_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_ub = 1;
@@ -68,14 +68,14 @@ __CFG_BEGIN(0)
 		
 		//**********************************DOWN_BUTTON*******************************//
 		
-		__root const CFG_HDR cfghdr4 = {CFG_LEVEL, "DOWN_BUTTON", 1, 0};
+		__root const CFG_HDR cfghdr4 = {CFG_LEVEL, "Down button", 1, 0};
 	
-			__root const CFG_HDR cfghdr4_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr4_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_db  = 1;
 			
 			__root const CFG_HDR cfghdr4_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_db = 0;
-			__root const CFG_CBOX_ITEM cfgcbox4_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox4_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr4_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_db = 1;
@@ -88,14 +88,14 @@ __CFG_BEGIN(0)
 		
 		//*****************************GREEN_BUTTON********************************//
 		
-		__root const CFG_HDR cfghdr5 = {CFG_LEVEL, "GREEN_BUTTON", 1, 0};
+		__root const CFG_HDR cfghdr5 = {CFG_LEVEL, "Green button", 1, 0};
 	
-			__root const CFG_HDR cfghdr5_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr5_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_gb  = 1;
 			
 			__root const CFG_HDR cfghdr5_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_gb = 0;
-			__root const CFG_CBOX_ITEM cfgcbox5_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox5_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr5_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_gb = 1;
@@ -106,16 +106,36 @@ __CFG_BEGIN(0)
 	
 		__root const CFG_HDR cfghdr5_5 = {CFG_LEVEL, "", 0, 0};
 		
+		//*******************************ENTER_BUTTON*******************************//
+		
+		__root const CFG_HDR cfghdr18 = {CFG_LEVEL, "Enter button", 1, 0};
+	
+			__root const CFG_HDR cfghdr18_1 = {CFG_CHECKBOX, "Apply", 0, 2};
+			__root const unsigned int cfg_use_eb  = 1;
+			
+			__root const CFG_HDR cfghdr18_2 = {CFG_CBOX, "Trigger mode", 0, 2};
+			__root const unsigned int cfg_style_eb = 0;
+			__root const CFG_CBOX_ITEM cfgcbox18_2[2] = {"Key down", "Long press"};
+			
+			__root const CFG_HDR cfghdr18_3 = {CFG_CBOX, "Action type", 0, 2};
+			__root const unsigned int cfg_action_eb = 1;
+			__root const CFG_CBOX_ITEM cfgcbox18_3[2] = {"File", "Shortcut"};
+	
+			__root const CFG_HDR cfghdr18_4 = {CFG_STR_UTF8, "Action", 0, 127};
+			__root const char cfg_execute_eb[128] = "MAIN_MENU";
+	
+		__root const CFG_HDR cfghdr18_5 = {CFG_LEVEL, "", 0, 0};
+		
 		//******************************1*****************************************//
 		
 		__root const CFG_HDR cfghdr6 = {CFG_LEVEL, "1", 1, 0};
 	
-			__root const CFG_HDR cfghdr6_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr6_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_1  = 0;
 			
 			__root const CFG_HDR cfghdr6_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_1 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox6_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox6_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr6_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_1 = 0;
@@ -130,12 +150,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr7 = {CFG_LEVEL, "2", 1, 0};
 	
-			__root const CFG_HDR cfghdr7_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr7_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_2  = 0;
 			
 			__root const CFG_HDR cfghdr7_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_2 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox7_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox7_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr7_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_2 = 0;
@@ -150,12 +170,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr8 = {CFG_LEVEL, "3", 1, 0};
 	
-			__root const CFG_HDR cfghdr8_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr8_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_3  = 1;
 			
 			__root const CFG_HDR cfghdr8_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_3 = 1;
-			__root const CFG_CBOX_ITEM cfgcbox8_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox8_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr8_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_3 = 1;
@@ -170,12 +190,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr9 = {CFG_LEVEL, "4", 1, 0};
 	
-			__root const CFG_HDR cfghdr9_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr9_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_4  = 0;
 			
 			__root const CFG_HDR cfghdr9_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_4 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox9_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox9_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr9_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_4 = 0;
@@ -191,12 +211,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr10 = {CFG_LEVEL, "5", 1, 0};
 	
-			__root const CFG_HDR cfghdr10_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr10_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_5  = 1;
 			
 			__root const CFG_HDR cfghdr10_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_5 = 1;
-			__root const CFG_CBOX_ITEM cfgcbox10_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox10_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr10_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_5 = 1;
@@ -211,12 +231,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr11 = {CFG_LEVEL, "6", 1, 0};
 	
-			__root const CFG_HDR cfghdr11_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr11_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_6  = 0;
 			
 			__root const CFG_HDR cfghdr11_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_6 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox11_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox11_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr11_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_6 = 0;
@@ -232,12 +252,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr12 = {CFG_LEVEL, "7", 1, 0};
 	
-			__root const CFG_HDR cfghdr12_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr12_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_7  = 1;
 			
 			__root const CFG_HDR cfghdr12_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_7 = 1;
-			__root const CFG_CBOX_ITEM cfgcbox12_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox12_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr12_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_7 = 1;
@@ -252,12 +272,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr13 = {CFG_LEVEL, "8", 1, 0};
 	
-			__root const CFG_HDR cfghdr13_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr13_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_8  = 0;
 			
 			__root const CFG_HDR cfghdr13_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_8 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox13_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox13_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr13_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_8 = 0;
@@ -272,12 +292,12 @@ __CFG_BEGIN(0)
 		
 		__root const CFG_HDR cfghdr14 = {CFG_LEVEL, "9", 1, 0};
 	
-			__root const CFG_HDR cfghdr14_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr14_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_9  = 0;
 			
 			__root const CFG_HDR cfghdr14_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_9 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox14_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox14_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr14_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_9 = 0;
@@ -292,12 +312,12 @@ __CFG_BEGIN(0)
 
 		__root const CFG_HDR cfghdr15 = {CFG_LEVEL, "*", 1, 0};
 	
-			__root const CFG_HDR cfghdr15_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr15_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_star  = 0;
 			
 			__root const CFG_HDR cfghdr15_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_star = 0;
-			__root const CFG_CBOX_ITEM cfgcbox15_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox15_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr15_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_star = 0;
@@ -312,12 +332,12 @@ __CFG_BEGIN(0)
 
 		__root const CFG_HDR cfghdr16 = {CFG_LEVEL, "0", 1, 0};
 	
-			__root const CFG_HDR cfghdr16_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr16_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_0  = 0;
 			
 			__root const CFG_HDR cfghdr16_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_0 = 0;
-			__root const CFG_CBOX_ITEM cfgcbox16_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox16_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr16_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_0 = 0;
@@ -332,12 +352,12 @@ __CFG_BEGIN(0)
 
 		__root const CFG_HDR cfghdr17 = {CFG_LEVEL, "#", 1, 0};
 	
-			__root const CFG_HDR cfghdr17_1 = {CFG_CHECKBOX, "Apply?", 0, 2};
+			__root const CFG_HDR cfghdr17_1 = {CFG_CHECKBOX, "Apply", 0, 2};
 			__root const unsigned int cfg_use_lat  = 0;
 			
 			__root const CFG_HDR cfghdr17_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_lat = 0;
-			__root const CFG_CBOX_ITEM cfgcbox17_2[2] = {"KEY_DOWN", "LONG_PRESS"};
+			__root const CFG_CBOX_ITEM cfgcbox17_2[2] = {"Key down", "Long press"};
 			
 			__root const CFG_HDR cfghdr17_3 = {CFG_CBOX, "Action type", 0, 2};
 			__root const unsigned int cfg_action_lat = 0;

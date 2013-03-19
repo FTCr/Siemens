@@ -54,6 +54,8 @@ void OnKey(unsigned int key, unsigned int type)
 			case GREEN_BUTTON:
 				Execute(cfg_use_gb, cfg_style_gb, cfg_action_gb, cfg_execute_gb);
 			break;
+			case ENTER_BUTTON:
+				Execute(cfg_use_eb, cfg_style_eb, cfg_action_eb, cfg_execute_eb);
 			case '1':
 				Execute(cfg_use_1, cfg_style_1, cfg_action_1, cfg_execute_1);
 			break;

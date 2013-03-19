@@ -28,6 +28,11 @@ extern const unsigned int cfg_style_gb;
 extern const unsigned cfg_action_gb;
 extern const char cfg_execute_gb[128];
 
+extern const unsigned int cfg_use_eb;
+extern const unsigned int cfg_style_eb;
+extern const unsigned cfg_action_eb;
+extern const char cfg_execute_eb[128];
+
 extern const unsigned int cfg_use_1;
 extern const unsigned int cfg_style_1;
 extern const unsigned cfg_action_1;
