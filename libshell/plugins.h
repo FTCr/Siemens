@@ -20,10 +20,6 @@ typedef struct
 
 	//действия при выгрузке плагина(например очистить память от графики)
 	void (*Destroy)(void);
-	//запуск автообновления
-	void (*StartUpdate)(void);
-	//остановка автообновления
-	void (*StopUpdate)(void);
 	//id рабочего стола
 	unsigned int desk_id;
 } PLUGIN_S4T;
