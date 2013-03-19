@@ -388,7 +388,7 @@ void OnKey(int key, int type)
 				case VOL_DOWN_BUTTON:
 					DrawVol(0, key, type);
 				break;
-				case UP_BUTTON: case DOWN_BUTTON:
+				case UP_BUTTON: case DOWN_BUTTON: case ENTER_BUTTON:
 					keyblock_id = 0;
 				break;
 			}
