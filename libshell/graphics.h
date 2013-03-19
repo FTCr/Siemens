@@ -24,7 +24,7 @@ extern char wallpaper_path[128];
 int LoadGraphics(void);
 void UploadGraphics(void);
 
-void DrawText(WSHDR *ws_allocate, const char *text, const int font, const int align, const char *color, const int type);
+void DrawText(WSHDR *ws, const char *text, const int font, const int align, const char *color, const int type);
 void DrawSeparateBG(const int x, const int y, const int x2, const int y2);
 void DrawBG(void);
 
