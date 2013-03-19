@@ -3,6 +3,7 @@
 
 extern const unsigned int cfg_coord_head_off_x;
 extern const unsigned int cfg_coord_soft_off_x;
+extern const unsigned int cfg_coord_h_mid;
 
 extern const unsigned int cfg_coord_menu1_off_y;
 extern const unsigned int cfg_coord_menu2_off_y;

@@ -280,30 +280,22 @@ void OnRedraw(void)
 	}
 }
 
-void StopUpdate()
+void OnUnFocus()
 {
 	DelTimer(&tmr);
 }
 
 void AutoUpdate(void)
 {
-	if (IsGuiOnTop(shell_gui_id))
+	SetSongInfo();
+	if (play_status)
 	{
-		SetSongInfo();
-		if (play_status)
-		{
-			DrawCover(0);
-			DrawSongInfo(0);
-			GBS_StartTimerProc(&tmr, TMR_6_SEC / 6 * cfg_update_time, (void*)AutoUpdate);
-		}
-		else
-			StopUpdate();
+		DrawCover(0);
+		DrawSongInfo(0);
+		GBS_StartTimerProc(&tmr, TMR_6_SEC / 6 * cfg_update_time, (void*)AutoUpdate);
 	}
 	else
-	{
-		STOP_UPDATE:
-			StopUpdate();
-	}
+		DelTimer(&tmr);
 }
 
 void OnFocus(void)
@@ -339,6 +331,7 @@ void OnKey(int key, int type)
 					DrawButtons(0);
 				break;
 				case ENTER_BUTTON:
+					keyblock_id = plugin_id;
 					if (cur_pos == 0)
 						MPlayer_Prev();
 					else if (cur_pos == 1)
@@ -415,7 +408,7 @@ void OnKey(int key, int type)
 
 void Destroy(void)
 {
-	StopUpdate();
+	DelTimer(&tmr);
 	
 	if (lgp)
 		FreeLang(&lgp);
@@ -454,16 +447,12 @@ int main(PLUGIN_S4T *plg)
 	sprintf(path, "%s%s%s", conf_dir, plg->fname, ".bcfg");
 	InitConfig(path);
 
-	plg->OnRedraw     = (void*)OnRedraw;
-	plg->OnFocus      = (void*)OnFocus;
-	plg->OnKey        = (void(*)(unsigned int, unsigned int))OnKey;
-	plg->OnMessage    = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
-
-	plg->Destroy = (void*)Destroy;
-
-	plg->StartUpdate = (void*)AutoUpdate;
-	plg->StopUpdate  = (void*)StopUpdate;
-
+	plg->OnRedraw  = (void*)OnRedraw;
+	plg->OnFocus   = (void*)OnFocus;
+	plg->OnUnFocus = (void*)OnUnFocus;
+	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
+	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
+	plg->Destroy   = (void*)Destroy;
 
 	sprintf(path, "%s%s", lang_dir, "mptab.txt");
 	if (InitLang(path, &lgp) == -1) return -1;
