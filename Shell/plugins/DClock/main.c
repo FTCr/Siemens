@@ -47,21 +47,16 @@ void OnRedraw(void)
 	Draw();
 }
 
-void StopUpdate(void)
-{
-	DelTimer(&tmr);
-}
-
 void AutoUpdate(void)
 {
-	if (IsGuiOnTop(shell_gui_id))
-	{
-		DrawSeparateBG(cfg_pos_x, cfg_pos_y, cfg_pos_x + bg->w, cfg_pos_y + bg->h);
-		Draw();
-		GBS_StartTimerProc(&tmr, TMR_6_SEC / 6 * cfg_update_time, (void*)AutoUpdate);
-	}
-	else
-		StopUpdate();
+	DrawSeparateBG(cfg_pos_x, cfg_pos_y, cfg_pos_x + bg->w, cfg_pos_y + bg->h);
+	Draw();
+	GBS_StartTimerProc(&tmr, TMR_6_SEC / 6 * cfg_update_time, (void*)AutoUpdate);
+}
+
+void OnUnFocus(void)
+{
+	DelTimer(&tmr);
 }
 
 void OnFocus(void)
@@ -90,7 +85,7 @@ int LoadPlgGraphics(void)
 
 void Destroy(void)
 {
-	StopUpdate();
+	DelTimer(&tmr);
 	if (ws)
 		FreeWS(ws);
 	FreeIMGHDR(bg);
@@ -120,10 +115,8 @@ int main(PLUGIN_S4T *plg)
 	plg->Destroy   = (void*)Destroy;
 	plg->OnRedraw  = (void*)OnRedraw;
 	plg->OnFocus   = (void*)OnFocus;
+	plg->OnUnFocus = (void*)OnUnFocus;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
-
-	plg->StartUpdate = (void*)AutoUpdate;
-	plg->StopUpdate  = (void*)StopUpdate;
 	
 	if(LoadPlgGraphics() == -1) return -1;
 	
