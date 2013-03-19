@@ -76,20 +76,17 @@ void OnRedraw(void)
 	DrawPanel();
 }
 
-void SSUpdate(void)
+void MFunc(void)
 {
-	if (plg)
+	for (int i = 0; plg[i] != NULL; i++)
 	{
-		for (int i = 0; plg[i] != NULL; i++)
+		if (!IsUsePlg(plg[i]))
 		{
-			if (!IsUsePlg(plg[i]))
-			{
-				if (plg[i]->StopUpdate) plg[i]->StopUpdate();
-			}
-			else
-			{
-				if (plg[i]->StartUpdate) plg[i]->StartUpdate();
-			}
+			if (plg[i]->OnUnFocus) plg[i]->OnUnFocus();
+		}
+		else
+		{
+			if (plg[i]->OnFocus) plg[i]->OnFocus();
 		}
 	}
 }
@@ -105,37 +102,43 @@ void Animation(void)
 	}
 	if (ANIMATION_COUNT % ((anim_lenght + 1)/2) == 0)
 	{
-		switch (ANIMATION_NAVI)
-		{
-			case LEFT:
-				cur_desk_id--;
-				InitData();
-				if (cur_desk_id == 1) goto EXIT;
-			break;
-			case RIGHT:
-				cur_desk_id++;
-				InitData();
-				if (cur_desk_id == desk_total - 4) goto EXIT;
-			break;
-		}
-		if (ANIMATION_STOP)
-		{
-			EXIT:
-				ANIMATION_STOP  = 0;
-				ANIMATION_COUNT = 1;
-				ANIMATION_NAVI  = 0;
-				DelTimer(&tmr);
-				keyblock_id = 0;
-				SSUpdate();
-				DirectRedrawGUI_ID(shell_gui_id);
-				return;
-		}
+		UNFOCUS:
+			switch (ANIMATION_NAVI)
+			{
+				case LEFT:
+					cur_desk_id--;
+					InitData();
+					if (cur_desk_id == 1) goto EXIT;
+				break;
+				case RIGHT:
+					cur_desk_id++;
+					InitData();
+					if (cur_desk_id == desk_total - 4) goto EXIT;
+				break;
+			}
+			if (ANIMATION_STOP)
+			{
+				EXIT:
+					ANIMATION_STOP  = 0;
+					ANIMATION_COUNT = 1;
+					ANIMATION_NAVI  = 0;
+					DelTimer(&tmr);
+					keyblock_id = 0;
+					if (IsGuiOnTop(shell_gui_id))
+					{
+						MFunc();
+						DirectRedrawGUI_ID(shell_gui_id);
+					}
+					return;
+			}
 	}
 	if (ANIMATION_NAVI == RIGHT)
 		x_start -= 2;
 	else
 		x_start += 2;
 	ANIMATION_COUNT++;
+	//завершаем наш цикл
+	if (!IsGuiOnTop(shell_gui_id)) goto UNFOCUS;
 	DrawPanel();
 	GBS_StartTimerProc(&tmr, 2, (void*)Animation);
 }
@@ -168,7 +171,7 @@ void OnKey(unsigned int key, unsigned int type)
 					else if (ANIMATION_COUNT == 1)
 					{
 						cur_desk_id--;
-						SSUpdate();
+						MFunc();
 						DirectRedrawGUI_ID(shell_gui_id);
 					}
 				}
@@ -181,7 +184,7 @@ void OnKey(unsigned int key, unsigned int type)
 					if (cur_desk_id != desk_total && ANIMATION_COUNT == 1)
 					{
 						cur_desk_id++;
-						SSUpdate();
+						MFunc();
 						DirectRedrawGUI_ID(shell_gui_id);
 					}
 				}
