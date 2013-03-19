@@ -1,6 +1,6 @@
 ID   = 51
 NAME = maintab
-VER  = 0.2
+VER  = 0.2.1
 
 LNAME   = ${NAME}-${VER}.so
 FNAME   = ${ID}-${LNAME}
