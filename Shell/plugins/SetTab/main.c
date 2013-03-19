@@ -139,6 +139,7 @@ void OnKey(unsigned int key, unsigned int type)
 		}
 		else if (key == ENTER_BUTTON)
 		{
+			keyblock_id = plugin_id;
 			goto ACTION;
 		}
 		else if (key == LEFT_SOFT)
@@ -182,7 +183,7 @@ void OnKey(unsigned int key, unsigned int type)
 	}
 	else if (type == KEY_UP)
 	{
-		if (key == UP_BUTTON || key == DOWN_BUTTON)
+		if (key == UP_BUTTON || key == DOWN_BUTTON || key == ENTER_BUTTON)
 			keyblock_id = 0;
 	}
 }
