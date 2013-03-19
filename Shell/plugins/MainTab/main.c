@@ -8,12 +8,6 @@
 #include "conf_loader.h"
 #include "config_data.h"
 
-char *RamMissedCalls(void)
-__swi(0x80CC);
-
-char *RamMissedMes(void)
-__swi(0x80D4);
-
 enum
 {
 	lgpSoftkeyLeft,
@@ -29,26 +23,7 @@ unsigned int *desk_id_ptr;
 void OnRedraw(void)
 {
 	if (cfg_use_ls)
-	{
-		if (cfg_draw_me)
-		{
-			if (((*RamMissedCalls()) || (*RamMissedMes())) ? 1 : 0)
-			{
-				char str[64];
-				sprintf(str, "%s (%d)", lgp[lgpSoftkeyLeft], *(RamMissedCalls()) + *(RamMissedMes()));
-				DrawText(ws, str, GetFont(fontSoftkeys), TEXT_ALIGNLEFT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
-			}
-			else
-			{
-				goto DRAW_DEFAULT_STRING;
-			}
-		}
-		else
-		{
-			DRAW_DEFAULT_STRING:
-				DrawText(ws, lgp[lgpSoftkeyLeft], GetFont(fontSoftkeys), TEXT_ALIGNLEFT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
-		}
-	}
+		DrawText(ws, lgp[lgpSoftkeyLeft], GetFont(fontSoftkeys), TEXT_ALIGNLEFT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
 	if (cfg_use_rs)
 		DrawText(ws, lgp[lgpSoftkeyRight], GetFont(fontSoftkeys), TEXT_ALIGNRIGHT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
 }
@@ -60,19 +35,7 @@ void OnKey(unsigned int key, unsigned int type)
 		switch (key)
 		{
 			case LEFT_SOFT:
-				if (cfg_use_ls)
-				{
-					if (cfg_draw_me)
-					{
-						//сброс
-						char *ptr;
-						ptr = RamMissedCalls();
-						*ptr = 0;
-						ptr = RamMissedMes();
-						*ptr = 0;
-					}
-					ExecShortcut(cfg_ls_func);
-				}
+				if (cfg_use_ls) ExecShortcut(cfg_ls_func);
 			break;
 			case RIGHT_SOFT:
 				if (cfg_use_rs) ExecShortcut(cfg_rs_func);
