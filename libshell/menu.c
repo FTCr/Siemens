@@ -112,7 +112,8 @@ void OnKeySMenu(MENU *menu, unsigned int way)
 
 void ActionSMenu(MENU *menu)
 {
-	((void(*)())menu->items[menu->cur_id]->proc)();
+	if (menu->items[menu->cur_id]->proc)
+		((void(*)())menu->items[menu->cur_id]->proc)();
 }
 
 void DrawSMenu(MENU *menu)
