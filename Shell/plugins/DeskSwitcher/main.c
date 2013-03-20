@@ -138,7 +138,11 @@ void Animation(void)
 		x_start += 2;
 	ANIMATION_COUNT++;
 	//завершаем наш цикл
-	if (!IsGuiOnTop(shell_gui_id)) goto UNFOCUS;
+	if (!IsGuiOnTop(shell_gui_id))
+	{
+		ANIMATION_STOP = 1;
+		goto UNFOCUS;
+	}
 	DrawPanel();
 	GBS_StartTimerProc(&tmr, 2, (void*)Animation);
 }
