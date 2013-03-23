@@ -3,6 +3,7 @@
 #include "../libsiemens/cfg.h"
 #include "../libsiemens/files.h"
 #include "../libsiemens/other.h"
+#include "../libsiemens/ipc.h"
 #include "../libsiemens/lang.h"
 #include "../libsiemens/obs.h"
 #include "../libshell/other.h"
@@ -16,6 +17,7 @@ typedef struct
 	GUI gui;
 } MAIN_GUI;
 
+char path[128];
 void DestroyIdleHook(void);
 
 static void OnRedraw(MAIN_GUI *data)
@@ -46,7 +48,7 @@ static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnClose && IsUsePlg(plg[i])) plg[i]->OnClose();
 	}
-	data->gui.state = 0;
+	shell_gui_id = data->gui.state = 0;
 }
 
 static void OnFocus(MAIN_GUI *data, void *(*malloc_adr)(int), void (*mfree_adr)(void *))
@@ -199,9 +201,26 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 						DestroyIdleHook();
 						if (shell_gui_id)
 							GeneralFunc_flag1(shell_gui_id, 0);
-					break;
-					case IPC_KILL_ELF:
+						UploadGraphics();
+						UploadPlugins();
 						kill_elf();
+					break;
+					case IPC_RELOAD:
+						UploadGraphics();
+						InitConfig();
+						InitPath();
+						if (LoadGraphics() == -1)
+						{
+							IPC_SendMessage("Shell", "Shell", IPC_CLOSE);
+						}
+						else
+						{
+							cur_desk_id = 1;
+							desk_total  = 0;
+							UploadPlugins();
+							LoadPlugins();
+							DirectRedrawGUI_ID(shell_gui_id);
+						}
 					break;
 				}
 			}
@@ -238,6 +257,7 @@ int main(const char *bin_path, const char *fname)
 	char *ptr = strrchr(bin_path, '\\');
 	ptr++;
 	memcpy(root_dir, bin_path, ptr - bin_path);
+	strcpy(path, bin_path);
 	
 	InitConfig();
 	InitPath();

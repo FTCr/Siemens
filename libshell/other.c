@@ -29,35 +29,10 @@ void InitPath(void)
 void Close(void)
 {
 	IPC_SendMessage("Shell", "Shell", IPC_CLOSE);
-	SUBPROC((void*)UploadGraphics);
-	SUBPROC((void*)UploadPlugins);
-	IPC_SendMessage("Shell", "Shell", IPC_KILL_ELF);
 }
 
 void Reload(void)
 {
-	static GBSTMR tmr;
-	void WaitToLoad(void)
-	{
-		if (plg == NULL)
-		{
-			DelTimer(&tmr);
-			LoadPlugins();
-			return;
-		}
-		GBS_StartTimerProc(&tmr, 5, (void*)WaitToLoad);
-	}
-	UploadGraphics();
-	InitConfig();
-	InitPath();
-	if (LoadGraphics() == -1)
-	{
-		Close();
-		return;
-	}
-	desk_total  = 0;
-	cur_desk_id = 1;
-	SUBPROC((void*)UploadPlugins);
-	GBS_StartTimerProc(&tmr, 5, (void*)WaitToLoad);
+	IPC_SendMessage("Shell", "Shell", IPC_RELOAD);
 }
 

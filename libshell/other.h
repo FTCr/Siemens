@@ -1,8 +1,8 @@
 #ifndef _LIBSHELL_OTHER_H_
 	#define _LIBSHELL_OTHER_H_
 
-#define IPC_CLOSE    0x00
-#define IPC_KILL_ELF 0x01
+#define IPC_CLOSE  0x00
+#define IPC_RELOAD 0x01
 	
 extern char root_dir[128];
 extern char conf_dir[128];

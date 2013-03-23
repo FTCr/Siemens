@@ -66,7 +66,8 @@ void UploadPlugins(void)
 			if (plg[i]->Destroy)
 				plg[i]->Destroy();
 			_dlclose(plg[i]->id);
-			mfree(plg[i++]);
+			mfree(plg[i]);
+			plg[i++] = NULL;
 		}
 		mfree(plg);
 		plg = NULL;
