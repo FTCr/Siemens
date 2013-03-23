@@ -87,7 +87,6 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 						SwitchPhoneOff();
 					break;
 					case 2:
-						GeneralFunc_flag1(gui_id, 0);
 						Close();
 					break;
 				}
