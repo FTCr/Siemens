@@ -214,9 +214,9 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 						}
 						else
 						{
+							UploadPlugins();
 							cur_desk_id = 1;
 							desk_total  = 0;
-							UploadPlugins();
 							LoadPlugins();
 							DirectRedrawGUI_ID(shell_gui_id);
 						}
