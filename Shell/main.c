@@ -259,7 +259,6 @@ int main(const char *bin_path, const char *fname)
 	
 	InitConfig();
 	InitPath();
-	
 	if (LoadGraphics() == -1)
 	{
 		UploadGraphics();
