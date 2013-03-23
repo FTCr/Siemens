@@ -4,6 +4,8 @@
 #include "main.h"
 #include "config_data.h"
 
+unsigned int gui_id;
+
 void *RamScreenBrightness()
 __swi(0x80D7);
 
@@ -23,7 +25,7 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 {
-	keyblock_id = data->gui.state = 0;
+	gui_id = keyblock_id = data->gui.state = 0;
 #ifdef ELKA
 	DisableIconBar(0);
 #endif
@@ -120,7 +122,7 @@ static const void * const gui_methods[11]=
 	0
 };
 
-void CreateSSGUI()
+void CreateSSGUI(void)
 {
 	static RECT Canvas = {0,0,0,0};
 	MAIN_GUI *main_gui = malloc(sizeof(MAIN_GUI));
@@ -130,5 +132,5 @@ void CreateSSGUI()
 	main_gui->gui.canvas             = (RECT *)(&Canvas);
 	main_gui->gui.methods            = (void *)gui_methods;
 	main_gui->gui.item_ll.data_mfree = (void (*)(void *))mfree_adr();
-	CreateGUI(main_gui);
+	gui_id = CreateGUI(main_gui);
 }

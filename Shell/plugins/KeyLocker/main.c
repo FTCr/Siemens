@@ -14,7 +14,8 @@
 GBSTMR tmr;
 GBSTMR tmr_autolock;
 unsigned int *desk_id_ptr;
-unsigned int *swi_addr;
+unsigned int *swi_addr_kbdlock;
+unsigned int *swi_addr_isunlocked;
 unsigned int plugin_id;
 unsigned int autolock_sec;
 
@@ -30,6 +31,11 @@ void DLock(void)
 		DLONG = 0;
 		GBS_SendMessage(MMI_CEPID, LONG_PRESS, cfg_key);
 	}
+}
+
+unsigned int IsUnLocked(void)
+{
+	return (gui_id) ? 0 : 1;
 }
 
 void KeyboardLock(void)
@@ -116,8 +122,10 @@ void OnUnFocus(void)
 void Destroy(void)
 {
 	DelTimer(&tmr_autolock);
-	if (swi_addr)
-		DestroySWIHook(SWI_KBDLOCK, swi_addr); 
+	if (swi_addr_kbdlock)
+		DestroySWIHook(SWI_KBDLOCK, swi_addr_kbdlock); 
+	if (swi_addr_isunlocked)
+		DestroySWIHook(SWI_ISUNLOCKED, swi_addr_isunlocked);
 }
 
 int main(PLUGIN_S4T *plg)
@@ -133,8 +141,11 @@ int main(PLUGIN_S4T *plg)
 	plg->OnUnFocus = (void*)OnUnFocus;
 	plg->Destroy   = (void*)Destroy;
 	
-	swi_addr = SetSWIHook(SWI_KBDLOCK, (void*)CreateSSGUI);
-	if (swi_addr == NULL) return -1;
+	swi_addr_kbdlock = SetSWIHook(SWI_KBDLOCK, (void*)CreateSSGUI);
+	if (swi_addr_kbdlock == NULL) return -1;
+	
+	swi_addr_isunlocked = SetSWIHook(SWI_ISUNLOCKED, (void*)IsUnLocked);
+	if (swi_addr_isunlocked == NULL) return -1;
 
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;
