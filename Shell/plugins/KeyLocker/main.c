@@ -12,6 +12,7 @@
 #define  DLONG  tmr.param6
 
 GBSTMR tmr;
+GBSTMR tmr_autolock;
 unsigned int *desk_id_ptr;
 unsigned int *swi_addr;
 unsigned int plugin_id;
@@ -42,7 +43,7 @@ void AutoLock(void)
 	if (autolock_sec)
 	{
 		if (IsGuiOnTop(shell_gui_id))
-			GBS_StartTimerProc(&tmr, TMR_6_SEC / 6 * autolock_sec, (void*)KeyboardLock);
+			GBS_StartTimerProc(&tmr_autolock, TMR_6_SEC / 6 * autolock_sec, (void*)KeyboardLock);
 	}
 }
 
@@ -89,7 +90,7 @@ void OnKey(unsigned int key, unsigned int type)
 	if (autolock_sec)
 	{
 		if (type == KEY_DOWN)
-			DelTimer(&tmr);
+			DelTimer(&tmr_autolock);
 		else if (type == KEY_UP)
 			AutoLock();
 	}
@@ -109,12 +110,12 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 
 void OnUnFocus(void)
 {
-	DelTimer(&tmr);
+	DelTimer(&tmr_autolock);
 }
 
 void Destroy(void)
 {
-	DelTimer(&tmr);
+	DelTimer(&tmr_autolock);
 	if (swi_addr)
 		DestroySWIHook(SWI_KBDLOCK, swi_addr); 
 }
