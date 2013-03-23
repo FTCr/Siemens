@@ -1,7 +1,9 @@
 #include <swilib.h>
-#include "../libsiemens/other.h"
-#include "../libshell/plugins.h"
-#include "../libshell/other.h"
+#include "../../../libsiemens/other.h"
+#include "../../../libsiemens/swihook.h"
+#include "../../../libsiemens/cfg.h"
+#include "../../../libshell/plugins.h"
+#include "../../../libshell/other.h"
 #include "main.h"
 #include "conf_loader.h"
 #include "config_data.h"
@@ -11,7 +13,9 @@
 
 GBSTMR tmr;
 unsigned int *desk_id_ptr;
+unsigned int *swi_addr;
 unsigned int plugin_id;
+unsigned int autolock_sec;
 
 void DLock(void)
 {
@@ -27,6 +31,20 @@ void DLock(void)
 	}
 }
 
+void KeyboardLock(void)
+{
+	KbdLock();
+}
+
+void AutoLock(void)
+{
+	SettingsAE_Read(&autolock_sec, AE_APIDC_SETUP, "SecurityUI", "AutoKeyLock");
+	if (autolock_sec)
+	{
+		if (IsGuiOnTop(shell_gui_id))
+			GBS_StartTimerProc(&tmr, TMR_6_SEC / 6 * autolock_sec, (void*)KeyboardLock);
+	}
+}
 
 void OnKey(unsigned int key, unsigned int type)
 {
@@ -39,7 +57,6 @@ void OnKey(unsigned int key, unsigned int type)
 				{
 					keyblock_id = plugin_id;
 					KbdLock();
-					CreateSSGUI();
 				}
 			break;
 			case CFG_LONG_PRESS:
@@ -47,7 +64,6 @@ void OnKey(unsigned int key, unsigned int type)
 				{
 					keyblock_id = plugin_id;
 					KbdLock();
-					CreateSSGUI();
 				}
 			break;
 			case CFG_DOUBLE_CLICK:
@@ -62,13 +78,20 @@ void OnKey(unsigned int key, unsigned int type)
 					else if (DLOCK == 1)
 					{
 						KbdLock();
-						CreateSSGUI();
 					}
 				}
 				else if (type == LONG_PRESS)
 					DLONG = 1;
 			break;
 		}
+	}
+	//автоблокировка
+	if (autolock_sec)
+	{
+		if (type == KEY_DOWN)
+			DelTimer(&tmr);
+		else if (type == KEY_UP)
+			AutoLock();
 	}
 }
 
@@ -84,6 +107,18 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 	}
 }
 
+void OnUnFocus(void)
+{
+	DelTimer(&tmr);
+}
+
+void Destroy(void)
+{
+	DelTimer(&tmr);
+	if (swi_addr)
+		DestroySWIHook(SWI_KBDLOCK, swi_addr); 
+}
+
 int main(PLUGIN_S4T *plg)
 {
 	//чтение конфига
@@ -93,6 +128,12 @@ int main(PLUGIN_S4T *plg)
 
 	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
+	plg->OnFocus   = (void*)AutoLock;
+	plg->OnUnFocus = (void*)OnUnFocus;
+	plg->Destroy   = (void*)Destroy;
+	
+	swi_addr = SetSWIHook(SWI_KBDLOCK, (void*)CreateSSGUI);
+	if (swi_addr == NULL) return -1;
 
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;
