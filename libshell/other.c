@@ -1,6 +1,7 @@
 #include "swilib.h"
 #include "../libsiemens/graphics.h"
 #include "../libsiemens/ipc.h"
+#include "../libsiemens/other.h"
 #include "graphics.h"
 #include "plugins.h"
 #include "other.h"
@@ -19,12 +20,44 @@ unsigned int shell_gui_id;
 //блокируем все обработчики, кроме выбранного
 unsigned int keyblock_id;
 
+void InitPath(void)
+{
+	sprintf(img_dir, "%s%s", cfg_skin_directory, "Img\\");
+	sprintf(conf_dir, "%s%s", cfg_skin_directory, "Configs\\");
+}
+
 void Close(void)
 {
 	IPC_SendMessage("Shell", "Shell", IPC_CLOSE);
+	SUBPROC((void*)UploadGraphics);
+	SUBPROC((void*)UploadPlugins);
+	IPC_SendMessage("Shell", "Shell", IPC_KILL_ELF);
 }
 
 void Reload(void)
 {
-	IPC_SendMessage("Shell", "Shell", IPC_RELOAD);
+	static GBSTMR tmr;
+	void WaitToLoad(void)
+	{
+		if (plg == NULL)
+		{
+			DelTimer(&tmr);
+			LoadPlugins();
+			return;
+		}
+		GBS_StartTimerProc(&tmr, 5, (void*)WaitToLoad);
+	}
+	UploadGraphics();
+	InitConfig();
+	InitPath();
+	if (LoadGraphics() == -1)
+	{
+		Close();
+		return;
+	}
+	desk_total  = 0;
+	cur_desk_id = 1;
+	SUBPROC((void*)UploadPlugins);
+	GBS_StartTimerProc(&tmr, 5, (void*)WaitToLoad);
 }
+

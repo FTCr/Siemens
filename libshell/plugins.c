@@ -22,28 +22,29 @@ int LoadPlugins(void)
 	unsigned int i = 0;
 	unsigned int n = 0;
 	unsigned int len = 0;
+	int plg_id;
 	while (de[i] != NULL)
 	{
 		sprintf(path, "%s%s%s", root_dir, "Plugins\\", de[i]->file_name);
-		if (_dlopen(path) != -1)
+		plg_id = _dlopen(path);
+		if (plg_id != -1)
 		{
 			plg        = realloc(plg, sizeof(PLUGIN_S4T*) * (n + 2));
 			plg[n]     = malloc(sizeof(PLUGIN_S4T));
 			plg[n + 1] = NULL;
 			zeromem(plg[n], sizeof(PLUGIN_S4T));
-			plg[n]->id = n + 1; // устанавливаем идентификатор для плагина
+			plg[n]->id = plg_id; // устанавливаем идентификатор для плагина
 			GetFNameWithoutExt(plg[n]->fname, de[i]->file_name);
 			int (*init)(PLUGIN_S4T*) = (int(*)(PLUGIN_S4T*))_dlsym(n, "main");
 			if (init(plg[n]) == -1) //что-то не так, выгружаем
 			{
-				if (plg[n]->Destroy) plg[n]->Destroy();
-				if (plg[n])
-				{
-					mfree(plg[n]);
-					plg[n] = NULL;
-				}
+				if (plg[n]->Destroy)
+					plg[n]->Destroy();
+				plg_id = plg[n]->id;
+				mfree(plg[n]);
+				plg[n] = NULL;
 				plg = realloc(plg, sizeof(PLUGIN_S4T*) * (n + 1));
-				_dlclose(n);
+				_dlclose(plg_id);
 			}
 			else
 				n++;
@@ -59,10 +60,12 @@ void UploadPlugins(void)
 	if (plg)
 	{
 		unsigned int i = 0;
-		while(plg[i] != NULL)
+		i = 0;
+		while(plg[i])
 		{
-			if (plg[i]->Destroy) plg[i]->Destroy();
-			_dlclose(i);
+			if (plg[i]->Destroy)
+				plg[i]->Destroy();
+			_dlclose(plg[i]->id);
 			mfree(plg[i++]);
 		}
 		mfree(plg);

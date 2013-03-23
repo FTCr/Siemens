@@ -16,8 +16,6 @@ typedef struct
 	GUI gui;
 } MAIN_GUI;
 
-unsigned int killed;
-
 void DestroyIdleHook(void);
 
 static void OnRedraw(MAIN_GUI *data)
@@ -48,7 +46,6 @@ static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnClose && IsUsePlg(plg[i])) plg[i]->OnClose();
 	}
-	
 	data->gui.state = 0;
 }
 
@@ -91,16 +88,6 @@ static void OnUnFocus(MAIN_GUI *data, void (*mfree_adr)(void *))
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnUnFocus && IsUsePlg(plg[i])) plg[i]->OnUnFocus();
 	}
-}
-
-void KillELF(void)
-{
-	DestroyIdleHook();
-	if (shell_gui_id)
-		GeneralFunc_flag1(shell_gui_id, 0);
-	SUBPROC((void*)UploadGraphics);
-	SUBPROC((void*)UploadPlugins);
-	SUBPROC((void*)kill_elf);
 }
 
 int OnKey(MAIN_GUI *data, GUI_MSG *msg)
@@ -177,20 +164,12 @@ CSM_RAM *GetIdleCSM(void)
 	return (CSM_RAM*)FindCSMbyID(CSM_root()->idle_id);
 }
 
-void InitPath(void)
-{
-	sprintf(img_dir, "%s%s", cfg_skin_directory, "Img\\");
-	sprintf(conf_dir, "%s%s", cfg_skin_directory, "Configs\\");
-}
-
 int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 {
 	if (msg->msg == MSG_RECONFIGURE_REQ)
 	{
 		if (strcmp(cfg_path, (char *)msg->data0) == 0)
-		{
 			Reload();
-		}
 		if (strcmp(cfg_col_path, (char*)msg->data0) == 0)
 			InitConfigCol();
 		if (strcmp(cfg_font_path, (char*)msg->data0) == 0)
@@ -207,8 +186,6 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnMessageDep && IsUsePlg(plg[i])) plg[i]->OnMessageDep(data, msg);
 	}
-	static GBSTMR tmr;
-	
 	if (msg->msg == MSG_IPC)
 	{
 		IPC_REQ *ipc = (IPC_REQ*)msg->data0;
@@ -216,38 +193,15 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 		{
 			if (strcmp(ipc->name_to, "Shell") == 0)
 			{
-				static GBSTMR tmr;
-				void LP(void)
-				{
-					if (plg == NULL)//ожидаем выгрузки всеx плагинов
-					{
-						LoadPlugins();
-						DelTimer(&tmr);
-						DirectRedrawGUI_ID(shell_gui_id);
-					}
-					else
-					{
-						GBS_StartTimerProc(&tmr, 5, (void*)LP);
-					}
-				}
 				switch (msg->submess)
 				{
 					case IPC_CLOSE:
-						KillELF();
+						DestroyIdleHook();
+						if (shell_gui_id)
+							GeneralFunc_flag1(shell_gui_id, 0);
 					break;
-					case IPC_RELOAD:
-						UploadGraphics();
-						InitConfig();
-						InitPath();
-						if (LoadGraphics() == -1)
-						{
-							KillELF();
-							return 1;
-						}
-						desk_total  = 0;
-						cur_desk_id = 1;
-						SUBPROC((void*)UploadPlugins);
-						LP();
+					case IPC_KILL_ELF:
+						kill_elf();
 					break;
 				}
 			}
@@ -274,10 +228,8 @@ int IdleCSMOnMessage(CSM_RAM *csm, GBS_MSG *msg)
 
 void DestroyIdleHook(void)
 {
-	LockSched();
 	CSM_RAM *csm = GetIdleCSM();
 	((CSM_DESC*)csm->constr)->onMessage = OldOnMessage;
-	UnlockSched();
 }
 
 int main(const char *bin_path, const char *fname)
@@ -293,7 +245,7 @@ int main(const char *bin_path, const char *fname)
 	if (LoadGraphics() == -1)
 	{
 		UploadGraphics();
-		SUBPROC((void*)kill_elf);
+		kill_elf();
 		return 0;
 	}
 	InitConfigCol();

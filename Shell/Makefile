@@ -13,7 +13,7 @@ LC_M := LC_MESSAGES=C
 
 
 CFLAGS = -I../include -W -msoft-float -mlittle-endian -mcpu=arm926ej-s -mtune=arm926ej-s -nostdlib -fshort-wchar \
-		-fno-exceptions -fno-builtin -fdata-sections -ffunction-sections -std=gnu99
+		-fno-exceptions -fno-builtin -fdata-sections -ffunction-sections -std=gnu99 -O2
 LDFLAGS = -L../libs -marmelf -z max-page-size=1 -nostdlib --defsym __ex=0 --gc-section -s
 LIB_LDFLAGS = ${LDFLAGS} -shared -Bsymbolic -Bsymbolic-function -soname=${FNAME}
 ELF_LDFLAGS = ${LDFLAGS} -pie 
