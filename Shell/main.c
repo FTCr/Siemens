@@ -17,7 +17,6 @@ typedef struct
 	GUI gui;
 } MAIN_GUI;
 
-char path[128];
 void DestroyIdleHook(void);
 
 static void OnRedraw(MAIN_GUI *data)
@@ -257,7 +256,6 @@ int main(const char *bin_path, const char *fname)
 	char *ptr = strrchr(bin_path, '\\');
 	ptr++;
 	memcpy(root_dir, bin_path, ptr - bin_path);
-	strcpy(path, bin_path);
 	
 	InitConfig();
 	InitPath();
