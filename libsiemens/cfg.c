@@ -63,6 +63,7 @@ int GetStrDataFromSystemConf(char *dest, const char *path, const char *keyword)
 		_close(fp, &err);
 		return -1;
 	}
+	_close(fp, &err);
 	return 1;
 }
 
