@@ -9,7 +9,7 @@ int *SetSWIHook(int swi_num, void *proc)
 	addr = (unsigned int*)lib[swi_num];
 	lib[swi_num] = (unsigned int)proc; 
 	UnlockSched(); 
-	
+	return addr;
 }
 
 void DestroySWIHook(int swi_num, unsigned int *addr)
