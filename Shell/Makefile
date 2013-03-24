@@ -1,5 +1,5 @@
 NAME = Shell
-VER  = 0.1
+VER  = 0.2
 
 FNAME   = ${NAME}-${VER}.elf
 OBJECTS = *.o
