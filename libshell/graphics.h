@@ -4,10 +4,6 @@
 #define TEXT_TYPE_HEADER  0
 #define TEXT_TYPE_SOFTKEY 1
 
-#define PROFILE_PD         "1:\\system\\hmi\\profile.pd"
-#define KEYWORD_WALLPAPER  "Wallpaper_3"
-#define KEYWORD_WALLPAPER2 "Wallpaper_1"
-
 enum
 {
 	imgWallpaper,
