@@ -32,7 +32,6 @@ static void OnRedraw(MAIN_GUI *data)
 static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 {
 	data->gui.state = 1;
-
 	if (plg)
 	{
 		for (int i = 0; plg[i] != NULL; i++)
@@ -54,24 +53,6 @@ static void OnFocus(MAIN_GUI *data, void *(*malloc_adr)(int), void (*mfree_adr)(
 {
 	data->gui.state = 2;
 	DisableIDLETMR();
-	
-	char path[128];
-	if (GetStrDataFromSystemConf(path, PROFILE_PD, KEYWORD_WALLPAPER) != -1)
-	{
-		utf8_2fname(path, path);
-		if (strcmp(path, wallpaper_path) != 0)
-		{
-			FSTATS fs;
-			unsigned int err;
-			if (GetFileStats(path, &fs, &err) != -1)
-			{
-				strcpy(wallpaper_path, path);
-				mfree(img[imgWallpaper]);
-				img[imgWallpaper] = CreateIMGHDRFromImgFile(wallpaper_path);
-			}
-		}
-	}
-	
 	if (plg)
 	{
 		for (int i = 0; plg[i] != NULL; i++)

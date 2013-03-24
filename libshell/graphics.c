@@ -7,10 +7,10 @@
 #include "other.h"
 #include "config_coord.h"
 
+IMGHDR *GetCanvasBufferPicPtr(char CanvasID)
+__swi(0x76);
+
 IMGHDR *img[imgTotal];
-
-
-char wallpaper_path[128];
 
 int LoadGraphics(void)
 {	
@@ -32,30 +32,14 @@ int LoadGraphics(void)
 		img[i++] = CreateIMGHDRFromPngFile(path, 0);
 	}
 	
-	if (GetStrDataFromSystemConf(wallpaper_path, PROFILE_PD, KEYWORD_WALLPAPER)  == -1)
-	{
-		if (GetStrDataFromSystemConf(wallpaper_path, PROFILE_PD, KEYWORD_WALLPAPER2) == 1)
-		{
-			MsgBoxError(1, (int)"Error parse profile.pd!");
-			return -1;
-		}
-	}
-	utf8_2fname(wallpaper_path, wallpaper_path);
-	
-	if (GetFileStats(wallpaper_path, &fs, &err) == -1)
-	{
-		MsgBoxError(1, (int)"Wallpaper not found!");
-		return -1;
-	}
-
-	img[imgWallpaper] = CreateIMGHDRFromImgFile(wallpaper_path);
+	img[imgWallpaper] = GetCanvasBufferPicPtr(0x00);
 	
 	return 0;
 }
 
 void UploadGraphics(void)
 {
-	for (int i = 0; i < imgTotal; i++)
+	for (int i = 1; i < imgTotal; i++)
 	{
 		FreeIMGHDR(img[i]);
 		img[i] = NULL;

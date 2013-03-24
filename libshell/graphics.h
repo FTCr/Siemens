@@ -19,8 +19,6 @@ enum
 
 extern IMGHDR *img[imgTotal];
 
-extern char wallpaper_path[128];
-
 int LoadGraphics(void);
 void UploadGraphics(void);
 
