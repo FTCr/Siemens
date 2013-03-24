@@ -15,6 +15,7 @@ int Parse(char *dest, const char *buffer, unsigned int size, const char *keyword
 				if (buffer[i + 1] != keyword[j]) //не подошло
 				{
 					j = 1;
+					ret = -1;
 					goto END;
 				}
 				i++;
@@ -23,7 +24,6 @@ int Parse(char *dest, const char *buffer, unsigned int size, const char *keyword
 			//всё найдено...
 			i += 2;
 			j = 0;
-			ret = i;
 			while(1)
 			{
 				if (buffer[i] == '\n' || buffer[i] == '\0' || buffer[i] == '\r') break;
@@ -32,7 +32,7 @@ int Parse(char *dest, const char *buffer, unsigned int size, const char *keyword
 				i++;
 			}
 			dest[j]='\0';
-			return ret;
+			return i;
 		}
 		END:
 			i++;
