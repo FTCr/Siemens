@@ -1,4 +1,5 @@
 #include <swilib.h>
+#include "../../../libsiemens/ipc.h"
 #include "../../../libsiemens/other.h"
 #include "../../../libsiemens/swihook.h"
 #include "../../../libsiemens/cfg.h"
@@ -40,7 +41,9 @@ unsigned int IsUnLocked(void)
 
 void KeyboardLock(void)
 {
-	KbdLock();
+	static IPC_REQ ipc;
+	IPC_SendMessage(&ipc, IPC_XTASK_NAME, "KeyLocker", IPC_XTASK_IDLE, NULL);
+	SUBPROC((void*)CreateSSGUI);
 }
 
 void AutoLock(void)
@@ -141,7 +144,7 @@ int main(PLUGIN_S4T *plg)
 	plg->OnUnFocus = (void*)OnUnFocus;
 	plg->Destroy   = (void*)Destroy;
 	
-	swi_addr_kbdlock = SetSWIHook(SWI_KBDLOCK, (void*)CreateSSGUI);
+	swi_addr_kbdlock = SetSWIHook(SWI_KBDLOCK, (void*)KeyboardLock);
 	if (swi_addr_kbdlock == NULL) return -1;
 	
 	swi_addr_isunlocked = SetSWIHook(SWI_ISUNLOCKED, (void*)IsUnLocked);

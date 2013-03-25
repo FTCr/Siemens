@@ -123,7 +123,7 @@ static const void * const gui_methods[11]=
 };
 
 void CreateSSGUI(void)
-{
+{	
 	static RECT Canvas = {0,0,0,0};
 	MAIN_GUI *main_gui = malloc(sizeof(MAIN_GUI));
 	zeromem(main_gui,sizeof(MAIN_GUI));
