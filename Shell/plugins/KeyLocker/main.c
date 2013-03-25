@@ -40,6 +40,7 @@ unsigned int IsUnLocked(void)
 
 void KeyboardLock(void)
 {
+	keyblock_id = 0;
 	FocusGUI(shell_gui_id);
 	SUBPROC((void*)CreateSSGUI);
 }
@@ -68,10 +69,17 @@ void OnKey(unsigned int key, unsigned int type)
 				}
 			break;
 			case CFG_LONG_PRESS:
+				if (type == KEY_DOWN)
+					keyblock_id = plugin_id;
 				if (type == LONG_PRESS)
 				{
 					keyblock_id = plugin_id;
 					KbdLock();
+				}
+				if (type == KEY_UP)
+				{
+					keyblock_id = 0;
+					GBS_SendMessage(MMI_CEPID, KEY_UP, cfg_key);
 				}
 			break;
 			case CFG_DOUBLE_CLICK:

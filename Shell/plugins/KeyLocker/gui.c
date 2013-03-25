@@ -1,6 +1,5 @@
 #include <swilib.h>
 #include "../libshell/plugins.h"
-#include "../libshell/other.h"
 #include "main.h"
 #include "config_data.h"
 
@@ -32,7 +31,7 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 {
-	gui_id = keyblock_id = data->gui.state = 0;
+	gui_id = data->gui.state = 0;
 #ifdef ELKA
 	DisableIconBar(0);
 #endif
