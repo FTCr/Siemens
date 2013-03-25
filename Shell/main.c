@@ -37,6 +37,9 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnCreate && IsUsePlg(plg[i])) plg[i]->OnCreate();
 	}
+#ifdef ELKA
+	GBS_SendMessage(0x4209, 0x642C, 0, 0, 0);
+#endif
 }
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
