@@ -28,13 +28,18 @@ void reload_func(void)
 	Reload();
 }
 
+void kbdlock_func(void)
+{
+	KbdLock();
+}
 
 void *menu_procs[MENU_ITEMS]=
 {
 	shutdown_func,
 	reboot_func,
 	close_func,
-	reload_func
+	reload_func,
+	kbdlock_func
 };
 
 static void OnRedraw(MAIN_GUI *data)

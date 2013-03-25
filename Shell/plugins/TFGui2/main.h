@@ -1,7 +1,7 @@
 #ifndef _MAIN_H_
 	#define _MAIN_H_
 	
-#define MENU_ITEMS 0x04
+#define MENU_ITEMS 0x05
 
 enum
 {
@@ -18,7 +18,9 @@ enum
 	lgpMenuExit,
 	lgpMenuExit_add,
 	lgpMenuRestart,
-	lgpMenuRestart_add
+	lgpMenuRestart_add,
+	lgpMenuLock,
+	lgpMenuLock_add
 };
 
 extern char **lgp;

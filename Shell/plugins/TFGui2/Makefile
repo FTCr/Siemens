@@ -1,6 +1,6 @@
 ID   = 97
 NAME = tfgui2
-VER  = 0.1
+VER  = 0.2
 
 LNAME   = ${NAME}-${VER}.so
 FNAME   = ${ID}-${LNAME}
