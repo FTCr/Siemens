@@ -178,6 +178,7 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 				switch (msg->submess)
 				{
 					case IPC_CLOSE:
+						ShowMSG(1, (int)"1");
 						DestroyIdleHook();
 						if (shell_gui_id)
 							GeneralFunc_flag1(shell_gui_id, 0);
@@ -191,7 +192,8 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 						InitPath();
 						if (LoadGraphics() == -1)
 						{
-							IPC_SendMessage("Shell", "Shell", IPC_CLOSE);
+							static IPC_REQ ipc;
+							IPC_SendMessage(&ipc, "Shell", "Shell", IPC_CLOSE, NULL);
 						}
 						else
 						{
