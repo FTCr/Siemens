@@ -109,7 +109,7 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 		if (strcmp(successed_config_filename, (char *)msg->data0) == 0)
 		{
 			InitConfig(successed_config_filename);
-			*desk_id_ptr         = cfg_desk_id;
+			*desk_id_ptr = cfg_desk_id;
 		}
 	}
 }
