@@ -11,6 +11,7 @@ __swi(0x80D7);
 
 typedef struct{
 	GUI gui;
+	int max_illum;
 } MAIN_GUI;
 
 static void OnRedraw(MAIN_GUI *data)
@@ -21,6 +22,12 @@ static void OnRedraw(MAIN_GUI *data)
 static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 {
 	data->gui.state = 1;
+	
+	LIGHT_PARAM *lp = RamScreenBrightness();
+	data->max_illum = lp->timeout;
+	SetIllumination(0, 1, 0, 0);
+	SetIllumination(1, 1, 0, 0);
+	SaveMaxIllumination(0);
 }
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
@@ -29,6 +36,9 @@ static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 #ifdef ELKA
 	DisableIconBar(0);
 #endif
+	SetIllumination(0, 1, data->max_illum, 0);
+	SetIllumination(1, 1, data->max_illum, 0);
+	SaveMaxIllumination(data->max_illum);
 }
 
 static void OnFocus(MAIN_GUI *data, void *(*malloc_adr)(int), void (*mfree_adr)(void *))
@@ -48,16 +58,6 @@ static void OnUnFocus(MAIN_GUI *data, void (*mfree_adr)(void *))
 #endif
 }
 
-void UnLock()
-{
-	KbdUnlock();
-	LIGHT_PARAM *lp;
-	lp = (LIGHT_PARAM*)RamScreenBrightness();
-	SetIllumination(0, 1, lp->unk0, 0); //в swlib.h перепутаны поля структуры
-	SetIllumination(1, 1, lp->unk0, 0);
-	//запуск автообновления плагинов
-}
-
 static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 {
 	const unsigned int Key  = msg->gbsmsg->submess;
@@ -70,14 +70,12 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 			case CFG_KEY_DOWN:
 				if (Type == KEY_DOWN)
 				{
-					UnLock();
 					return 1;
 				}
 			break;
 			case CFG_LONG_PRESS:
 				if (Type == LONG_PRESS)
 				{
-					UnLock();
 					return 1;
 				}
 			break;
@@ -91,7 +89,6 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 					}
 					else if (DLOCK == 1)
 					{
-						UnLock();
 						return 1;
 					}
 				}
