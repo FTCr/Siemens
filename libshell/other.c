@@ -28,11 +28,13 @@ void InitPath(void)
 
 void Close(void)
 {
-	IPC_SendMessage("Shell", "Shell", IPC_CLOSE);
+	static IPC_REQ ipc;
+	IPC_SendMessage(&ipc, "Shell", "Shell", IPC_CLOSE, NULL);
 }
 
 void Reload(void)
 {
-	IPC_SendMessage("Shell", "Shell", IPC_RELOAD);
+	static IPC_REQ ipc;
+	IPC_SendMessage(&ipc, "Shell", "Shell", IPC_RELOAD, NULL);
 }
 
