@@ -34,6 +34,7 @@ static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 	gui_id = data->gui.state = 0;
 #ifdef ELKA
 	DisableIconBar(0);
+	GBS_SendMessage(0x4209, 0x642C, 0, 0, 0);
 #endif
 	SetIllumination(0, 1, data->max_illum, 0);
 	SetIllumination(1, 1, data->max_illum, 0);
@@ -54,6 +55,7 @@ static void OnUnFocus(MAIN_GUI *data, void (*mfree_adr)(void *))
 	data->gui.state = 1;
 #ifdef ELKA
 	DisableIconBar(0);
+	GBS_SendMessage(0x4209, 0x642C, 0, 0, 0);
 #endif
 }
 
