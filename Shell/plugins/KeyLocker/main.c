@@ -1,5 +1,4 @@
 #include <swilib.h>
-#include "../../../libsiemens/ipc.h"
 #include "../../../libsiemens/other.h"
 #include "../../../libsiemens/swihook.h"
 #include "../../../libsiemens/cfg.h"
@@ -41,8 +40,7 @@ unsigned int IsUnLocked(void)
 
 void KeyboardLock(void)
 {
-	static IPC_REQ ipc;
-	IPC_SendMessage(&ipc, IPC_XTASK_NAME, "KeyLocker", IPC_XTASK_IDLE, NULL);
+	FocusGUI(shell_gui_id);
 	SUBPROC((void*)CreateSSGUI);
 }
 
