@@ -14,10 +14,12 @@
 GBSTMR tmr;
 GBSTMR tmr_autolock;
 unsigned int *desk_id_ptr;
-unsigned int *swi_addr_kbdlock;
-unsigned int *swi_addr_isunlocked;
 unsigned int plugin_id;
 unsigned int autolock_sec;
+
+unsigned int *swi_addr_kbdlock;
+unsigned int *swi_addr_isunlocked;
+unsigned int *swi_addr_kbdunlock;
 
 void DLock(void)
 {
@@ -135,6 +137,9 @@ void Destroy(void)
 		DestroySWIHook(SWI_KBDLOCK, swi_addr_kbdlock); 
 	if (swi_addr_isunlocked)
 		DestroySWIHook(SWI_ISUNLOCKED, swi_addr_isunlocked);
+	if (swi_addr_kbdunlock)
+		DestroySWIHook(SWI_KBDUNLOCK, swi_addr_kbdunlock);
+	CloseSSGUI();
 }
 
 int main(PLUGIN_S4T *plg)
@@ -155,6 +160,9 @@ int main(PLUGIN_S4T *plg)
 	
 	swi_addr_isunlocked = SetSWIHook(SWI_ISUNLOCKED, (void*)IsUnLocked);
 	if (swi_addr_isunlocked == NULL) return -1;
+
+	swi_addr_kbdunlock = SetSWIHook(SWI_KBDUNLOCK, (void*)CloseSSGUI);
+	if (swi_addr_kbdunlock == NULL) return -1;
 
 	plg->desk_id = cfg_desk_id;
 	desk_id_ptr  = &plg->desk_id;

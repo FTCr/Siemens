@@ -71,13 +71,13 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 			case CFG_KEY_DOWN:
 				if (Type == KEY_DOWN)
 				{
-					return 1;
+					KbdUnlock();
 				}
 			break;
 			case CFG_LONG_PRESS:
 				if (Type == LONG_PRESS)
 				{
-					return 1;
+					KbdUnlock();
 				}
 			break;
 			case CFG_DOUBLE_CLICK:
@@ -90,7 +90,7 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 					}
 					else if (DLOCK == 1)
 					{
-						return 1;
+						KbdUnlock();
 					}
 				}
 			break;
@@ -131,4 +131,10 @@ void CreateSSGUI(void)
 	main_gui->gui.methods            = (void *)gui_methods;
 	main_gui->gui.item_ll.data_mfree = (void (*)(void *))mfree_adr();
 	gui_id = CreateGUI(main_gui);
+}
+
+void CloseSSGUI(void)
+{
+	if (gui_id)
+		GeneralFunc_flag1(gui_id, 0);
 }

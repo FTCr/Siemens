@@ -4,5 +4,6 @@
 extern unsigned int gui_id;
 
 void CreateSSGUI(void);
+void CloseSSGUI(void);
 
 #endif
