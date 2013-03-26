@@ -58,6 +58,66 @@ void DE_Sort1(DIR_ENTRY ***DE)
 	}
 }
 
+void DE_Sort1_With_Dirs(DIR_ENTRY ***DE)
+{
+	DIR_ENTRY **de = *DE;
+	DIR_ENTRY **de_dirs  = NULL;
+	DIR_ENTRY **de_files = NULL;
+	unsigned int err;
+	unsigned int i = 0;
+	unsigned int d_id = 0;
+	unsigned int f_id = 0;
+	//раскидываем файлы и директории по отдельным переменным
+	char path[128];
+	while (de[i] != NULL)
+	{
+		sprintf(path, "%s\\%s", de[i]->folder_name, de[i]->file_name);
+		if (isdir(path, &err))
+		{
+			de_dirs = realloc(de_dirs, sizeof(DIR_ENTRY*) * (d_id + 2));
+			de_dirs[d_id]     = de[i];
+			de_dirs[d_id + 1] = NULL;
+			d_id++;
+		}
+		else
+		{
+			de_files = realloc(de_files, sizeof(DIR_ENTRY*) * (f_id + 2));
+			de_files[f_id]     = de[i];
+			de_files[f_id + 1] = NULL;
+			f_id++;
+		}
+		i++;
+	}
+	
+	if (de_dirs)
+	{
+		//сортируем каталоги
+		DE_Sort1(&de_dirs);
+		//пихаем их на выход
+		i = 0;
+		while (de_dirs[i] != NULL)
+			de[i] = de_dirs[i++];
+		//чистим
+		mfree(de_dirs);
+	}
+	if (de_files)
+	{
+		//сортируем файлы
+		DE_Sort1(&de_files);
+		//пихаем их на выход
+		f_id = i;
+		i = 0;
+		while (de_files[i] != NULL)
+		{
+			de[f_id] = de_files[i];
+			f_id++;
+			i++;
+		}
+		//чистота залог успеха
+		mfree(de_files);
+	}
+}
+
 int GetExtByPath(char *dest, const char *path)
 {
 	char *ptr = strrchr(path, '.');
