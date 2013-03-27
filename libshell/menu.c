@@ -3,7 +3,7 @@
 #include "graphics.h"
 #include "menu.h"
 #include "config_col.h"
-#include "config_coord.h"
+#include "config_font.h"
 
 MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons, int icon_flag, void **procs, int y, int d_items, int total)
 {	
@@ -133,7 +133,7 @@ void DrawSMenu(MENU *menu)
 		const int Start_y  = menu->y;
 		const int Cur_x_off = (ScreenW() - img[imgCursor]->w) / 2;
 		
-		unsigned int font = FONT_MEDIUM;
+		int font = cfg_font_menu2;
 		unsigned int x = Cur_x_off;
 		unsigned int y = 0;
 		DrawSeparateBG(0, Start_y, ScreenW(), Start_y + Height_item * menu->max);
@@ -165,12 +165,12 @@ void DrawSMenu(MENU *menu)
 				ws_enc_work(menu->items[n]->string2);
 				DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(FONT_SMALL), FONT_SMALL, TEXT_ALIGNLEFT,
 						cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
-				font = FONT_SMALL_BOLD;
+				font = cfg_font_add_menu1;
 				y = Start_y + Height_item * i;
 			}
 			else
 			{
-				font = FONT_MEDIUM;
+				font = cfg_font_menu1;
 				y = Start_y + Height_item * i + (img[imgCursor]->h - GetFontYSIZE(font)) / 2;
 			}
 			//основная строка
