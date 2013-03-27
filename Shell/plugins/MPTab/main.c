@@ -236,7 +236,7 @@ void DrawVol(int is_on_redraw, int key, int mode)
 	unsigned int font = GetFont(fontMain1);
 	if (!is_on_redraw)
 	{
-		DrawSeparateBG(cfg_x_volume, cfg_y_volume, cfg_x_volume + GetWsWidth(ws, font), cfg_y_volume + GetFontYSIZE(font));
+		DrawSeparateBG(cfg_x_volume, cfg_y_volume, cfg_x_volume + GetWidthWS(ws, font), cfg_y_volume + GetFontYSIZE(font));
 		DrawSeparateBG(cfg_x_vol_up, cfg_y_vol_up, cfg_x_vol_up + icons[iconVol_up]->w, cfg_y_vol_up + icons[iconVol_up]->h);
 		DrawSeparateBG(cfg_x_vol_down, cfg_y_vol_down, cfg_x_vol_down + icons[iconVol_down]->w, cfg_y_vol_down + icons[iconVol_down]->h);
 		if (key == VOL_UP_BUTTON)
@@ -246,7 +246,7 @@ void DrawVol(int is_on_redraw, int key, int mode)
 	}
 	DrawIMGHDR(img1, cfg_x_vol_up, cfg_y_vol_up, 0, 0, 0, 0);
 	DrawIMGHDR(img2, cfg_x_vol_down, cfg_y_vol_down, 0, 0, 0, 0);
-	DrawString(ws, cfg_x_volume, cfg_y_volume, cfg_x_volume + GetWsWidth(ws, font), cfg_y_volume + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
+	DrawString(ws, cfg_x_volume, cfg_y_volume, cfg_x_volume + GetWidthWS(ws, font), cfg_y_volume + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
 				GetColor(colorMain), GetPaletteAdrByColorIndex(23));
 }
 
@@ -274,7 +274,7 @@ void OnRedraw(void)
 	{
 		unsigned int font = GetFont(fontMain1);
 		wsprintf(ws, "%t", lgp[lgpMain]);
-		DrawString(ws, 0, cfg_coord_h_mid - GetFontYSIZE(font)/2, ScreenW(), ScreenH(), font, TEXT_ALIGNMIDDLE,
+		DrawString(ws, 0, cfg_coord_h_mid, ScreenW(), ScreenH(), font, TEXT_ALIGNMIDDLE,
 					GetColor(colorMain), GetPaletteAdrByColorIndex(23));
 		DrawText(ws, lgp[lgpSoftkeyLeft_open], GetFont(fontSoftkeys), TEXT_ALIGNLEFT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
 	}
