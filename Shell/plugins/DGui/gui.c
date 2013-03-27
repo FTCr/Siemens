@@ -194,7 +194,7 @@ void CreateDialGUI(const char symbol)
 	//считаем количество макс. символом для набора номера
 	WSHDR *ws = AllocWS(12);
 	wsAppendChar(ws, '0');
-	const unsigned int Swidth = GetWsWidth(ws, GetFont(fontMain3));
+	const unsigned int Swidth = GetWidthWS(ws, GetFont(fontMain3));
 	unsigned int width = 0;
 	while((int)width < ScreenW())
 	{

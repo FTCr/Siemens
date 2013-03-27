@@ -20,7 +20,7 @@ void DrawData(const int is_draw_bg, const int cfg_x, const int cfg_y, /*const in
 	wsprintf(ws, cfg_string, data);
 	unsigned int align;
 	unsigned int font = GetFont(fontMain1);
-	unsigned int width = GetWsWidth(ws, font);
+	unsigned int width = GetWidthWS(ws, font);
 	unsigned int height = GetFontYSIZE(font);
 	
 	/*switch (cfg_align)
