@@ -134,7 +134,7 @@ void DrawSMenu(MENU *menu)
 		const int Start_y  = menu->y;
 		const int Cur_x_off = (ScreenW() - img[imgCursor]->w) / 2;
 		
-		unsigned int x = Cur_x_off;
+		int x = Cur_x_off;
 		unsigned int y = 0;
 		DrawSeparateBG(0, Start_y, ScreenW(), Start_y + Height_item * menu->max);
 		
@@ -165,7 +165,7 @@ void DrawSMenu(MENU *menu)
 				y = Start_y + Height_item * i + img[imgCursor]->h - GetFontYSIZE(font);
 				
 				ws_enc_work(menu->items[n]->string2);
-				DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
+				DrawStringWS(menu->ws, x, y, ScreenW() - Cur_x_off, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
 						cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
 				font = GetFontFromCfg(cfg_font_menu1);
 				y = Start_y + Height_item * i;
@@ -177,7 +177,7 @@ void DrawSMenu(MENU *menu)
 			}
 			//основная строка
 			ws_enc_work(menu->items[n]->string1);
-			DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT, cfg_col_menu_main,
+			DrawStringWS(menu->ws, x, y, ScreenW() - Cur_x_off, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT, cfg_col_menu_main,
 				GetPaletteAdrByColorIndex(23));
 			i++;
 			n++;
