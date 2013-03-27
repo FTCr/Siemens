@@ -118,6 +118,14 @@ void ActionSMenu(MENU *menu)
 
 void DrawSMenu(MENU *menu)
 {
+	void ws_enc_work(char *str)
+	{
+		if (menu->enc == MENU_ENC_CP1251)
+			wsprintf(menu->ws, "%t", str);
+		else
+			str_2ws(menu->ws, str, strlen(str));
+	}
+	
 	if (menu->items)
 	{
 		const int Height_item = img[imgCursor]->h + 1;
@@ -149,12 +157,13 @@ void DrawSMenu(MENU *menu)
 				x = Cur_x_off + 5 + menu->items[n]->icon->w + 5;
 			}
 			//дополнительная строка
+			
 			if (menu->items[n]->string2)
 			{
 				y = Start_y + Height_item * i + img[imgCursor]->h - GetFontYSIZE(FONT_SMALL);
-				if (menu->enc == MENU_ENC_CP1251)
-					wsprintf(menu->ws, "%t", menu->items[n]->string2);
-				DrawString(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(FONT_SMALL), FONT_SMALL, TEXT_ALIGNLEFT,
+				
+				ws_enc_work(menu->items[n]->string2);
+				DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(FONT_SMALL), FONT_SMALL, TEXT_ALIGNLEFT,
 						cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
 				font = FONT_SMALL_BOLD;
 				y = Start_y + Height_item * i;
@@ -165,10 +174,9 @@ void DrawSMenu(MENU *menu)
 				y = Start_y + Height_item * i + (img[imgCursor]->h - GetFontYSIZE(font)) / 2;
 			}
 			//основная строка
-			if (menu->enc == MENU_ENC_CP1251)
-				wsprintf(menu->ws, "%t", menu->items[n]->string1);
-			DrawString(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
-						cfg_col_menu_main, GetPaletteAdrByColorIndex(23));
+			ws_enc_work(menu->items[n]->string1);
+			DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT, cfg_col_menu_main,
+				GetPaletteAdrByColorIndex(23));
 			i++;
 			n++;
 		}

@@ -53,15 +53,15 @@ RECT *GetTextCoord(WSHDR *ws, const unsigned int y, const unsigned int offset_x,
 	{
 		case TEXT_ALIGNLEFT:
 			rc->x  = offset_x;
-			rc->x2 = offset_x + GetWsWidth(ws, font);
+			rc->x2 = offset_x + GetWidthWS(ws, font);
 		break;
 		case TEXT_ALIGNMIDDLE:
 			rc->x  = 0;
 			rc->x2 = ScreenW();
 		break;
 		case TEXT_ALIGNRIGHT:
-			rc->x  = ScreenW() - GetWsWidth(ws, font) - offset_x;
-			rc->x2 = rc->x + GetWsWidth(ws, font);
+			rc->x  = ScreenW() - GetWidthWS(ws, font) - offset_x;
+			rc->x2 = rc->x + GetWidthWS(ws, font);
 		break;
 	}
 	rc->y  = y;
