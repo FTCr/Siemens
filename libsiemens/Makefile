@@ -1,5 +1,5 @@
 NAME = libs
-VER  = 0.2
+VER  = 0.3
 
 FNAME   = ${NAME}-${VER}.so
 OBJECTS = *.o
