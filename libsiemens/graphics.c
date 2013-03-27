@@ -91,6 +91,6 @@ unsigned int GetWidthWS(WSHDR *ws, const int font)
 #ifdef ELKA
 void RedrawIconbar(void)
 {
-	GBS_SendMessage(0x4209, 0x642C, 0, 0, 0);
+	GBS_SendMessage(MMI_CEPID, 0x642C, 0, 0, 0);
 }
 #endif
