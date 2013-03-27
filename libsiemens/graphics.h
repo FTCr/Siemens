@@ -30,8 +30,8 @@
 
 IMGHDR *CreateIMGHDRFromImgFile(const char *path);
 void DrawIMGHDR(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bleed_y);
-
 void FreeIMGHDR(IMGHDR *img);
 
-unsigned int GetWsWidth(WSHDR *ws, const int font);	
+int DrawStringWS(WSHDR *ws, int x1, int y1, int x2, int y2, int font, int text_attr, const char *pen, const char *brush);
+unsigned int GetWidthWS(WSHDR *ws, const int font);	
 #endif
