@@ -67,26 +67,10 @@ void menu1_func1(void)
 		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU2_ITEMS);
 	DirectRedrawGUI_ID(shell_gui_id);
 }
-void menu1_func2(void)
-{
-	keyblock_id = 0;
-	ExecFile(cfg_path);
-}
-void menu1_func3(void)
-{
-	keyblock_id = 0;
-	ExecFile(cfg_col_path);
-}
-void menu1_func4(void)
-{
-	keyblock_id = 0;
-	ExecFile(cfg_coord_path);
-}
-void menu1_func5(void)
-{
-	keyblock_id = 0;
-	ExecFile(cfg_font_path);
-}
+void menu1_func2(void){ExecFile(cfg_path);}
+void menu1_func3(void){ExecFile(cfg_col_path);}
+void menu1_func4(void){ExecFile(cfg_coord_path);}
+void menu1_func5(void){ExecFile(cfg_font_path);}
 
 void *menu1_procs[MENU1_ITEMS]=
 {
@@ -188,7 +172,7 @@ void OnKey(unsigned int key, unsigned int type)
 	}
 	else if (type == KEY_UP)
 	{
-		if (key == UP_BUTTON || key == DOWN_BUTTON)
+		if (key == UP_BUTTON || key == DOWN_BUTTON || key == ENTER_BUTTON)
 			keyblock_id = 0;
 	}
 }
