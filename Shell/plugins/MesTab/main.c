@@ -39,7 +39,7 @@ void OnRedraw(void)
 	else
 	{
 		wsprintf(ws_main, "%t", lgp[lgpNoUSSD]);
-		DrawString(ws_main, 0, cfg_coord_h_mid - GetFontYSIZE(font_main)/2, ScreenW(), ScreenH(), font_main, TEXT_ALIGNMIDDLE,
+		DrawString(ws_main, 0, cfg_coord_h_mid, ScreenW(), ScreenH(), font_main, TEXT_ALIGNMIDDLE,
 					GetColor(colorMain), GetPaletteAdrByColorIndex(23));
 		DrawText(ws, lgp[lgpSoftkeyLeft1], GetFont(fontSoftkeys), TEXT_ALIGNLEFT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
 	}
