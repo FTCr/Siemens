@@ -37,9 +37,7 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnCreate && IsUsePlg(plg[i])) plg[i]->OnCreate();
 	}
-#ifdef ELKA
-	GBS_SendMessage(0x4209, 0x642C, 0, 0, 0);
-#endif
+	RedrawIconbar();
 }
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
@@ -79,7 +77,6 @@ int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 {
 	const unsigned int Key  =  msg->gbsmsg->submess;
 	const unsigned int Type = msg->gbsmsg->msg;
-
 	if (plg)
 	{
 		if (!keyblock_id)
@@ -151,6 +148,15 @@ CSM_RAM *GetIdleCSM(void)
 
 int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 {
+	if (plg)
+	{
+		//мессаги принимаются независимо от рабочего стола
+		for (int i = 0; plg[i] != NULL; i++)
+			if(plg[i]->OnMessage) plg[i]->OnMessage(data, msg);
+		//а эти зависимо
+		for (int i = 0; plg[i] != NULL; i++)
+			if (plg[i]->OnMessageDep && IsUsePlg(plg[i])) plg[i]->OnMessageDep(data, msg);
+	}
 	if (msg->msg == MSG_RECONFIGURE_REQ)
 	{
 		if (strcmp(cfg_path, (char *)msg->data0) == 0)
@@ -162,16 +168,7 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 		if (strcmp(cfg_coord_path, (char*)msg->data0) == 0)
 			InitConfigCoord();
 	}
-	if (plg)
-	{
-		//мессаги принимаются независимо от рабочего стола
-		for (int i = 0; plg[i] != NULL; i++)
-			if(plg[i]->OnMessage) plg[i]->OnMessage(data, msg);
-		//а эти зависимо
-		for (int i = 0; plg[i] != NULL; i++)
-			if (plg[i]->OnMessageDep && IsUsePlg(plg[i])) plg[i]->OnMessageDep(data, msg);
-	}
-	if (msg->msg == MSG_IPC)
+	else if (msg->msg == MSG_IPC)
 	{
 		IPC_REQ *ipc = (IPC_REQ*)msg->data0;
 		if (ipc)
@@ -213,11 +210,9 @@ int OnMessage(CSM_RAM *data, GBS_MSG *msg)
 	return 1;
 }
 
-
 int IdleCSMOnMessage(CSM_RAM *csm, GBS_MSG *msg)
 {
 	#define IDLEGUI_ID (((int*)csm)[DISPLACE_OF_IDLEGUI_ID/4])
-
 	int on_mes = OnMessage(csm, msg);
 	if (IsGuiOnTop(IDLEGUI_ID))
 	{
