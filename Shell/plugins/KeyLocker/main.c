@@ -1,4 +1,5 @@
 #include <swilib.h>
+#include "../../../libsiemens/ipc.h"
 #include "../../../libsiemens/other.h"
 #include "../../../libsiemens/swihook.h"
 #include "../../../libsiemens/cfg.h"
@@ -47,7 +48,7 @@ void KeyboardLock(void)
 	SUBPROC((void*)CreateSSGUI);
 }
 
-void AutoLock(void)
+void OnFocus(void)
 {
 	SettingsAE_Read(&autolock_sec, AE_APIDC_SETUP, "SecurityUI", "AutoKeyLock");
 	if (autolock_sec)
@@ -109,7 +110,7 @@ void OnKey(unsigned int key, unsigned int type)
 		if (type == KEY_DOWN)
 			DelTimer(&tmr_autolock);
 		else if (type == KEY_UP)
-			AutoLock();
+			OnFocus();
 	}
 }
 
@@ -151,7 +152,7 @@ int main(PLUGIN_S4T *plg)
 
 	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
-	plg->OnFocus   = (void*)AutoLock;
+	plg->OnFocus   = (void*)OnFocus;
 	plg->OnUnFocus = (void*)OnUnFocus;
 	plg->Destroy   = (void*)Destroy;
 	
