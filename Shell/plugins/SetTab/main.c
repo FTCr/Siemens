@@ -10,6 +10,7 @@
 #include "../../../libshell/conf_loader.h"
 #include "../../../libshell/skin_utils.h"
 #include "../../../libshell/config_coord.h"
+#include "../../../libshell/conf_loader.h"
 #include "conf_loader.h"
 #include "config_data.h"
 
@@ -66,10 +67,26 @@ void menu1_func1(void)
 		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU2_ITEMS);
 	DirectRedrawGUI_ID(shell_gui_id);
 }
-void menu1_func2(void){ExecFile(cfg_path);}
-void menu1_func3(void){ExecFile(cfg_col_path);}
-void menu1_func4(void){ExecFile(cfg_coord_path);}
-void menu1_func5(void){ExecFile(cfg_font_path);}
+void menu1_func2(void)
+{
+	keyblock_id = 0;
+	ExecFile(cfg_path);
+}
+void menu1_func3(void)
+{
+	keyblock_id = 0;
+	ExecFile(cfg_col_path);
+}
+void menu1_func4(void)
+{
+	keyblock_id = 0;
+	ExecFile(cfg_coord_path);
+}
+void menu1_func5(void)
+{
+	keyblock_id = 0;
+	ExecFile(cfg_font_path);
+}
 
 void *menu1_procs[MENU1_ITEMS]=
 {
@@ -93,18 +110,6 @@ void OnRedraw(void)
 		DrawText(ws, lgp[lgpRightSoftkey], GetFont(fontSoftkeys), TEXT_ALIGNRIGHT, GetColor(colorSoftkeys), TEXT_TYPE_SOFTKEY);
 		DrawSMenu(menu2);
 	}
-}
-
-void OnFocus(void)
-{
-	menu1 = CreateSMenu(menu1_strings1, menu1_strings2, MENU_ENC_CP1251, menu1_icons, MENU_MANY_ICONS, menu1_procs,
-		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU1_ITEMS);
-}
-
-void OnUnFocus(void)
-{
-	DestroySMenu(menu1);
-	menu1 = NULL;
 }
 
 void Destroy(void)
@@ -183,19 +188,25 @@ void OnKey(unsigned int key, unsigned int type)
 	}
 	else if (type == KEY_UP)
 	{
-		if (key == UP_BUTTON || key == DOWN_BUTTON || key == ENTER_BUTTON)
+		if (key == UP_BUTTON || key == DOWN_BUTTON)
 			keyblock_id = 0;
 	}
 }
 
 void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 {
-	if(msg->msg == MSG_RECONFIGURE_REQ)
+	if (msg->msg == MSG_RECONFIGURE_REQ)
 	{
-		if (strcmp(successed_config_filename, (char *)msg->data0) == 0)
+		if (strcmp(successed_config_filename, (char*)msg->data0) == 0)
 		{
 			InitPlgConfig(successed_config_filename);
 			*desk_id_ptr         = cfg_desk_id;
+		}
+		else if (strcmp(cfg_coord_path, (char*)msg->data0) == 0)
+		{
+			DestroySMenu(menu1);
+			menu1 = CreateSMenu(menu1_strings1, menu1_strings2, MENU_ENC_CP1251, menu1_icons, MENU_MANY_ICONS, menu1_procs,
+				ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU1_ITEMS);
 		}
 	}
 }
@@ -212,8 +223,6 @@ int main(PLUGIN_S4T *plg)
 	plg->OnRedraw  = (void*)OnRedraw;
 	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
-	plg->OnFocus   = (void*)OnFocus;
-	plg->OnUnFocus = (void*)OnUnFocus;
 	
 	//загрузка ленгпака
 	sprintf(path, "%s%s", lang_dir, "settab.txt");
@@ -238,6 +247,9 @@ int main(PLUGIN_S4T *plg)
 		menu2_icons[i++] = CreateIMGHDRFromPngFile(path, 0);
 		lgp_id += 2;
 	}
+	
+	menu1 = CreateSMenu(menu1_strings1, menu1_strings2, MENU_ENC_CP1251, menu1_icons, MENU_MANY_ICONS, menu1_procs,
+		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU1_ITEMS);
 	
 	ws  = AllocWS(128);
 	
