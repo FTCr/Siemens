@@ -83,3 +83,14 @@ unsigned int GetWidthWS(WSHDR *ws, const int font)
 {
 	return (Get_WS_width(ws, font) + 1);
 }
+
+
+//Функция для принудительно обновления иконбара
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef ELKA
+void RedrawIconbar(void)
+{
+	GBS_SendMessage(0x4209, 0x642C, 0, 0, 0);
+}
+#endif

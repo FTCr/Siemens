@@ -33,5 +33,9 @@ void DrawIMGHDR(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int blee
 void FreeIMGHDR(IMGHDR *img);
 
 int DrawStringWS(WSHDR *ws, int x1, int y1, int x2, int y2, int font, int text_attr, const char *pen, const char *brush);
-unsigned int GetWidthWS(WSHDR *ws, const int font);	
+unsigned int GetWidthWS(WSHDR *ws, const int font);
+
+#ifdef ELKA
+	void RedrawIconbar(void);
+#endif
 #endif
