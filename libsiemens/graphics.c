@@ -68,11 +68,18 @@ int DrawStringWS(WSHDR *ws, int x1, int y1, int x2, int y2, int font, int text_a
 	
 	for (int i = 0; i < ws->wsbody[0]; i++)
 	{
-		if (ws_width > (x2 - x1)) break;
-		symbol->wsbody[1] = ws->wsbody[1 + i];
 		symbol_width = GetSymbolWidth(ws->wsbody[1 + i], font);
-		DrawString(symbol, x1 + ws_width, y1, x1 + ws_width + symbol_width, y2, font, text_attr, pen, brush);
-		ws_width += symbol_width;
+		ws_width     += symbol_width;
+		if (ws_width < (x2 - x1))
+		{
+			symbol->wsbody[1] = ws->wsbody[1 + i];
+			DrawString(symbol, x1 + ws_width - symbol_width, y1, x1 + ws_width + symbol_width, y2, font, text_attr, pen, brush);
+		}
+		else
+		{
+			ws_width -= symbol_width;
+			break;
+		}
 	}
 	
 	FreeWS(symbol);
