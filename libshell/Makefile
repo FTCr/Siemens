@@ -1,5 +1,5 @@
 NAME = libshell
-VER  = 0.2.1
+VER  = 0.3
 
 FNAME   = ${NAME}-${VER}.so
 OBJECTS = *.o
