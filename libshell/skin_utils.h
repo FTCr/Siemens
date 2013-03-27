@@ -21,5 +21,6 @@ enum
 
 const char *GetColor(const unsigned int color_id);
 unsigned int GetFont(const unsigned int font_id);
+unsigned int GetFontFromCfg(const unsigned int id);
 
 #endif

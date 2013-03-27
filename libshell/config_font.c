@@ -76,7 +76,7 @@ __root const CFG_CBOX_ITEM cfgcbox5[6] =
 };
 
 __root const CFG_HDR fonthdr6 = {CFG_CBOX, "Basic menu font 1", 0, 6};
-__root const unsigned int cfg_font_menu1 = 0;
+__root const unsigned int cfg_font_menu1 = 1;
 __root const CFG_CBOX_ITEM cfgcbox6[6] =
 {
 	"Small",
@@ -100,7 +100,7 @@ __root const CFG_CBOX_ITEM cfgcbox7[6] =
 };
 
 __root const CFG_HDR fonthdr8 = {CFG_CBOX, "Additional menu font 1", 0, 6};
-__root const unsigned int cfg_font_add_menu1 = 1;
+__root const unsigned int cfg_font_add_menu1 = 0;
 __root const CFG_CBOX_ITEM cfgcbox8[6] =
 {
 	"Small",

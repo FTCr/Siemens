@@ -4,6 +4,7 @@
 #include "menu.h"
 #include "config_col.h"
 #include "config_font.h"
+#include "skin_utils.h"
 
 MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons, int icon_flag, void **procs, int y, int d_items, int total)
 {	
@@ -133,7 +134,6 @@ void DrawSMenu(MENU *menu)
 		const int Start_y  = menu->y;
 		const int Cur_x_off = (ScreenW() - img[imgCursor]->w) / 2;
 		
-		int font = cfg_font_menu2;
 		unsigned int x = Cur_x_off;
 		unsigned int y = 0;
 		DrawSeparateBG(0, Start_y, ScreenW(), Start_y + Height_item * menu->max);
@@ -144,6 +144,7 @@ void DrawSMenu(MENU *menu)
 		DrawIMGHDR(img[imgCursor], Cur_x_off, y, 0, 0, 0, 0);
 		
 		//все остальное
+		int font;
 		int i = 0;
 		while(i != menu->max)
 		{
@@ -160,17 +161,18 @@ void DrawSMenu(MENU *menu)
 			
 			if (menu->items[n]->string2)
 			{
-				y = Start_y + Height_item * i + img[imgCursor]->h - GetFontYSIZE(FONT_SMALL);
+				font = GetFontFromCfg(cfg_font_add_menu1);
+				y = Start_y + Height_item * i + img[imgCursor]->h - GetFontYSIZE(font);
 				
 				ws_enc_work(menu->items[n]->string2);
-				DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(FONT_SMALL), FONT_SMALL, TEXT_ALIGNLEFT,
+				DrawStringWS(menu->ws, x, y, x + img[imgCursor]->w, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
 						cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
-				font = cfg_font_add_menu1;
+				font = GetFontFromCfg(cfg_font_menu1);
 				y = Start_y + Height_item * i;
 			}
 			else
 			{
-				font = cfg_font_menu1;
+				font = GetFontFromCfg(cfg_font_menu2);
 				y = Start_y + Height_item * i + (img[imgCursor]->h - GetFontYSIZE(font)) / 2;
 			}
 			//основная строка
