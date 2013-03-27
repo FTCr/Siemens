@@ -27,6 +27,7 @@
 #define THEME_CACHE_ID_STATUSBAR_STANDARD       0x11
 #define THEME_CACHE_ID_STATUSBAR_FULLSCREEN     0x12
 
+#define CANVAS_BUFFER_WALLPAPER 0x00 
 
 IMGHDR *CreateIMGHDRFromImgFile(const char *path);
 void DrawIMGHDR(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bleed_y);
