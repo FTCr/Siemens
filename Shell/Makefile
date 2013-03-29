@@ -1,7 +1,6 @@
 NAME = Shell
-VER  = 0.2
 
-FNAME   = ${NAME}-${VER}.elf
+FNAME   = ${NAME}.elf
 OBJECTS = *.o
 SOURCES = *.c
 
