@@ -25,8 +25,8 @@ enum
 
 extern char **lgp;
 
+extern WSHDR *ws1[MENU_ITEMS], *ws2[MENU_ITEMS];
 extern IMGHDR *icons[MENU_ITEMS];
-extern char *strings1[MENU_ITEMS], *strings2[MENU_ITEMS];
 
 extern WSHDR *ws;
 

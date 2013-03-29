@@ -11,7 +11,7 @@
 #include "config_data.h"
 
 IMGHDR *icons[MENU_ITEMS];
-char *strings1[MENU_ITEMS], *strings2[MENU_ITEMS];
+WSHDR *ws1[MENU_ITEMS], *ws2[MENU_ITEMS];
 
 unsigned int *desk_id_ptr;
 
@@ -66,7 +66,11 @@ void Destroy(void)
 		FreeLang(&lgp);
 	unsigned int i = 0;
 	while (i < MENU_ITEMS)
+	{
+		FreeWS(ws1[i]);
+		FreeWS(ws2[i]);
 		FreeIMGHDR(icons[i++]);
+	}
 }
 
 int main(PLUGIN_S4T *plg)
@@ -91,8 +95,10 @@ int main(PLUGIN_S4T *plg)
 	unsigned int lgp_id = 4;
 	while(i < MENU_ITEMS)
 	{
-		strings1[i] = lgp[lgp_id];
-		strings2[i] = lgp[lgp_id + 1];
+		ws1[i] = AllocWS(64);
+		wsprintf(ws1[i], "%t", lgp[lgp_id]);
+		ws2[i] = AllocWS(64);
+		wsprintf(ws2[i], "%t", lgp[lgp_id + 1]);
 		sprintf(path, "%s%s%d%s", img_dir, "tfgui2\\", i + 1, ".png");
 		icons[i++] = CreateIMGHDRFromPngFile(path, 0);
 		lgp_id += 2;

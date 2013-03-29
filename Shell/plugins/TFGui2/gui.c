@@ -53,8 +53,8 @@ static void OnRedraw(MAIN_GUI *data)
 
 static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 {
-	menu = CreateSMenu(strings1, strings2, MENU_ENC_CP1251, icons, MENU_MANY_ICONS, menu_procs, ICONBAR_H + img[imgHeader]->h + cfg_coord_menu2_off_y,
-			cfg_coord_max_menu2_items, MENU_ITEMS);
+	menu = CreateSMenu(ws1, ws2, icons, MENU_MANY_ICONS, menu_procs, ICONBAR_H + img[imgHeader]->h + cfg_coord_menu2_off_y,
+		cfg_coord_max_menu2_items, MENU_ITEMS);
 	data->gui.state = 1;
 }
 
