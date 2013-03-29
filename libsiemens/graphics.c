@@ -52,40 +52,6 @@ void FreeIMGHDR(IMGHDR *img)
 	}
 }
 
-//Отрисовывает WS строку, где критичны точные данные отрисовки. Возвращает ширину строки
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////только ALIGN_LEFT!!!////////////////////////////////////////////
-
-int DrawStringWS(WSHDR *ws, int x1, int y1, int x2, int y2, int font, int text_attr, const char *pen, const char *brush)
-{
-	if (text_attr != TEXT_ALIGNLEFT) return 0;
-	
-	WSHDR *symbol = AllocWS(1);
-	symbol->wsbody[0] = 1;
-	int ws_width = 0;
-	int symbol_width;
-	
-	for (int i = 0; i < ws->wsbody[0]; i++)
-	{
-		symbol_width = GetSymbolWidth(ws->wsbody[1 + i], font);
-		ws_width     += symbol_width;
-		if (ws_width < (x2 - x1))
-		{
-			symbol->wsbody[1] = ws->wsbody[1 + i];
-			DrawString(symbol, x1 + ws_width - symbol_width, y1, x1 + ws_width + symbol_width, y2, font, text_attr, pen, brush);
-		}
-		else
-		{
-			ws_width -= symbol_width;
-			break;
-		}
-	}
-	
-	FreeWS(symbol);
-	return ws_width;
-}
-
 unsigned int GetWidthWS(WSHDR *ws, const int font)
 {
 	return (Get_WS_width(ws, font) + 1);
