@@ -6,10 +6,9 @@
 #include "config_font.h"
 #include "skin_utils.h"
 
-MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons, int icon_flag, void **procs, int y, int d_items, int total)
+MENU *CreateSMenu(WSHDR **ws1, WSHDR **ws2, IMGHDR **icons, int icon_flag, void **procs, int y, int d_items, int total)
 {	
 	MENU *menu = malloc(sizeof(MENU));
-	menu->ws         = AllocWS(128);
 	menu->items      = NULL;
 	menu->first_item = 1;
 	menu->cur_id     = 0;
@@ -17,7 +16,6 @@ MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons
 	menu->y          = y;
 	menu->max        = (total < d_items) ? total : d_items;
 	menu->data       = menu->max - 1;
-	menu->enc        = encoding;
 	
 	unsigned int len;
 	for(int i = 0; i < menu->total; i++)
@@ -26,13 +24,13 @@ MENU *CreateSMenu(char **strings1, char **strings2, int encoding, IMGHDR **icons
 		menu->items[i] = malloc(sizeof(MENU_ITEM));
 		zeromem(menu->items[i], sizeof(MENU_ITEM));
 		menu->items[i + 1] = NULL;
-		if (strings1)
+		if (ws1)
 		{
-			menu->items[i]->string1 = strings1[i];
+			menu->items[i]->ws1 = ws1[i];
 		}
-		if (strings2)
+		if (ws2)
 		{
-			menu->items[i]->string2 = strings2[i];
+			menu->items[i]->ws2 = ws2[i];
 		}
 		if (icons)
 		{
@@ -61,7 +59,6 @@ void DestroySMenu(MENU *menu)
 			{
 				mfree(menu->items[i++]);
 			}
-			FreeWS(menu->ws);
 			mfree(menu->items);
 		}
 		mfree(menu);
@@ -119,14 +116,6 @@ void ActionSMenu(MENU *menu)
 
 void DrawSMenu(MENU *menu)
 {
-	void ws_enc_work(char *str)
-	{
-		if (menu->enc == MENU_ENC_CP1251)
-			wsprintf(menu->ws, "%t", str);
-		else
-			str_2ws(menu->ws, str, strlen(str));
-	}
-	
 	if (menu->items)
 	{
 		const int Height_item = img[imgCursor]->h + 1;
@@ -159,14 +148,13 @@ void DrawSMenu(MENU *menu)
 			}
 			//дополнительная строка
 			
-			if (menu->items[n]->string2)
+			if (menu->items[n]->ws2)
 			{
 				font = GetFontFromCfg(cfg_font_add_menu1);
 				y = Start_y + Height_item * i + img[imgCursor]->h - GetFontYSIZE(font);
 				
-				ws_enc_work(menu->items[n]->string2);
-				DrawStringWS(menu->ws, x, y, ScreenW() - Cur_x_off, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT,
-						cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
+				DrawString(menu->items[n]->ws2, x, y, ScreenW() - Cur_x_off - GetSymbolWidth('a', font),
+					y + GetFontYSIZE(font), font, TEXT_NOFORMAT, cfg_col_menu_main_add, GetPaletteAdrByColorIndex(23));
 				font = GetFontFromCfg(cfg_font_menu1);
 				y = Start_y + Height_item * i;
 			}
@@ -176,8 +164,7 @@ void DrawSMenu(MENU *menu)
 				y = Start_y + Height_item * i + (img[imgCursor]->h - GetFontYSIZE(font)) / 2;
 			}
 			//основная строка
-			ws_enc_work(menu->items[n]->string1);
-			DrawStringWS(menu->ws, x, y, ScreenW() - Cur_x_off, y + GetFontYSIZE(font), font, TEXT_ALIGNLEFT, cfg_col_menu_main,
+			DrawString(menu->items[n]->ws2, x, y, ScreenW() - Cur_x_off, y + GetFontYSIZE(font), font, TEXT_NOFORMAT, cfg_col_menu_main,
 				GetPaletteAdrByColorIndex(23));
 			i++;
 			n++;
