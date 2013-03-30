@@ -122,6 +122,9 @@ typedef int jmp_buf[11];
 
 #define MSG_USSD_RX 0x60E2
 #define MSG_AUTOUSSD_RX 0x60E5
+
+#define MSG_REFRESH_ICONBAR 0x642C
+
 typedef struct{
   int pid_from;
   int msg; //MSG_USSD_RX
