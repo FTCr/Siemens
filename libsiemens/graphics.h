@@ -35,7 +35,4 @@ void FreeIMGHDR(IMGHDR *img);
 
 unsigned int GetWidthWS(WSHDR *ws, const int font);
 
-#ifdef ELKA
-	void RedrawIconbar(void);
-#endif
 #endif
