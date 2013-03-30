@@ -98,16 +98,18 @@ void OnRedraw(void)
 
 void Destroy(void)
 {
-	int i = 0;
 	if (lgp)
 		FreeLang(&lgp);
+	int i = 0;
 	while(i < MENU1_ITEMS)
-		FreeIMGHDR(menu1_icons[i++]);
-	i = 0;
-	while(i < MENU2_ITEMS)
 	{
 		if (menu1_ws1[i]) FreeWS(menu1_ws1[i]);
 		if (menu1_ws2[i]) FreeWS(menu1_ws2[i]);
+		FreeIMGHDR(menu1_icons[i++]);
+	}
+	i = 0;
+	while(i < MENU1_ITEMS)
+	{
 		if (menu2_ws1[i]) FreeWS(menu2_ws1[i]);
 		if (menu2_ws2[i]) FreeWS(menu2_ws2[i]);
 		FreeIMGHDR(menu2_icons[i++]);
