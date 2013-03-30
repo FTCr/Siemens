@@ -51,7 +51,7 @@ __CFG_BEGIN(0)
 		__root const CFG_HDR cfghdr3 = {CFG_LEVEL, "Up button", 1, 0};
 	
 			__root const CFG_HDR cfghdr3_1 = {CFG_CHECKBOX, "Apply", 0, 2};
-			__root const unsigned int cfg_use_ub  = 1;
+			__root const unsigned int cfg_use_ub  = 0;
 			
 			__root const CFG_HDR cfghdr3_2 = {CFG_CBOX, "Trigger mode", 0, 2};
 			__root const unsigned int cfg_style_ub = 0;
