@@ -107,7 +107,7 @@ void CreateBookmarsMenu(void)
 void OnFocus(void)
 {
 	CreateBookmarsMenu();
-	RedrawIconbar();
+	GBS_SendMessage(MMI_CEPID, MSG_REFRESH_ICONBAR);
 }
 
 void OnUnFocus(void)
