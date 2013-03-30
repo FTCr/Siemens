@@ -17,7 +17,7 @@ DIR_ENTRY **de;
 int total_items;
 
 MENU *menu;
-char **strings1, **strings2;
+WSHDR **ws1, **ws2;
 IMGHDR *icon[1];
 
 char **lgp;
@@ -59,20 +59,6 @@ void ClearMenuData(void)
 		DestroySMenu(menu);
 		menu = NULL;
 	}
-	if (strings1)
-	{
-		for (int i = 0; strings1[i] != NULL; i++)
-			mfree(strings1[i]);
-		mfree(strings1);
-		strings1 = NULL;
-	}
-	if (strings2)
-	{
-		for (int i = 0; strings2[i] != NULL; i++)
-			mfree(strings2[i]);
-		mfree(strings2);
-		strings2 = NULL;
-	}
 }
 
 void CreateBookmarsMenu(void)
@@ -83,23 +69,21 @@ void CreateBookmarsMenu(void)
 	
 	if (total == total_items) return;
 	
-	total_items = total;
-	
 	ClearMenuData();
+	
+	total_items = total;
 	
 	FSTATS fs;
 	unsigned int err;
 	int len;
 	char path[128], *buffer;
-	for (int i = 0; i < total; i++)
+	for (int i = 0; i < total_items; i++)
 	{
-		strings1 = realloc(strings1, sizeof(char*) * (i + 2));
+		//имена файлов без расширения
 		len = strlen(de[i]->file_name);
-		strings1[i] = malloc(len);
-		strncpy(strings1[i], de[i]->file_name, len - 4);
-		(*(strings1 + i))[len - 4] = '\0';
-		
-		strings1[i + 1] = NULL;
+		ws1 = realloc(ws1, sizeof(WSHDR*) * (i + 1));
+		ws1[i] = AllocWS(len - 3);
+		str_2ws(ws1[i], de[i]->file_name, len - 4);
 		
 		//читаем адреса загладок
 		sprintf(path, "%s%s", cfg_path_bm_bookmark_dir, de[i]->file_name);
@@ -111,13 +95,12 @@ void CreateBookmarsMenu(void)
 		_read(fp, buffer, fs.size, &err);
 		_close(fp, &err);
 		
-		strings2 = realloc(strings2, sizeof(char*) * (i + 2));
-		strings2[i] = malloc(fs.size + 1);
-		strcpy(strings2[i], buffer);
-		strings2[i + 1] = NULL;
+		ws2 = realloc(ws2, sizeof(WSHDR*) * (i + 1));
+		ws2[i] = AllocWS(fs.size + 1);
+		str_2ws(ws2[i], buffer, fs.size);
 		mfree(buffer);
 	}
-	menu = CreateSMenu(strings1, strings2, MENU_ENC_UTF8, icon, MENU_ONE_ICONS, NULL, ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y,
+	menu = CreateSMenu(ws1, ws2, icon, MENU_ONE_ICONS, NULL, ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y,
 		cfg_coord_max_menu1_items, total);
 }
 
@@ -144,6 +127,19 @@ void Destroy(void)
 	FreeIMGHDR(icon[0]);
 	if (ws)
 		FreeWS(ws);
+	
+	int i = 0;
+	if (ws1)
+	{
+		while (i < total_items)
+			FreeWS(ws1[i++]);
+	}
+	if (ws2)
+	{
+		i = 0;
+		while (i < total_items)
+			FreeWS(ws2[i++]);
+	}
 }
 
 void RunBookmark(void)
