@@ -164,7 +164,7 @@ void DrawSMenu(MENU *menu)
 				y = Start_y + Height_item * i + (img[imgCursor]->h - GetFontYSIZE(font)) / 2;
 			}
 			//основная строка
-			DrawString(menu->items[n]->ws1, x, y, ScreenW() - Cur_x_off, y + GetFontYSIZE(font), font, TEXT_NOFORMAT, cfg_col_menu_main,
+			DrawString(menu->items[n]->ws1, x, y, ScreenW() - Cur_x_off - GetSymbolWidth('a', font), y + GetFontYSIZE(font), font, TEXT_NOFORMAT, cfg_col_menu_main,
 				GetPaletteAdrByColorIndex(23));
 			i++;
 			n++;
