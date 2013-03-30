@@ -21,8 +21,8 @@ MENU *menu1, *menu2;
 
 IMGHDR *menu1_icons[MENU1_ITEMS];
 IMGHDR *menu2_icons[MENU2_ITEMS];
-char *menu1_strings1[MENU1_ITEMS], *menu1_strings2[MENU1_ITEMS];
-char *menu2_strings1[MENU2_ITEMS], *menu2_strings2[MENU2_ITEMS];
+WSHDR *menu1_ws1[MENU1_ITEMS], *menu1_ws2[MENU1_ITEMS];
+WSHDR *menu2_ws1[MENU2_ITEMS], *menu2_ws2[MENU2_ITEMS];
 
 enum
 {
@@ -63,7 +63,7 @@ void *menu2_procs[MENU2_ITEMS]=
 
 void menu1_func1(void)
 {
-	menu2 = CreateSMenu(menu2_strings1, menu2_strings2, MENU_ENC_CP1251, menu2_icons, MENU_MANY_ICONS, menu2_procs, 
+	menu2 = CreateSMenu(menu2_ws1, menu2_ws2, menu2_icons, MENU_MANY_ICONS, menu2_procs, 
 		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU2_ITEMS);
 	DirectRedrawGUI_ID(shell_gui_id);
 }
@@ -105,7 +105,13 @@ void Destroy(void)
 		FreeIMGHDR(menu1_icons[i++]);
 	i = 0;
 	while(i < MENU2_ITEMS)
+	{
+		if (menu1_ws1[i]) FreeWS(menu1_ws1[i]);
+		if (menu1_ws2[i]) FreeWS(menu1_ws2[i]);
+		if (menu2_ws1[i]) FreeWS(menu2_ws1[i]);
+		if (menu2_ws2[i]) FreeWS(menu2_ws2[i]);
 		FreeIMGHDR(menu2_icons[i++]);
+	}
 	if (menu1)
 		DestroySMenu(menu1);
 	if (menu2)
@@ -189,7 +195,7 @@ void OnMessage(CSM_RAM *data, GBS_MSG *msg)
 		else if (strcmp(cfg_coord_path, (char*)msg->data0) == 0)
 		{
 			DestroySMenu(menu1);
-			menu1 = CreateSMenu(menu1_strings1, menu1_strings2, MENU_ENC_CP1251, menu1_icons, MENU_MANY_ICONS, menu1_procs,
+			menu1 = CreateSMenu(menu1_ws1, menu1_ws2, menu1_icons, MENU_MANY_ICONS, menu1_procs,
 				ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU1_ITEMS);
 		}
 	}
@@ -216,8 +222,10 @@ int main(PLUGIN_S4T *plg)
 	unsigned int lgp_id = 3;
 	while(i < MENU1_ITEMS)
 	{
-		menu1_strings1[i] = lgp[lgp_id];
-		menu1_strings2[i] = lgp[lgp_id + 1];
+		menu1_ws1[i] = AllocWS(128);
+		wsprintf(menu1_ws1[i], "%t", lgp[lgp_id]);
+		menu1_ws2[i] = AllocWS(128);
+		wsprintf(menu1_ws2[i], "%t", lgp[lgp_id + 1]);
 		sprintf(path, "%s%s%d%s", img_dir, "settab\\01_", i + 1, ".png");
 		menu1_icons[i++] = CreateIMGHDRFromPngFile(path, 0);
 		lgp_id += 2;
@@ -225,14 +233,16 @@ int main(PLUGIN_S4T *plg)
 	i = 0;
 	while(i < MENU2_ITEMS)
 	{
-		menu2_strings1[i] = lgp[lgp_id];
-		menu2_strings2[i] = lgp[lgp_id + 1];
+		menu2_ws1[i] = AllocWS(128);
+		wsprintf(menu2_ws1[i], "%t", lgp[lgp_id]);
+		menu2_ws2[i] = AllocWS(128);
+		wsprintf(menu2_ws2[i], "%t", lgp[lgp_id + 1]);
 		sprintf(path, "%s%s%d%s", img_dir, "settab\\02_", i + 1, ".png");
 		menu2_icons[i++] = CreateIMGHDRFromPngFile(path, 0);
 		lgp_id += 2;
 	}
 	
-	menu1 = CreateSMenu(menu1_strings1, menu1_strings2, MENU_ENC_CP1251, menu1_icons, MENU_MANY_ICONS, menu1_procs,
+	menu1 = CreateSMenu(menu1_ws1, menu1_ws2, menu1_icons, MENU_MANY_ICONS, menu1_procs,
 		ICONBAR_H + img[imgHeader]->h + cfg_coord_menu1_off_y, cfg_coord_max_menu1_items, MENU1_ITEMS);
 	
 	ws  = AllocWS(128);
