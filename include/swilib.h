@@ -1404,11 +1404,11 @@ typedef struct TVIEW_DESC
 
 typedef struct LIGHT_PARAM
 {
-	char timeout; // Таймаут гашения
-	char unk0; // Нечто загадочтное, бывает 0, или 5
-	char perm_illum; // Не совсем понятно, похоже уровень, который будет удерживаться при вызове IllumTimeRequest,
-                            //переписывается вызовом SaveMaxIllumination(), и зачем-то ограничено 80%
 	char max_illum; // Ну здесь как известно яркость подсветки
+	char perm_illum; // Не совсем понятно, похоже уровень, который будет удерживаться при вызове IllumTimeRequest,
+		//переписывается вызовом SaveMaxIllumination(), и зачем-то ограничено 80%
+	char unk0; // Нечто загадочтное, бывает 0, или 5
+	char timeout; // Таймаут гашения
 } LIGHT_PARAM;
 
 typedef struct I2C_MSG
