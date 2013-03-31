@@ -1725,6 +1725,9 @@ __swi(0x8299);
 char *RamInputLanguage()
 __swi(0x829C);
 
+void *RamScreenBrightness(void)
+__swi(0x80D7);
+
 #ifndef __LOADER_BUILD
 int elfclose(void* ex)
 __swi(0x2EE);
