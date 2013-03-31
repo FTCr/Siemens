@@ -53,6 +53,7 @@ static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))
 static void OnFocus(MAIN_GUI *data, void *(*malloc_adr)(int), void (*mfree_adr)(void *))
 {
 	data->gui.state = 2;
+	DisableIDLETMR();
 #ifdef ELKA
 	DisableIconBar(1);
 #endif
