@@ -37,7 +37,7 @@ static void OnCreate(MAIN_GUI *data, void *(*malloc_adr)(int))
 		for (int i = 0; plg[i] != NULL; i++)
 			if (plg[i]->OnCreate && IsUsePlg(plg[i])) plg[i]->OnCreate();
 	}
-	RedrawIconbar();
+	GBS_SendMessage(MMI_CEPID, MSG_REFRESH_ICONBAR);
 }
 
 static void OnClose(MAIN_GUI *data, void (*mfree_adr)(void *))

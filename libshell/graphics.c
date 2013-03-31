@@ -72,7 +72,8 @@ RECT *GetTextCoord(WSHDR *ws, const unsigned int y, const unsigned int offset_x,
 void DrawText(WSHDR *ws, const char *text, const int font, const int align, const char *color, const int type)
 {
 	RECT *rc;
-	wsprintf(ws, "%t", text);
+	if (text)
+		wsprintf(ws, "%t", text);
 	if (type == TEXT_TYPE_HEADER)
 		rc = GetTextCoord(ws, ICONBAR_H + (img[imgHeader]->h - GetFontYSIZE(font)) / 2, cfg_coord_head_off_x, font, align);
 	else
