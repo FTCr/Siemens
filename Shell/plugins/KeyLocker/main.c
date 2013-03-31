@@ -17,6 +17,7 @@ GBSTMR tmr_autolock;
 unsigned int *desk_id_ptr;
 unsigned int plugin_id;
 unsigned int autolock_sec;
+unsigned int locked;
 
 unsigned int *swi_addr_kbdlock;
 unsigned int *swi_addr_isunlocked;
@@ -44,8 +45,21 @@ unsigned int IsUnLocked(void)
 void KeyboardLock(void)
 {
 	keyblock_id = 0;
+	locked = 1;
 	FocusGUI(shell_gui_id);
 	SUBPROC((void*)CreateSSGUI);
+}
+
+void KeyboardUnLock(void)
+{
+	locked = 0;
+	CloseSSGUI();
+}
+
+void OnCreate(void)
+{
+	if (locked == 1)
+		KbdLock();
 }
 
 void OnFocus(void)
@@ -150,6 +164,7 @@ int main(PLUGIN_S4T *plg)
 	sprintf(bcfg, "%s%s%s", conf_dir, plg->fname, ".bcfg");
 	InitConfig(bcfg);
 
+	plg->OnCreate  = (void*)OnCreate;
 	plg->OnKey     = (void(*)(unsigned int, unsigned int))OnKey;
 	plg->OnMessage = (void(*)(CSM_RAM*, GBS_MSG*))OnMessage;
 	plg->OnFocus   = (void*)OnFocus;
@@ -162,7 +177,7 @@ int main(PLUGIN_S4T *plg)
 	swi_addr_isunlocked = SetSWIHook(SWI_ISUNLOCKED, (void*)IsUnLocked);
 	if (swi_addr_isunlocked == NULL) return -1;
 
-	swi_addr_kbdunlock = SetSWIHook(SWI_KBDUNLOCK, (void*)CloseSSGUI);
+	swi_addr_kbdunlock = SetSWIHook(SWI_KBDUNLOCK, (void*)KeyboardUnLock);
 	if (swi_addr_kbdunlock == NULL) return -1;
 
 	plg->desk_id = cfg_desk_id;

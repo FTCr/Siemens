@@ -4,6 +4,7 @@
 #define DLOCK tmr.param5
 
 extern GBSTMR tmr;
+extern unsigned int is_killed;
 
 void DLock(void);
 	

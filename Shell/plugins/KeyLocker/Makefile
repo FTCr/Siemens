@@ -1,6 +1,6 @@
 ID   = 02
 NAME = keylocker
-VER  = 0.3
+VER  = 0.4
 
 LNAME   = ${NAME}-${VER}.so
 FNAME   = ${ID}-${LNAME}
