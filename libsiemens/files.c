@@ -18,14 +18,16 @@ unsigned int FindFiles(DIR_ENTRY ***DE, const char *dir, const char *mask)
 		{
 			de = realloc(de, sizeof(DIR_ENTRY*) * (i + 2));
 			de[i] = malloc(sizeof(DIR_ENTRY));
+			memcpy(de[i], &tmp_de, sizeof(DIR_ENTRY));
 			de[i + 1] = NULL;
-			memcpy(de[i++], &tmp_de, sizeof(DIR_ENTRY));
+			i++;
 		} while(FindNextFile(&tmp_de, &err));
 	}
 	FindClose(&tmp_de, &err);
 	*DE = de;
 	return i;
 }
+
 
 unsigned int FindFilesRec(DIR_ENTRY ***DE, const char *dir, FIND_UIDS *fu)
 {

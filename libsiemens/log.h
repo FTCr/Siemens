@@ -4,5 +4,5 @@
 	
 void log_init(const char *path);
 void log_integer(const char *prev_text, const int data);
-	
+
 #endif
