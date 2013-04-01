@@ -1,4 +1,7 @@
 #include <swilib.h>
+#include "files.h"
+#include "string_utils.h"
+#include "obs.h"
 
 unsigned int FindFiles(DIR_ENTRY ***DE, const char *dir, const char *mask)
 {
@@ -18,11 +21,62 @@ unsigned int FindFiles(DIR_ENTRY ***DE, const char *dir, const char *mask)
 			de[i + 1] = NULL;
 			memcpy(de[i++], &tmp_de, sizeof(DIR_ENTRY));
 		} while(FindNextFile(&tmp_de, &err));
-		FindClose(&tmp_de, &err);
 	}
+	FindClose(&tmp_de, &err);
 	*DE = de;
 	return i;
 }
+
+unsigned int FindFilesRec(DIR_ENTRY ***DE, const char *dir, FIND_UIDS *fu)
+{
+	DIR_ENTRY tmp_de;
+	static int total = 0;
+	
+	unsigned int err;
+	char path[128], find[128], folder_name[128];
+	sprintf(find, "%s%s", dir, "*");
+	LockSched();
+	if (FindFirstFile(&tmp_de, find, &err))
+	{
+		do
+		{
+			sprintf(path, "%s\\%s", tmp_de.folder_name, tmp_de.file_name);
+			if (isdir(path, &err))
+			{
+				strcat(path, "\\");
+				FindFilesRec(DE, path, fu);
+			}
+			else
+			{
+				if (fu)
+				{
+					unsigned int uid;
+					for (int i = 0; i < 8; i++)
+					{
+						if (fu->data[i])
+						{
+							uid = GetExtUidByFileName(tmp_de.file_name);
+							if (uid == fu->data[i]) goto SAVE;
+						}
+					}
+				}
+				else
+				{
+					SAVE:
+						(*DE) = realloc((*DE), sizeof(DIR_ENTRY*) * (total + 2));
+						(*DE)[total] = malloc(sizeof(DIR_ENTRY));
+						memcpy((*DE)[total], &tmp_de, sizeof(DIR_ENTRY));
+						(*DE)[(total + 1)] = NULL;
+						total++;
+				}
+			}
+		} while(FindNextFile(&tmp_de, &err));
+	}
+	FindClose(&tmp_de, &err);
+	UnlockSched();
+	return total;
+}
+
 
 void DE_Free(DIR_ENTRY ***DE)
 {
