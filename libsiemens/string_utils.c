@@ -1,6 +1,5 @@
 #include <swilib.h>
 
-//преобразование строки в нижний регистр
 int str2lower(char *dest, const char *src)
 {
 	unsigned int len = strlen(src);
@@ -27,4 +26,21 @@ int str2lower(char *dest, const char *src)
 	}
 	dest[len] = '\0';
 	return i;
+}
+
+int strcmp_nocase(const char *s, const char *d)
+{
+	int cs;
+	int ds;
+	do
+	{
+		cs = *s++;
+		if (cs&0x40) cs &= 0xDF;
+		ds = *d++;
+		if (ds & 0x40) ds &= 0xDF;
+		cs -= ds;
+		if (cs) break;
+	}
+	while(ds);
+	return(cs);
 }
