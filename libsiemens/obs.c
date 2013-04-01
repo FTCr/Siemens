@@ -10,75 +10,66 @@ unsigned int GetExtUid(const char *ext)
 	
 	if (!len) return uid;
 	
-	char *extension = malloc(strlen(ext));
-	str2lower(extension, ext);
 	
-	inline int func(const char *ext_func)
-	{
-		if (strcmp(extension, ext_func) == 0) return 1;
-		else return 0;
-	}
 	
-	if (func("mp3"))
+	if (strcmp_nocase(ext, "mp3") == 0)
 		uid = UID_MP3;
-	else if (func("m3u"))
+	else if (strcmp_nocase(ext, "m3u") == 0)
 		uid = UID_M3U;
-	else if (func("jar"))
+	else if (strcmp_nocase(ext, "jar") == 0)
 		uid = UID_JAR;
-	else if (func("jad"))
+	else if (strcmp_nocase(ext, "jad") == 0)
 		uid = UID_JAD;
-	else if (func("mid"))
+	else if (strcmp_nocase(ext, "mid") == 0)
 		uid = UID_MID;
-	else if (func("amr"))
+	else if (strcmp_nocase(ext, "amr") == 0)
 		uid = UID_AMR;
-	else if (func("imy"))
+	else if (strcmp_nocase(ext, "imy") == 0)
 		uid = UID_IMY;
-	else if (func("srt"))
+	else if (strcmp_nocase(ext, "srt") == 0)
 		uid = UID_SRT;
-	else if (func("aac"))
+	else if (strcmp_nocase(ext, "aac") == 0)
 		uid = UID_AAC;
-	else if (func("wav"))
+	else if (strcmp_nocase(ext, "wav") == 0)
 		uid = UID_WAV;
-	else if (func("jts"))
+	else if (strcmp_nocase(ext, "jts") == 0)
 		uid = UID_JTS;
-	else if (func("xmf"))
+	else if (strcmp_nocase(ext, "xmf") == 0)
 		uid = UID_XMF;
-	else if (func("m4a"))
+	else if (strcmp_nocase(ext, "m4a") == 0)
 		uid = UID_M4A;
-	else if (func("bmx"))
+	else if (strcmp_nocase(ext, "bmx") == 0)
 		uid = UID_BMX;
-	else if (func("wbmp"))
+	else if (strcmp_nocase(ext, "wbmp") == 0)
 		uid = UID_WBMP;
-	else if (func("bmp"))
+	else if (strcmp_nocase(ext, "bmp") == 0)
 		uid = UID_BMP;
-	else if (func("jpg"))
+	else if (strcmp_nocase(ext, "jpg") == 0)
 		uid = UID_JPG;
-	else if (func("jpeg"))
+	else if (strcmp_nocase(ext, "jpeg") == 0)
 		uid = UID_JPG;
-	else if (func("png"))
+	else if (strcmp_nocase(ext, "png") == 0)
 		uid = UID_PNG;
-	else if (func("gif"))
+	else if (strcmp_nocase(ext, "gif") == 0)
 		uid = UID_GIF;
-	else if (func("svg"))
+	else if (strcmp_nocase(ext, "svg") == 0)
 		uid = UID_SVG;
-	else if (func("3gp"))
+	else if (strcmp_nocase(ext, "3gp") == 0)
 		uid = UID_3GP;
-	else if (func("mp4"))
+	else if (strcmp_nocase(ext, "mp4") == 0)
 		uid = UID_M4A;
-	else if (func("sdp"))
+	else if (strcmp_nocase(ext, "sdp") == 0)
 		uid = UID_SDP;
-	else if (func("pvx"))
+	else if (strcmp_nocase(ext, "pvx") == 0)
 		uid = UID_PVX;
-	else if (func("sdt"))
+	else if (strcmp_nocase(ext, "sdt") == 0)
 		uid = UID_SDT;
-	else if (func("ldb"))
+	else if (strcmp_nocase(ext, "ldb") == 0)
 		uid = UID_LDB;
-	else if (func("txt"))
+	else if (strcmp_nocase(ext, "txt") == 0)
 		uid = UID_TXT;
-	else if (func("url"))
+	else if (strcmp_nocase(ext, "url") == 0)
 		uid = UID_URL;
-	
-	mfree(extension);
 	return uid;
 }
 

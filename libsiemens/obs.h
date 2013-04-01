@@ -30,6 +30,8 @@
 #define UID_TXT  0x57
 #define UID_URL  0x58
 
+unsigned int GetExtUidByFileName(const char *path);
+
 HObj CreateHObjFromImgFile(const char *path);
 IMGHDR *HObj2IMGHDR(HObj obj);
 void SetScaling(HObj obj, short *w, short *h, short width, short height);
