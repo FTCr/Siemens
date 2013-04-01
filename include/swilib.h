@@ -236,14 +236,16 @@ typedef struct
   void (*data_mfree)(void *);
 }LLQ;
 
+#define TMR_6_SEC 1300
+
 typedef struct{
-  int param0;
-  int param1;
-  int param2;
-  int param3;
-  int param4;
-  int param5;
-  int param6;
+	int param0;
+	int param1;
+	int param2;
+	int param3;
+	int param4;
+	int param5;
+	int param6;
 } GBSTMR;
 
 typedef struct{
