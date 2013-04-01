@@ -99,7 +99,7 @@ void DE_Sort1(DIR_ENTRY ***DE)
 		j = i + 1;
 		while(de[j] != NULL)
 		{
-			if (strcmp(de[i]->file_name, de[j]->file_name) > 0)
+			if (strcmp_nocase(de[i]->file_name, de[j]->file_name) > 0)
 			{
 				DIR_ENTRY *tmp = de[i];
 				de[i] = de[j];
