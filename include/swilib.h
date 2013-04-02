@@ -711,6 +711,8 @@ typedef struct
 #define STATUSBAR_STANDART       0x11
 #define STATUSBAR_FULLSCREEN     0x12
 
+#define AE_APIDC_SETUP 0x06
+
 typedef struct
 {
 #ifdef ELKA
