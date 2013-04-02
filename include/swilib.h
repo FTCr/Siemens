@@ -712,6 +712,7 @@ typedef struct
 #define STATUSBAR_FULLSCREEN     0x12
 
 #define AE_APIDC_SETUP 0x06
+#define AE_MEDIAPLAYER 0x07
 
 typedef struct
 {
