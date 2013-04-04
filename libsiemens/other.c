@@ -32,17 +32,6 @@ void ExecFile(const char *path)
 	FreeWS(ws);
 }
 
-
-void DelTimer(GBSTMR *tmr)
-{
-	if (IsTimerProc(tmr))
-	{
-		GBS_StopTimer(tmr);
-		GBS_DelTimer(tmr);
-	}
-}
-
-
 unsigned int GetCSMIDFromAddr(const char *addr)
 {
 	CSM_RAM *p;

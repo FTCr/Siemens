@@ -4,8 +4,6 @@
 void ExecEntrypoint(const char *name);
 void ExecShortcut(const char *name);
 void ExecFile(const char *path);
-
-void DelTimer(GBSTMR *tmr);
 	
 unsigned int GetCSMIDFromAddr(const char *addr);
 #endif
