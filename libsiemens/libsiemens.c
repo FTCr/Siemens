@@ -441,32 +441,6 @@ IMGHDR *HObj2IMGHDR(HObj obj)
 	return img;
 }
 
-void SetScaling(HObj obj, short *w, short *h, short width, short height)
-{
-	float pct = 0;
-	short _w = *w, _h = *h;
-	if (_w < _h)
-	{
-		if (_h > height) goto HORI;
-		VERT:
-			pct = 100 / ((float)_h / height);
-			_h = height;
-			_w = _w * pct / 100;
-	}
-	else
-	{
-		if (_w > width) goto VERT;
-		HORI:
-		pct = 100 / ((float)_w / width);
-		_w = width;
-		_h = _h * pct / 100;
-	}
-	*w = _w;
-	*h = _h;
-	Obs_SetScaling(obj, 3);
-}
-
-
 ///////////////////////////////////////////////////////
 //*******************работа с аудио******************//
 ///////////////////////////////////////////////////////
