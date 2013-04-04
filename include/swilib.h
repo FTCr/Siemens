@@ -743,6 +743,10 @@ typedef struct
 #define UID_TXT  0x57
 #define UID_URL  0x58
 
+#define SWI_ISUNLOCKED 0x43
+#define SWI_KBDLOCK    0xA9
+#define SWI_KBDUNLOCK  0xB9
+
 typedef struct
 {
 #ifdef ELKA
