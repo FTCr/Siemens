@@ -36,4 +36,7 @@ HObj CreateHObjFromImgFile(const char *path);
 IMGHDR *HObj2IMGHDR(HObj obj);
 void SetScaling(HObj obj, short *w, short *h, short width, short height);
 
+HObj CreateHObjFromAudioFile(char *path);
+unsigned int Obs_SoundGetVolume(HObj obj);
+
 #endif

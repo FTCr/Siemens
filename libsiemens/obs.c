@@ -148,3 +148,39 @@ void SetScaling(HObj obj, short *w, short *h, short width, short height)
 	*h = _h;
 	Obs_SetScaling(obj, 3);
 }
+
+
+///////////////////////////////////////////////////////
+//*******************работа с аудио******************//
+///////////////////////////////////////////////////////
+
+
+HObj CreateHObjFromAudioFile(char *path)
+{
+	HObj obj;
+	unsigned uid = GetExtUidByFileName(path); 
+	unsigned int err = 0;
+	obj = Obs_CreateObject(uid, 0x34, 2, 0, 1, 0, &err);
+	if (!err)
+	{
+		int len = strlen(path);
+		WSHDR *ws = AllocWS(len);
+		str_2ws (ws, path, len);
+		Obs_SetInput_File(obj, 0, ws);
+		#ifdef ELKA  
+			Obs_Mam_SetPurpose(obj, 0x16); 
+		#else
+			Obs_Sound_SetPurpose(obj, 0x16);
+		#endif
+		Obs_Prepare(obj);
+		return obj;
+	}
+	return 0;
+};
+
+unsigned int Obs_SoundGetVolume(HObj obj)
+{
+	char vol = 0;
+	Obs_Sound_GetVolume(obj, &vol);
+	return vol;
+}
