@@ -690,12 +690,6 @@ typedef struct
 #define FIRST_UCS2_BITMAP 0xE137
 #endif
 
-#ifdef ELKA
-	#define ICONBAR_H 24
-#else
-	#define ICONBAR_H 0
-#endif
-
 #define THEME_CACHE_ID_HEADLINE_STANDARD        0x00
 #define THEME_CACHE_ID_HEADLINE_FULLSCREEN      0x01
 #define THEME_CACHE_ID_BODY_STANDARD            0x02
