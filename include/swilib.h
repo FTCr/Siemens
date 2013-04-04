@@ -690,26 +690,31 @@ typedef struct
 #define FIRST_UCS2_BITMAP 0xE137
 #endif
 
+#ifdef ELKA
+	#define ICONBAR_H 24
+#else
+	#define ICONBAR_H 0
+#endif
 
-#define HEADLINE_STANDART        0x0
-#define HEADLINE_FULLSCREEN      0x1
-#define BODY_STANDART            0x2
-#define BODY_TAB                 0x3
-#define BOTTOM_STANDART          0x4
-#define BOTTOM_FULLSCREEN        0x5
-#define POPUP_OPTIONS            0x6
-#define POPUP_FEEDBACK           0x7
-#define SELECTION_1_LINE         0x8
-#define SELECTION_2_LINE         0x9
-#define SELECTION_3_LINE         0xA
-#define SELECTION_ICON_ONLY      0xB
-#define POPUP_SEARCH_LINE        0xC
-#define POPUP_QUICK_ACCESS_FIELD 0xD
-#define PROGRESS_STATUSBAR       0xE
-#define TAB_SELECTED             0xF
-#define TAB_UNSELECTED           0x10
-#define STATUSBAR_STANDART       0x11
-#define STATUSBAR_FULLSCREEN     0x12
+#define THEME_CACHE_ID_HEADLINE_STANDARD        0x00
+#define THEME_CACHE_ID_HEADLINE_FULLSCREEN      0x01
+#define THEME_CACHE_ID_BODY_STANDARD            0x02
+#define THEME_CACHE_ID_BODY_TAB                 0x03
+#define THEME_CACHE_ID_BOTTOM_STANDARD          0x04
+#define THEME_CACHE_ID_BOTTOM_FULLSCREEN        0x05
+#define THEME_CACHE_ID_POPUP_OPTIONS            0x06
+#define THEME_CACHE_ID_POPUP_FEEDBACK           0x07
+#define THEME_CACHE_ID_SELECTION_1LINE          0x08
+#define THEME_CACHE_ID_SELECTION_2LINE          0x09
+#define THEME_CACHE_ID_SELECTION_3LINE          0x0A
+#define THEME_CACHE_ID_SELECTION_ICON           0x0B
+#define THEME_CACHE_ID_POPUP_SEARCH_LINE        0x0C
+#define THEME_CACHE_ID_POPUP_QUICK_ACCESS_FIELD 0x0D
+#define THEME_CACHE_ID_PROGRESS_STATUSBAR       0x0E
+#define THEME_CACHE_ID_TAB_SELECTED             0x0F
+#define THEME_CACHE_ID_TAB_UNSELECTED           0x10
+#define THEME_CACHE_ID_STATUSBAR_STANDARD       0x11
+#define THEME_CACHE_ID_STATUSBAR_FULLSCREEN     0x12
 
 #define AE_APIDC_SETUP 0x06
 #define AE_MEDIAPLAYER 0x07
