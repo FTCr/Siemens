@@ -180,7 +180,7 @@ int GetExtByPath(char *dest, const char *path)
 	return 1;
 }
 
-int GetFNameWithoutExt(char *dest, const char *fname)
+int GetFileNameWithoutExt(char *dest, const char *fname)
 {
 	char *ptr = strrchr(fname, '.');
 	if (ptr == NULL) return -1;
