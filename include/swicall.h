@@ -1728,6 +1728,9 @@ __swi(0x829C);
 void *RamScreenBrightness(void)
 __swi(0x80D7);
 
+IMGHDR *GetCanvasBufferPicPtr(char CanvasID)
+__swi(0x076);
+
 #ifndef __LOADER_BUILD
 int elfclose(void* ex)
 __swi(0x2EE);
