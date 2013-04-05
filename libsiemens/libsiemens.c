@@ -188,6 +188,14 @@ int GetFileNameWithoutExt(char *dest, const char *fname)
 	return 1;
 }
 
+int GetDirByPath(char *dest, const char *path)
+{
+	char *ptr = strrchr(path, '\\');
+	if (ptr == NULL) return -1;
+	strncpy(dest, path, ptr - path);
+	return 1;
+}
+
 void utf8_2fname(char *dest, const char *source)
 {
 	int len = strlen(source) + 16;

@@ -35,8 +35,10 @@ void DE_Sort1(DIR_ENTRY ***DE);
 void DE_Sort1_With_Dirs(DIR_ENTRY ***DE);
 //получение расширения из пути к файлу
 int GetExtByPath(char *dest, const char *path);
-//получение имении файла из его имени без расширения
+//получение имени файла из его имени без расширения
 int GetFNameWithoutExt(char *dest, const char *fname);
+//получение имени директори из пути к файлу
+int GetDirByPath(char *dest, const char *path);
 //конвертация строки из utf8
 void utf8_2fname(char *dest, const char *source);
 
