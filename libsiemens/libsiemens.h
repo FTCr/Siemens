@@ -121,8 +121,7 @@ int GetStrDataFromSystemConf(char *dest, const char *path, const char *keyword);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void patch_rect(RECT*rc, int x, int y, int x2, int y2);
-
-void patch_header(const HEADER_DESC* head);
-
-void patch_input(const INPUTDIA_DESC* inp);
+void patch_header(HEADER_DESC* head);
+void patch_header_small(HEADER_DESC* head);
+void patch_input(INPUTDIA_DESC* inp);
 #endif
