@@ -1,5 +1,5 @@
 #include <swilib.h>
-#include "../libsiemens/other.h"
+#include "../libsiemens/libsiemens.h"
 
 extern void kill_data(void *p, void (*func_p)(void *));
 
@@ -52,8 +52,8 @@ int maincsm_onmessage(CSM_RAM* data, GBS_MSG* msg){return 1;}
 
 static void maincsm_oncreate(CSM_RAM *data)
 {
-	if (GetCPUClock() >= 104)
-		is_cpu_hi = 1;
+	/*if (GetCPUClock() >= 104)*/
+		//is_cpu_hi = 1;
 }
 
 static void maincsm_onclose(CSM_RAM *csm)
