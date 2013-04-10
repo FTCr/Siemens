@@ -1,5 +1,5 @@
 #include <swilib.h>
-#include <../libsiemens/libsiemens.h>
+#include <../libsiemens/graphics.h>
 
 void patch(IMGHDR *dest, IMGHDR *src)
 {

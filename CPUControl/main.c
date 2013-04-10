@@ -1,5 +1,4 @@
 #include <swilib.h>
-#include "../libsiemens/libsiemens.h"
 
 extern void kill_data(void *p, void (*func_p)(void *));
 
