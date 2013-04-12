@@ -24,7 +24,7 @@ typedef struct
 int GetExtByPath(char *dest, const char *path);
 unsigned int GetExtUid(const char *ext);
 unsigned int GetExtUidByFileName(const char *path);
-int GetFNameWithoutExt(char *dest, const char *fname);
+int GetFileNameWithoutExt(char *dest, const char *fname);
 int GetDirByPath(char *dest, const char *path);
 void utf8_2fname(char *dest, const char *source);
 //обычный поиск файлов

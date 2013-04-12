@@ -97,7 +97,9 @@ int GetFileNameWithoutExt(char *dest, const char *fname)
 {
 	char *ptr = strrchr(fname, '.');
 	if (ptr == NULL) return -1;
-	strncpy(dest, fname, ptr - fname);
+	int len = ptr - fname;
+	strncpy(dest, fname, len);
+	dest[len] = '\0';
 	return 1;
 }
 
