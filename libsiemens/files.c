@@ -217,7 +217,12 @@ void DE_Sort1(DIR_ENTRY ***DE)
 		j = i + 1;
 		while(de[j] != NULL)
 		{
-			if (strcmp_nocase(de[i]->file_name, de[j]->file_name) > 0)
+			//а вдруг сименовский юникод?
+			char *ptr1, *ptr2;
+			ptr1 = (de[i]->file_name[0] == 0x1F) ? de[i]->file_name + 1 : de[i]->file_name;
+			ptr2 = (de[j]->file_name[0] == 0x1F) ? de[j]->file_name + 1 : de[j]->file_name;
+			
+			if (strcmp_nocase(ptr1, ptr2) > 0)
 			{
 				DIR_ENTRY *tmp = de[i];
 				de[i] = de[j];
