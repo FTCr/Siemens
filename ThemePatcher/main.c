@@ -44,6 +44,14 @@ void main(void)
 	img2 = CreateIMGHDRFromPngFile("2:\\Default\\PopupFeedbackBgImage.png", 0);
 	patch(img, img2);
 	
+	img  = GetIMGHDRFromThemeCache(THEME_CACHE_ID_POPUP_QUICK_ACCESS_FIELD);
+	img2 = CreateIMGHDRFromPngFile("2:\\Default\\PopupQuickAccessFieldBgImage.png", 0);
+	patch(img, img2);
+	
+	img  = GetIMGHDRFromThemeCache(THEME_CACHE_ID_POPUP_SEARCH_LINE);
+	img2 = CreateIMGHDRFromPngFile("2:\\Default\\PopupSearchLineBgImage.png", 0);
+	patch(img, img2);
+	
 	//экономим память
 	img  = GetIMGHDRFromThemeCache(THEME_CACHE_ID_HEADLINE_FULLSCREEN);
 	img2 = GetIMGHDRFromThemeCache(THEME_CACHE_ID_HEADLINE_STANDARD);
