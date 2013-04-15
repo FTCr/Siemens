@@ -1,6 +1,8 @@
 #ifndef _LIBSIEMENS_FIND_FILES_H_
 	#define _LIBSIEMENS_FIND_FILES_H_
 
+#define MAX_UIDS 0x05
+
 typedef struct
 {
 	union
@@ -12,11 +14,8 @@ typedef struct
 			unsigned int uid3; 
 			unsigned int uid4; 
 			unsigned int uid5;
-			unsigned int uid6;
-			unsigned int uid7;
-			unsigned int uid8;
 		};
-		unsigned int data[8]; 
+		unsigned int data[MAX_UIDS]; 
 	}; 
 } FIND_UIDS;
 

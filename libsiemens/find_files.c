@@ -88,7 +88,7 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 				if (fu)
 				{
 					unsigned int uid;
-					for (int i = 0; i < 8; i++)
+					for (int i = 0; i < MAX_UIDS; i++)
 					{
 						uid = GetExtUidByFileName(de.file_name);
 						if (uid == fu->data[i]) goto COPY_DATA;
