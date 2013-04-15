@@ -120,49 +120,85 @@ void utf8_2fname(char *dest, const char *source)
 	FreeWS(ws);
 }
 
-unsigned int FindFiles(DIR_ENTRY ***DE, const char *dir, const char *mask)
+unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask)
 {
-	DIR_ENTRY tmp_de;
-	DIR_ENTRY **de = NULL;
-	char find[128];
-	unsigned int err;
+	DIR_ENTRY_LIST *top = NULL;
 	unsigned int i = 0;
-	sprintf(find, "%s%s", dir, mask);
 	
-	if (FindFirstFile(&tmp_de, find, &err))
+	char find[256];
+	strcpy(find, dir);
+	strcat(find, mask);
+	
+	DIR_ENTRY de;
+	unsigned int err;
+	LockSched();
+	if (FindFirstFile(&de, find, &err))
 	{
+		DIR_ENTRY_LIST *prev, *de_list;
+		top = malloc(sizeof(DIR_ENTRY_LIST));
+		de_list = top;
 		do
 		{
-			de = realloc(de, sizeof(DIR_ENTRY*) * (i + 2));
-			de[i] = malloc(sizeof(DIR_ENTRY));
-			memcpy(de[i], &tmp_de, sizeof(DIR_ENTRY));
-			de[i + 1] = NULL;
+			de_list->file_size        = de.file_size;
+			de_list->file_attr        = de.file_attr;
+			de_list->create_date_time = de.create_date_time;
+			
+			strcpy(de_list->dir,   de.folder_name);
+			strcpy(de_list->fname, de.file_name);
+			
+			prev = de_list;
+			de_list->next = malloc(sizeof(DIR_ENTRY_LIST));
+			de_list = de_list->next;
+			de_list->prev = prev;
 			i++;
-		} while(FindNextFile(&tmp_de, &err));
+		}
+		while (FindNextFile(&de, &err));
+		top->prev = NULL;
+		mfree(prev->next);
+		prev->next = NULL;
 	}
-	FindClose(&tmp_de, &err);
-	*DE = de;
+	UnlockSched();
+	FindClose(&de, &err);
+	*list = top;
 	return i;
 }
 
-unsigned int FindFilesRec(DIR_ENTRY ***DE, const char *dir, FIND_UIDS *fu)
+unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 {
-	DIR_ENTRY tmp_de;
-	static int total = 0;
+	DIR_ENTRY_LIST *top = NULL;
+	int total = 0;
 	
+	char path[256];
+	char find[256];
+	char folder_name[128];
+	
+	strcpy(find, dir);
+	strcat(find, "*");
+	
+	DIR_ENTRY de;
 	unsigned int err;
-	char path[128], find[128], folder_name[128];
-	sprintf(find, "%s%s", dir, "*");
 	LockSched();
-	if (FindFirstFile(&tmp_de, find, &err))
+	if (FindFirstFile(&de, find, &err))
 	{
+		DIR_ENTRY_LIST *de_list, *prev;
+		//самый первый запуск фукнции
+		if (*list == NULL)
+		{
+			top = malloc(sizeof(DIR_ENTRY_LIST));
+			de_list = top;
+		}
+		//еще где-то в рекурсии
+		else
+			de_list = *list;
 		do
 		{
-			sprintf(path, "%s\\%s", tmp_de.folder_name, tmp_de.file_name);
+			strcpy(path, de.folder_name);
+			strcat(path, "\\");
+			strcat(path, de.file_name);
 			if (isdir(path, &err))
 			{
 				strcat(path, "\\");
-				FindFilesRec(DE, path, fu);
+				total += FindFilesRec(&de_list, path, fu);
 			}
 			else
 			{
@@ -171,71 +207,97 @@ unsigned int FindFilesRec(DIR_ENTRY ***DE, const char *dir, FIND_UIDS *fu)
 					unsigned int uid;
 					for (int i = 0; i < 8; i++)
 					{
-						if (fu->data[i])
-						{
-							uid = GetExtUidByFileName(tmp_de.file_name);
-							if (uid == fu->data[i]) goto SAVE;
-						}
+						uid = GetExtUidByFileName(de.file_name);
+						if (uid == fu->data[i]) goto COPY_DATA;
 					}
 				}
 				else
 				{
-					SAVE:
-						(*DE) = realloc((*DE), sizeof(DIR_ENTRY*) * (total + 2));
-						(*DE)[total] = malloc(sizeof(DIR_ENTRY));
-						memcpy((*DE)[total], &tmp_de, sizeof(DIR_ENTRY));
-						(*DE)[(total + 1)] = NULL;
+					COPY_DATA:
+						de_list->file_size        = de.file_size;
+						de_list->file_attr        = de.file_attr;
+						de_list->create_date_time = de.create_date_time;
+			
+						strcpy(de_list->dir,   de.folder_name);
+						strcpy(de_list->fname, de.file_name);
+			
+						prev = de_list;
+						de_list->next = malloc(sizeof(DIR_ENTRY_LIST));
+						de_list = de_list->next;
+						de_list->prev = prev;
 						total++;
 				}
 			}
-		} while(FindNextFile(&tmp_de, &err));
+		}
+		while (FindNextFile(&de, &err));
+		//самый первый запуск функции
+		if (*list == NULL)
+		{
+			top->prev = NULL;
+			mfree(prev->next);
+			prev->next = NULL;
+			*list = top;
+		}
+		//еще где-то в рекурсии
+		else
+		{
+			*list = de_list;
+		}
 	}
-	FindClose(&tmp_de, &err);
 	UnlockSched();
+	FindClose(&de, &err);
 	return total;
 }
 
-
-void DE_Free(DIR_ENTRY ***DE)
+void FreeDEList(DIR_ENTRY_LIST **list)
 {
-	DIR_ENTRY **de = *DE;
-	unsigned int i = 0;
-	while(de[i] != NULL)
+	DIR_ENTRY_LIST *de_list = *list;
+	while(de_list)
 	{
-		mfree(de[i++]);
+		mfree(de_list);
+		de_list = de_list->next;
 	}
-	mfree(de);
 }
 
-void DE_Sort1(DIR_ENTRY ***DE)
+void SortDEList(DIR_ENTRY_LIST **list)
 {
-	DIR_ENTRY **de = *DE;
-	unsigned int j = 0;
-	unsigned int i = 0;
-	while (de[i + 1] != NULL)
+	DIR_ENTRY_LIST *de_list1, *de_list2;
+	if (*list)
 	{
-		j = i + 1;
-		while(de[j] != NULL)
+		char *ptr1, *ptr2;
+		
+		de_list1 = *list;
+		while (de_list1->next)
 		{
-			//а вдруг сименовский юникод?
-			char *ptr1, *ptr2;
-			ptr1 = (de[i]->file_name[0] == 0x1F) ? de[i]->file_name + 1 : de[i]->file_name;
-			ptr2 = (de[j]->file_name[0] == 0x1F) ? de[j]->file_name + 1 : de[j]->file_name;
-			
-			if (strcmp_nocase(ptr1, ptr2) > 0)
+			de_list2 = de_list1->next;
+			while(de_list2)
 			{
-				DIR_ENTRY *tmp = de[i];
-				de[i] = de[j];
-				de[j] = tmp;
-				continue;
+				//а вдруг сименовский юникод
+				ptr1 = (de_list1->fname[0] == 0x1F) ? de_list1->fname + 1 : de_list1->fname;
+				ptr2 = (de_list2->fname[0] == 0x1F) ? de_list2->fname + 1 : de_list2->fname;
+				
+				if (strcmp_nocase(ptr1, ptr2) > 0)
+				{
+					//копируем данные
+					DIR_ENTRY_LIST tmp;
+					memcpy(&tmp, de_list1, sizeof(DIR_ENTRY_LIST));
+					memcpy(de_list1, de_list2, sizeof(DIR_ENTRY_LIST));
+					memcpy(de_list2, &tmp, sizeof(DIR_ENTRY_LIST));
+					//возвращаем расcтановку воиск
+					void *ptr;
+					ptr = de_list1->next;
+					de_list1->next = de_list2->next;
+					de_list2->next = ptr;
+					continue;
+				}
+				de_list2 = de_list2->next;
 			}
-			j++;
+			de_list1 = de_list1->next;
 		}
-		i++;
 	}
 }
 
-void DE_Sort1_With_Dirs(DIR_ENTRY ***DE)
+/*void DE_Sort1_With_Dirs(DIR_ENTRY ***DE)
 {
 	DIR_ENTRY **de = *DE;
 	DIR_ENTRY **de_dirs  = NULL;
@@ -293,4 +355,4 @@ void DE_Sort1_With_Dirs(DIR_ENTRY ***DE)
 		//чистота залог успеха
 		mfree(de_files);
 	}
-}
+}*/
