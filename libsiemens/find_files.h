@@ -1,5 +1,5 @@
-#ifndef _LIBSIEMENS_FILES_H_
-	#define _LIBSIEMENS_FILES_H_
+#ifndef _LIBSIEMENS_FIND_FILES_H_
+	#define _LIBSIEMENS_FIND_FILES_H_
 
 typedef struct
 {
@@ -32,19 +32,13 @@ typedef struct
 	char fname[128];
 } DIR_ENTRY_LIST;
 
-int GetExtByPath(char *dest, const char *path);
-unsigned int GetExtUid(const char *ext);
-unsigned int GetExtUidByFileName(const char *path);
-int GetFileNameWithoutExt(char *dest, const char *fname);
-int GetDirByPath(char *dest, const char *path);
-void utf8_2fname(char *dest, const char *source);
-
 //обычный поиск файлов
 unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask);
 //рекурсивный поиск файлов по uid(расширению)
 unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu);
 //очистка
 void FreeDEList(DIR_ENTRY_LIST **list);
+//сортировка пузырьком
 void SortDEList(DIR_ENTRY_LIST **list);
 
 #endif

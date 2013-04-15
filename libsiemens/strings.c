@@ -1,5 +1,41 @@
 #include <swilib.h>
 
+int GetExtByPath(char *dest, const char *path)
+{
+	char *ptr = strrchr(path, '.');
+	if (ptr == NULL) return -1;
+	ptr++;
+	strcpy(dest, ptr);
+	return 1;
+}
+
+int GetFileNameWithoutExt(char *dest, const char *fname)
+{
+	char *ptr = strrchr(fname, '.');
+	if (ptr == NULL) return -1;
+	int len = ptr - fname;
+	strncpy(dest, fname, len);
+	dest[len] = '\0';
+	return 1;
+}
+
+int GetDirByPath(char *dest, const char *path)
+{
+	char *ptr = strrchr(path, '\\');
+	if (ptr == NULL) return -1;
+	strncpy(dest, path, ptr - path);
+	return 1;
+}
+
+void utf8_2fname(char *dest, const char *source)
+{
+	int len = strlen(source) + 16;
+	WSHDR *ws = AllocWS(len);
+	utf8_2ws(ws, source, len);
+	ws_2str(ws, dest, len);
+	FreeWS(ws);
+}
+
 int str2lower(char *dest, const char *src)
 {
 	unsigned int len = strlen(src);
