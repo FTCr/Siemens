@@ -29,12 +29,15 @@ typedef struct
 	unsigned int create_date_time;
 	char dir[128];
 	char fname[128];
+	char path[256];
 } DIR_ENTRY_LIST;
 
 //обычный поиск файлов
 unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask);
 //рекурсивный поиск файлов по uid(расширению)
 unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu);
+//получение элемента по id
+DIR_ENTRY_LIST *GetDEListValue(DIR_ENTRY_LIST *list, int n);
 //очистка
 void FreeDEList(DIR_ENTRY_LIST **list);
 //сортировка пузырьком

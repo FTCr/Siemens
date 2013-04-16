@@ -28,6 +28,10 @@ unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask)
 			
 			strcpy(de_list->dir,   de.folder_name);
 			strcpy(de_list->fname, de.file_name);
+			strcpy(de_list->path, de.folder_name);
+			strcat(de_list->path, "\\");
+			strcat(de_list->path, de.file_name);
+			
 			
 			prev = de_list;
 			de_list->next = malloc(sizeof(DIR_ENTRY_LIST));
@@ -103,7 +107,12 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 			
 						strcpy(de_list->dir,   de.folder_name);
 						strcpy(de_list->fname, de.file_name);
-			
+						strcpy(de_list->path, de.folder_name);
+						strcat(de_list->path, "\\");
+						strcat(de_list->path, de.file_name);
+						
+						
+						
 						prev = de_list;
 						de_list->next = malloc(sizeof(DIR_ENTRY_LIST));
 						de_list = de_list->next;
@@ -132,13 +141,27 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 	return total;
 }
 
+DIR_ENTRY_LIST *GetDEListValue(DIR_ENTRY_LIST *list, int n)
+{
+	int i = 0;
+	while(i < n)
+	{
+		if (!list->next) return NULL;
+		list = list->next;
+		i++;
+	}
+	return list;
+}
+
 void FreeDEList(DIR_ENTRY_LIST **list)
 {
 	DIR_ENTRY_LIST *de_list = *list;
+	DIR_ENTRY_LIST *next;
 	while(de_list)
 	{
+		next = de_list->next;
 		mfree(de_list);
-		de_list = de_list->next;
+		de_list = next;
 	}
 }
 
