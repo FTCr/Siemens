@@ -22,20 +22,22 @@ IMGHDR *CreateIMGHDRFromImgFile(const char *path)
 	return img;
 }
 
-void DrawIMGHDR(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bleed_y)
+void DrawIMGHDR(IMGHDR *img, int x, int y, int w, int h)
 {
 	RECT rc;
 	DRWOBJ drwobj;
-	if (!bleed_x && !bleed_y)
-	{
-		StoreXYWHtoRECT(&rc,x,y,img->w,img->h);
-		SetPropTo_Obj5(&drwobj, &rc, 0, img);
-	}
-	else
-	{
-		StoreXYXYtoRECT(&rc, x, y, x2, y2);
-		SetProp2ImageOrCanvas(&drwobj, &rc, 0, img, bleed_x, bleed_y);
-	}
+	StoreXYWHtoRECT(&rc, x, y, w, h);
+	SetPropTo_Obj5(&drwobj, &rc, 0, img);
+	SetColor(&drwobj, NULL, NULL);
+	DrawObject(&drwobj);
+}
+
+void DrawIMGHDR_2(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bleed_y)
+{
+	RECT rc;
+	DRWOBJ drwobj;
+	StoreXYXYtoRECT(&rc, x, y, x2, y2);
+	SetProp2ImageOrCanvas(&drwobj, &rc, 0, img, bleed_x, bleed_y);
 	SetColor(&drwobj, NULL, NULL);
 	DrawObject(&drwobj);
 }
