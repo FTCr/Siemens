@@ -1731,6 +1731,9 @@ __swi(0x80D7);
 IMGHDR *GetCanvasBufferPicPtr(char CanvasID)
 __swi(0x076);
 
+int ProgressCalculate(int current, int total)
+__swi(0x1EE);
+
 #ifndef __LOADER_BUILD
 int elfclose(void* ex)
 __swi(0x2EE);
