@@ -90,3 +90,42 @@ int strcmp_nocase(const char *s, const char *d)
 	while(ds);
 	return(cs);
 }
+
+int char16to8(int c)
+{
+	if (c < 0x400) return c;
+	c -= 0x400;
+	if (c < 16)
+	{
+		if (c == 1) c = 0;
+		else if (c == 4) c = 2;
+		else if (c == 6) c = 10;
+		else return c;
+	}
+	else if (c > 79)
+	{
+		if (c == 0x51) c = 16;
+		else if (c == 0x54) c = 18;
+		else if (c == 0x56) c = 11;
+		else if (c == 0x57) c = 23;
+		else return c;
+	}
+	else c += 8;
+	c += 168;
+	return c;
+}
+
+int ws2ascii(char *dest, WSHDR *ws)
+{
+  unsigned int sWs = ws->wsbody[0];
+  unsigned int p = 0;
+  unsigned int cWs;
+  while(p < sWs)
+  {
+    cWs = ws->wsbody[p + 1];
+    dest[p] = char16to8(cWs);
+    p++;
+  }
+  dest[p] = 0;
+  return p;
+}

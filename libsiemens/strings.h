@@ -12,4 +12,6 @@ int str2lower(char *dest, const char *src);
 //аналого strcmp, но без чувствительности к регистру
 int strcmp_nocase(const char *s, const char *d);
 
+int ws2ascii(char *dest, WSHDR *ws);
+
 #endif
