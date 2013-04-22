@@ -33,7 +33,7 @@ int GetFileName(char *dest, const char *path)
 {
 	char *ptr = strrchr(path, '\\');
 	if (ptr == NULL) return -1;
-	strcpy(ptr + sizeof(char), path);
+	strcpy(dest, ptr + sizeof(char));
 	return 1;
 }
 
