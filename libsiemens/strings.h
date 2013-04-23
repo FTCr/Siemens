@@ -5,6 +5,7 @@ int GetExt(char *dest, const char *path);
 int GetFileNameWithoutExt(char *dest, const char *fname);
 int GetDir(char *dest, const char *path);
 int GetFileName(char *dest, const char *path);
+int GetFileNameWithoutExtFromPath(char *dest, const char *path);
 
 void utf8_2fname(char *dest, const char *source);
 //преобразование строки в нижний регистр

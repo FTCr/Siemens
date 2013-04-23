@@ -37,6 +37,21 @@ int GetFileName(char *dest, const char *path)
 	return 1;
 }
 
+int GetFileNameWithoutExtFromPath(char *dest, const char *path)
+{
+	char *ptr1 = strrchr(path, '\\');
+	char *ptr2 = strrchr(path, '.');
+	
+	if (ptr1 == NULL || ptr2 == NULL) return -1;
+	
+	ptr1++;
+	
+	int len = ptr2 - ptr1;
+	strncpy(dest, ptr1, len);
+	dest[len] = '\0';
+	return 1;
+}
+
 void utf8_2fname(char *dest, const char *source)
 {
 	int len = strlen(source) + 16;
