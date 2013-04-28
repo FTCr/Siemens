@@ -3,7 +3,7 @@
 #include "obs.h"
 #include "strings.h"
 
-unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask)
+unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask, void CallBack(DIR_ENTRY_LIST *ptr))
 {
 	DIR_ENTRY_LIST *top = NULL;
 	unsigned int i = 0;
@@ -22,15 +22,18 @@ unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask)
 		de_list = top;
 		do
 		{
+			strcpy(de_list->path, de.folder_name);
+			strcat(de_list->path, "\\");
+			strcat(de_list->path, de.file_name);
+			strcpy(de_list->dir,   de.folder_name);
+			strcpy(de_list->fname, de.file_name);
+			
+			
 			de_list->file_size        = de.file_size;
 			de_list->file_attr        = de.file_attr;
 			de_list->create_date_time = de.create_date_time;
 			
-			strcpy(de_list->dir,   de.folder_name);
-			strcpy(de_list->fname, de.file_name);
-			strcpy(de_list->path, de.folder_name);
-			strcat(de_list->path, "\\");
-			strcat(de_list->path, de.file_name);
+			if (CallBack) CallBack(de_list);
 			
 			
 			prev = de_list;
@@ -50,7 +53,7 @@ unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask)
 	return i;
 }
 
-unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
+unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu, void CallBack(DIR_ENTRY_LIST *ptr))
 {
 	DIR_ENTRY_LIST *top = NULL;
 	int total = 0;
@@ -85,7 +88,7 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 			if (isdir(path, &err))
 			{
 				strcat(path, "\\");
-				total += FindFilesRec(&de_list, path, fu);
+				total += FindFilesRec(&de_list, path, fu, CallBack);
 			}
 			else
 			{
@@ -101,16 +104,17 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 				else
 				{
 					COPY_DATA:
-						de_list->file_size        = de.file_size;
-						de_list->file_attr        = de.file_attr;
-						de_list->create_date_time = de.create_date_time;
-			
-						strcpy(de_list->dir,   de.folder_name);
-						strcpy(de_list->fname, de.file_name);
 						strcpy(de_list->path, de.folder_name);
 						strcat(de_list->path, "\\");
 						strcat(de_list->path, de.file_name);
+						strcpy(de_list->dir,   de.folder_name);
+						strcpy(de_list->fname, de.file_name);
 						
+						de_list->file_size        = de.file_size;
+						de_list->file_attr        = de.file_attr;
+						de_list->create_date_time = de.create_date_time;
+						
+						if (CallBack) CallBack(de_list);
 						
 						
 						prev = de_list;
@@ -141,31 +145,101 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu)
 	return total;
 }
 
-DIR_ENTRY_LIST *GetDEListValue(DIR_ENTRY_LIST *list, int n)
+DIR_ENTRY_LIST *GetDEListPtr(DIR_ENTRY_LIST *top, unsigned int n)
 {
-	int i = 0;
+	DIR_ENTRY_LIST *ptr = top;
+	unsigned int i = 0;
 	while(i < n)
-	{
-		if (!list->next) return NULL;
-		list = list->next;
+	{	
+		if (!ptr->next) return NULL;
+		ptr = ptr->next;
 		i++;
 	}
-	return list;
+	return ptr;
 }
 
-void FreeDEList(DIR_ENTRY_LIST **list)
+int CutDEListData(DIR_ENTRY_LIST **top, DIR_ENTRY_LIST **buffer, unsigned int n)
 {
-	DIR_ENTRY_LIST *de_list = *list;
-	DIR_ENTRY_LIST *next;
-	while(de_list)
+	DIR_ENTRY_LIST *ptr = GetDEListPtr(*top, n);
+	
+	if (!ptr) return -1;
+	
+	if (!(*buffer)) *buffer = malloc(sizeof(DIR_ENTRY_LIST));
+	memcpy(*buffer, ptr, sizeof(DIR_ENTRY_LIST));
+	
+	DIR_ENTRY_LIST *p1, *p2;
+	if (!n)
 	{
-		next = de_list->next;
-		mfree(de_list);
-		de_list = next;
+		*top = (*top)->next;
+		(*top)->prev = NULL;
+	}
+	else
+	{
+		p1 = ptr->prev;
+		if (ptr->next)
+		{
+			p2 = ptr->next;
+			p2->prev = p1;
+			p1->next = ptr->next;
+		}
+		else
+		{
+			p1->next = NULL;
+		}
+	}
+	mfree(ptr);
+	return 1;
+}
+
+int PasteDEListData(DIR_ENTRY_LIST **top, DIR_ENTRY_LIST **buffer, unsigned int n)
+{
+	DIR_ENTRY_LIST *ptr = GetDEListPtr(*top, n);
+	
+	if (!ptr) return -1;
+		
+	if (!buffer) return -1;
+	
+	DIR_ENTRY_LIST *paste = malloc(sizeof(DIR_ENTRY_LIST));
+	memcpy(paste, *buffer, sizeof(DIR_ENTRY_LIST));
+	mfree((*buffer));
+	*buffer = NULL;
+		
+	DIR_ENTRY_LIST *p1, *p2;
+	if (!n)
+	{
+		p1 = *top;
+		*top = paste;
+		(*top)->prev = NULL;
+		(*top)->next = p1;
+		p1->prev = paste;
+	}
+	else
+	{
+		p1 = ptr->prev;
+		p2 = p1->next;
+		
+		p1->next = paste;
+		paste->next = p2;
+		paste->prev = p1;
+		p2->prev = paste;
+	}
+	
+	return 1;
+}
+
+void FreeDEList(DIR_ENTRY_LIST *top, void CallBack(DIR_ENTRY_LIST *ptr))
+{
+	DIR_ENTRY_LIST *next;
+	while(top)
+	{
+		next = top->next;
+		if (CallBack) CallBack(top);
+		mfree(top);
+		top = next;
 	}
 }
 
-void SortDEList(DIR_ENTRY_LIST **list)
+/*void SortDEList(DIR_ENTRY_LIST **list) //кривоватенько что-то, а что не помню
 {
 	DIR_ENTRY_LIST *de_list1, *de_list2;
 	if (*list)
@@ -201,7 +275,7 @@ void SortDEList(DIR_ENTRY_LIST **list)
 			de_list1 = de_list1->next;
 		}
 	}
-}
+}*/
 
 /*void DE_Sort1_With_Dirs(DIR_ENTRY ***DE)
 {
