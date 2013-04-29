@@ -56,3 +56,40 @@ unsigned int GetWidthWS(WSHDR *ws, const int font)
 {
 	return (Get_WS_width(ws, font) + 1);
 }
+
+void patch_rect(RECT*rc, int x, int y, int x2, int y2)
+{
+	rc->x  = x;
+	rc->y  = y;
+	rc->x2 = x2;
+	rc->y2 = y2;
+}
+
+void patch_header(HEADER_DESC* head)
+{
+	head->rc.x  = 0;
+	head->rc.y  = YDISP;
+	head->rc.x2 = ScreenW() - 1;
+	head->rc.y2 = HeaderH() + YDISP-1;
+}
+
+void patch_header_small(HEADER_DESC* head)
+{
+	head->rc.x  = 3;
+	head->rc.x2 = ScreenW()-6;
+	#ifndef ELKA
+		head->rc.y  = YDISP + 0x18;
+		head->rc.y2 = YDISP + 0x18 + 0x13;
+	#else
+		head->rc.y  = YDISP + 0x23;
+		head->rc.y2 = YDISP + 0x23+0x22;
+	#endif
+}
+
+void patch_input(INPUTDIA_DESC* inp)
+{
+	inp->rc.x  = 0;
+	inp->rc.y  = HeaderH() + 1 + YDISP;
+	inp->rc.x2 = ScreenW() - 1;
+	inp->rc.y2 = ScreenH() - SoftkeyH() - 1;
+}

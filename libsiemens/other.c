@@ -76,39 +76,26 @@ void DestroySWIHook(int swi_num, unsigned int *addr)
 	UnlockSched();
 }
 
-void patch_rect(RECT*rc, int x, int y, int x2, int y2)
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+// Генератор случайных чисел
+// Алгоритм взят из исходников mp3 плеера (c) ILYA_ZX
+// И слегка переделан
+
+#define EPIC_CONST 0x08088405
+
+unsigned int rand(unsigned int *seed)
 {
-	rc->x  = x;
-	rc->y  = y;
-	rc->x2 = x2;
-	rc->y2 = y2;
+	(*seed) = (*seed) * EPIC_CONST;
+	(*seed)++;
+	return ((long long)(*seed) * 100000 ) >> 32;
 }
 
-void patch_header(HEADER_DESC* head)
+void srand(unsigned int *seed)
 {
-	((HEADER_DESC*)head)->rc.x = 0;
-	((HEADER_DESC*)head)->rc.y = YDISP;
-	((HEADER_DESC*)head)->rc.x2 = ScreenW()-1;
-	((HEADER_DESC*)head)->rc.y2 = HeaderH() + YDISP-1;
-}
-
-void patch_header_small(HEADER_DESC* head)
-{
-	head->rc.x  = 3;
-	head->rc.x2 = ScreenW()-6;
-	#ifndef ELKA
-		head->rc.y  = YDISP + 0x18;
-		head->rc.y2 = YDISP + 0x18 + 0x13;
-	#else
-		head->rc.y  = YDISP + 0x23;
-		head->rc.y2 = YDISP + 0x23+0x22;
-	#endif
-}
-
-void patch_input(INPUTDIA_DESC* inp)
-{
-	((INPUTDIA_DESC*)inp)->rc.x  = 0;
-	((INPUTDIA_DESC*)inp)->rc.y  = HeaderH()+1+YDISP;
-	((INPUTDIA_DESC*)inp)->rc.x2 = ScreenW()-1;
-	((INPUTDIA_DESC*)inp)->rc.y2 = ScreenH()-SoftkeyH()-1;
+	TTime time;
+	GetDateTime(NULL, &time);
+	(*seed) = (time.min | (time.sec << 5));
 }

@@ -11,4 +11,9 @@ void DrawIMGHDR_2(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bl
 void FreeIMGHDR(IMGHDR *img);
 //получение ширины строки
 unsigned int GetWidthWS(WSHDR *ws, const int font);
+
+void patch_rect(RECT*rc, int x, int y, int x2, int y2);
+void patch_header(HEADER_DESC* head);
+void patch_header_small(HEADER_DESC* head);
+void patch_input(INPUTDIA_DESC* inp);
 #endif

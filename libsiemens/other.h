@@ -17,9 +17,9 @@ int *SetSWIHook(int swi_num, void *proc);
 //снятие хука
 void DestroySWIHook(int swi_num, unsigned int *addr);
 
-void patch_rect(RECT*rc, int x, int y, int x2, int y2);
-void patch_header(HEADER_DESC* head);
-void patch_header_small(HEADER_DESC* head);
-void patch_input(INPUTDIA_DESC* inp);
+//получение рандомного числа
+unsigned int rand(unsigned int *seed);
+//инициализация рандома
+void srand(unsigned int *seed);
 
 #endif
