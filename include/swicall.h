@@ -1187,10 +1187,10 @@ __swi(0x204);
 void SetProp2Square_v1(void)
 __swi(0x205);
 
-#ifdef __NO_LIBC
+/*#ifdef __NO_LIBC
 void srand(unsigned int seed)
 __swi(0x206);
-#endif
+#endif*/
 
 void DrawScrollString(WSHDR *WSHDR,int x1,int y1,int x2,int y2,int xdisp,int font,int text_attribute,const char *Pen,const char *Brush)
 __swi(0x207);
@@ -1305,10 +1305,10 @@ __swi(0x822F);
 int GetTimeZoneShift(TDate * param1, TTime * param2, int timeZone)
 __swi(0x230);
 
-#ifdef __NO_LIBC
+/*#ifdef __NO_LIBC
 int rand(void)
 __swi(0x7E);
-#endif
+#endif*/
 
 void SendAutoUSSDack(void)
 __swi(0x238);
