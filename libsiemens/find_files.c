@@ -168,62 +168,84 @@ int CutDEListData(DIR_ENTRY_LIST **top, DIR_ENTRY_LIST **buffer, unsigned int n)
 	memcpy(*buffer, ptr, sizeof(DIR_ENTRY_LIST));
 	
 	DIR_ENTRY_LIST *p1, *p2;
-	if (!n)
+	if ((*top)->next)
 	{
-		*top = (*top)->next;
-		(*top)->prev = NULL;
-	}
-	else
-	{
-		p1 = ptr->prev;
-		if (ptr->next)
+		if (!n)
 		{
-			p2 = ptr->next;
-			p2->prev = p1;
-			p1->next = ptr->next;
+			*top = (*top)->next;
+			(*top)->prev = NULL;
 		}
 		else
 		{
-			p1->next = NULL;
+			p1 = ptr->prev;
+			if (ptr->next)
+			{
+				p2 = ptr->next;
+				p2->prev = p1;
+				p1->next = ptr->next;
+			}
+			else
+			{
+				p1->next = NULL;
+			}
 		}
+		mfree(ptr);
 	}
-	mfree(ptr);
+	else
+	{
+		mfree(*top);
+		*top = NULL;
+	}
 	return 1;
 }
 
 int PasteDEListData(DIR_ENTRY_LIST **top, DIR_ENTRY_LIST **buffer, unsigned int n)
 {
-	DIR_ENTRY_LIST *ptr = GetDEListPtr(*top, n);
-	
-	if (!ptr) return -1;
-		
-	if (!buffer) return -1;
-	
-	DIR_ENTRY_LIST *paste = malloc(sizeof(DIR_ENTRY_LIST));
-	memcpy(paste, *buffer, sizeof(DIR_ENTRY_LIST));
-	mfree((*buffer));
-	*buffer = NULL;
-		
-	DIR_ENTRY_LIST *p1, *p2;
-	if (!n)
+	DIR_ENTRY_LIST *paste;
+	void func(void)
 	{
-		p1 = *top;
-		*top = paste;
-		(*top)->prev = NULL;
-		(*top)->next = p1;
-		p1->prev = paste;
+		paste = malloc(sizeof(DIR_ENTRY_LIST));
+		memcpy(paste, *buffer, sizeof(DIR_ENTRY_LIST));
+		mfree((*buffer));
+		*buffer = NULL;
+	}
+	if (*top)
+	{
+		DIR_ENTRY_LIST *ptr = GetDEListPtr(*top, n);
+	
+		if (!ptr) return -1;
+		
+		if (!(*buffer)) return -1;
+		
+		func();
+		
+		DIR_ENTRY_LIST *p1, *p2;
+		if (!n)
+		{
+			p1 = *top;
+			*top = paste;
+			(*top)->prev = NULL;
+			(*top)->next = p1;
+			p1->prev = paste;
+		}
+		else
+		{
+			p1 = ptr->prev;
+			p2 = p1->next;
+		
+			p1->next = paste;
+			paste->next = p2;
+			paste->prev = p1;
+			p2->prev = paste;
+		}
 	}
 	else
 	{
-		p1 = ptr->prev;
-		p2 = p1->next;
-		
-		p1->next = paste;
-		paste->next = p2;
-		paste->prev = p1;
-		p2->prev = paste;
+		func();
+		paste->prev = NULL;
+		paste->next = NULL;
+		*top = paste;
 	}
-	
 	return 1;
 }
 
