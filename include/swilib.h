@@ -746,6 +746,14 @@ typedef struct
 #define SWI_KBDLOCK    0xA9
 #define SWI_KBDUNLOCK  0xB9
 
+#ifdef NEWSGOLD
+	#define ICON_AAC_SMALL 0x3BA
+	#define ICON_MP3_SMALL 0x3D3
+	#define ICON_M3U_SMALL 0x3DC
+	#define ICON_WAV_SMALL 0x3F1
+	#define ICON_EMPTY     0x538
+#endif
+
 typedef struct
 {
 #ifdef ELKA
