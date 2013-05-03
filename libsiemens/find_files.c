@@ -158,6 +158,22 @@ DIR_ENTRY_LIST *GetDEListPtr(DIR_ENTRY_LIST *top, unsigned int n)
 	return ptr;
 }
 
+unsigned int GetDEListTotalItems(DIR_ENTRY_LIST *top)
+{
+	unsigned int i = 0;
+	if (top)
+	{
+		i++;
+		top = top->next;
+		while(top)
+		{
+			i++;
+			top = top->next;
+		}
+	}
+	return i;
+}
+
 int CutDEListData(DIR_ENTRY_LIST **top, DIR_ENTRY_LIST **buffer, unsigned int n)
 {
 	DIR_ENTRY_LIST *ptr = GetDEListPtr(*top, n);

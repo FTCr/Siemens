@@ -40,6 +40,8 @@ unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask,
 unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu, void CallBack(DIR_ENTRY_LIST *ptr));
 //получение элемента по id
 DIR_ENTRY_LIST *GetDEListPtr(DIR_ENTRY_LIST *list, unsigned int n);
+//получение размера
+unsigned int GetDEListTotalItems(DIR_ENTRY_LIST *top);
 //удаление элемента
 int CutDEListData(DIR_ENTRY_LIST **top, DIR_ENTRY_LIST **buffer, unsigned int n);
 //вставка элемента из буфера
