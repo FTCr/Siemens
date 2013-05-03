@@ -1,6 +1,7 @@
 NAME = libs
+VER  = 0.3
 
-FNAME   = ${NAME}.so
+FNAME   = ${NAME}-${VER}.so
 OBJECTS = *.o
 SOURCES = *.c
 
