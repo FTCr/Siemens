@@ -1,6 +1,6 @@
 #include <swilib.h>
 
-int GetExt(char *dest, const char *path)
+int GetExtByPath(char *dest, const char *path)
 {
 	char *ptr = strrchr(path, '.');
 	if (ptr == NULL) return -1;
@@ -9,7 +9,7 @@ int GetExt(char *dest, const char *path)
 	return 1;
 }
 
-int GetFileNameWithoutExt(char *dest, const char *fname)
+int GetFileNameWithoutExtByFileName(char *dest, const char *fname)
 {
 	char *ptr = strrchr(fname, '.');
 	if (ptr == NULL) return -1;
@@ -19,7 +19,7 @@ int GetFileNameWithoutExt(char *dest, const char *fname)
 	return 1;
 }
 
-int GetDir(char *dest, const char *path)
+int GetDirByPath(char *dest, const char *path)
 {
 	char *ptr = strrchr(path, '\\');
 	if (ptr == NULL) return -1;
@@ -29,7 +29,7 @@ int GetDir(char *dest, const char *path)
 	return 1;
 }
 
-int GetFileName(char *dest, const char *path)
+int GetFileNameByPath(char *dest, const char *path)
 {
 	char *ptr = strrchr(path, '\\');
 	if (ptr == NULL) return -1;
@@ -37,7 +37,7 @@ int GetFileName(char *dest, const char *path)
 	return 1;
 }
 
-int GetFileNameWithoutExtFromPath(char *dest, const char *path)
+int GetFileNameWithoutExtByPath(char *dest, const char *path)
 {
 	char *ptr1 = strrchr(path, '\\');
 	char *ptr2 = strrchr(path, '.');

@@ -1,11 +1,11 @@
 #ifndef _LIBSIEMENS_STRINGS_H_
 	#define _LIBSIEMENS_STRINGS_H_
 
-int GetExt(char *dest, const char *path);
-int GetFileNameWithoutExt(char *dest, const char *fname);
-int GetDir(char *dest, const char *path);
-int GetFileName(char *dest, const char *path);
-int GetFileNameWithoutExtFromPath(char *dest, const char *path);
+int GetExtByPath(char *dest, const char *path);
+int GetDirByPath(char *dest, const char *path);
+int GetFileNameByPath(char *dest, const char *path);
+int GetFileNameWithoutExtByFileName(char *dest, const char *fname);
+int GetFileNameWithoutExtByPath(char *dest, const char *path);
 
 void utf8_2fname(char *dest, const char *source);
 //преобразование строки в нижний регистр
