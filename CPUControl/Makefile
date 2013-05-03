@@ -1,7 +1,6 @@
-NAME = libs
-VER  = 0.3
+NAME = CPUControl
 
-FNAME   = ${NAME}-${VER}.so
+FNAME   = ${NAME}.elf
 OBJECTS = *.o
 SOURCES = *.c
 

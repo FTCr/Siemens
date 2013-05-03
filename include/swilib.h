@@ -236,14 +236,16 @@ typedef struct
   void (*data_mfree)(void *);
 }LLQ;
 
+#define TMR_6_SEC 1300
+
 typedef struct{
-  int param0;
-  int param1;
-  int param2;
-  int param3;
-  int param4;
-  int param5;
-  int param6;
+	int param0;
+	int param1;
+	int param2;
+	int param3;
+	int param4;
+	int param5;
+	int param6;
 } GBSTMR;
 
 typedef struct{
@@ -688,26 +690,69 @@ typedef struct
 #define FIRST_UCS2_BITMAP 0xE137
 #endif
 
+#define THEME_CACHE_ID_HEADLINE_STANDARD        0x00
+#define THEME_CACHE_ID_HEADLINE_FULLSCREEN      0x01
+#define THEME_CACHE_ID_BODY_STANDARD            0x02
+#define THEME_CACHE_ID_BODY_TAB                 0x03
+#define THEME_CACHE_ID_BOTTOM_STANDARD          0x04
+#define THEME_CACHE_ID_BOTTOM_FULLSCREEN        0x05
+#define THEME_CACHE_ID_POPUP_OPTIONS            0x06
+#define THEME_CACHE_ID_POPUP_FEEDBACK           0x07
+#define THEME_CACHE_ID_SELECTION_1LINE          0x08
+#define THEME_CACHE_ID_SELECTION_2LINE          0x09
+#define THEME_CACHE_ID_SELECTION_3LINE          0x0A
+#define THEME_CACHE_ID_SELECTION_ICON           0x0B
+#define THEME_CACHE_ID_POPUP_SEARCH_LINE        0x0C
+#define THEME_CACHE_ID_POPUP_QUICK_ACCESS_FIELD 0x0D
+#define THEME_CACHE_ID_PROGRESS_STATUSBAR       0x0E
+#define THEME_CACHE_ID_TAB_SELECTED             0x0F
+#define THEME_CACHE_ID_TAB_UNSELECTED           0x10
+#define THEME_CACHE_ID_STATUSBAR_STANDARD       0x11
+#define THEME_CACHE_ID_STATUSBAR_FULLSCREEN     0x12
 
-#define HEADLINE_STANDART        0x0
-#define HEADLINE_FULLSCREEN      0x1
-#define BODY_STANDART            0x2
-#define BODY_TAB                 0x3
-#define BOTTOM_STANDART          0x4
-#define BOTTOM_FULLSCREEN        0x5
-#define POPUP_OPTIONS            0x6
-#define POPUP_FEEDBACK           0x7
-#define SELECTION_1_LINE         0x8
-#define SELECTION_2_LINE         0x9
-#define SELECTION_3_LINE         0xA
-#define SELECTION_ICON_ONLY      0xB
-#define POPUP_SEARCH_LINE        0xC
-#define POPUP_QUICK_ACCESS_FIELD 0xD
-#define PROGRESS_STATUSBAR       0xE
-#define TAB_SELECTED             0xF
-#define TAB_UNSELECTED           0x10
-#define STATUSBAR_STANDART       0x11
-#define STATUSBAR_FULLSCREEN     0x12
+#define AE_APIDC_SETUP 0x06
+#define AE_MEDIAPLAYER 0x07
+
+#define UID_MP3  0x03
+#define UID_M3U  0x04
+#define UID_JAR  0x12
+#define UID_JAD  0x13
+#define UID_MID  0x18
+#define UID_AMR  0x19
+#define UID_IMY  0x1A
+#define UID_SRT  0x1C
+#define UID_AAC  0x1D
+#define UID_WAV  0x1E
+#define UID_JTS  0x20
+#define UID_XMF  0x21
+#define UID_M4A  0x22
+#define UID_BMX  0x23
+#define UID_WBMP 0x24
+#define UID_BMP  0x25
+#define UID_JPG  0x26
+#define UID_PNG  0x27
+#define UID_GIF  0x28
+#define UID_SVG  0x2B
+#define UID_3GP  0x32
+#define UID_MP4  0x33
+#define UID_SDP  0x3E
+#define UID_PVX  0x3F
+#define UID_SDT  0x40
+#define UID_LDB  0x44
+#define UID_TXT  0x57
+#define UID_URL  0x58
+
+#define SWI_ISUNLOCKED 0x43
+#define SWI_KBDLOCK    0xA9
+#define SWI_KBDUNLOCK  0xB9
+
+#ifdef NEWSGOLD
+	#define ICON_AAC_SMALL 0x3BA
+	#define ICON_MP3_SMALL 0x3D3
+	#define ICON_M3U_SMALL 0x3DC
+	#define ICON_WAV_SMALL 0x3F1
+	#define ICON_EMPTY     0x538
+#endif
 
 typedef struct
 {
@@ -1404,11 +1449,11 @@ typedef struct TVIEW_DESC
 
 typedef struct LIGHT_PARAM
 {
-	char timeout; // Таймаут гашения
-	char unk0; // Нечто загадочтное, бывает 0, или 5
-	char perm_illum; // Не совсем понятно, похоже уровень, который будет удерживаться при вызове IllumTimeRequest,
-                            //переписывается вызовом SaveMaxIllumination(), и зачем-то ограничено 80%
 	char max_illum; // Ну здесь как известно яркость подсветки
+	char perm_illum; // Не совсем понятно, похоже уровень, который будет удерживаться при вызове IllumTimeRequest,
+		//переписывается вызовом SaveMaxIllumination(), и зачем-то ограничено 80%
+	char unk0; // Нечто загадочтное, бывает 0, или 5
+	char timeout; // Таймаут гашения
 } LIGHT_PARAM;
 
 typedef struct I2C_MSG

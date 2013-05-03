@@ -1,5 +1,5 @@
-NAME = libs
-VER  = 0.3
+NAME = libapd
+VER  = 0.1
 
 FNAME   = ${NAME}-${VER}.so
 OBJECTS = *.o
@@ -18,7 +18,7 @@ LDFLAGS = -L../libs -marmelf -z max-page-size=1 -nostdlib --defsym __ex=0 --gc-s
 LIB_LDFLAGS = ${LDFLAGS} -shared -Bsymbolic -Bsymbolic-function -soname=${FNAME}
 ELF_LDFLAGS = ${LDFLAGS} -pie 
 
-LIBS = -lgcc -lcrt -lcrt_helper
+LIBS = -lgcc -lcrt -lcrt_helper -ls -laudio
 
 CFLAGS += -D__NO_DIRECT_SWI -D__NO_LIBC
 CFLAGS_INPUT =

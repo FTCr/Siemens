@@ -1,38 +1,19 @@
-#ifndef _LIBS_GRAPHICS_H_
-	#define _LIBS_GRAPHICS_H_
+#ifndef _LIBSIEMENS_GRAPHICS_H_
+	#define _LIBSIEMENS_GRAPHICS_H_
 
-#ifdef ELKA
-	#define ICONBAR_H 24
-#else
-	#define ICONBAR_H 0
-#endif
-
-#define THEME_CACHE_ID_HEADLINE_STANDARD        0x00
-#define THEME_CACHE_ID_HEADLINE_FULLSCREEN      0x01
-#define THEME_CACHE_ID_BODY_STANDARD            0x02
-#define THEME_CACHE_ID_BODY_TAB                 0x03
-#define THEME_CACHE_ID_BOTTOM_STANDARD          0x04
-#define THEME_CACHE_ID_BOTTOM_FULLSCREEN        0x05
-#define THEME_CACHE_ID_POPUP_OPTIONS            0x06
-#define THEME_CACHE_ID_POPUP_FEEDBACK           0x07
-#define THEME_CACHE_ID_SELECTION_1LINE          0x08
-#define THEME_CACHE_ID_SELECTION_2LINE          0x09
-#define THEME_CACHE_ID_SELECTION_3LINE          0x0A
-#define THEME_CACHE_ID_SELECTION_ICON           0x0B
-#define THEME_CACHE_ID_POPUP_SEARCH_LINE        0x0C
-#define THEME_CACHE_ID_POPUP_QUICK_ACCESS_FIELD 0x0D
-#define THEME_CACHE_ID_PROGRESS_STATUSBAR       0x0E
-#define THEME_CACHE_ID_TAB_SELECTED             0x0F
-#define THEME_CACHE_ID_TAB_UNSELECTED           0x10
-#define THEME_CACHE_ID_STATUSBAR_STANDARD       0x11
-#define THEME_CACHE_ID_STATUSBAR_FULLSCREEN     0x12
-
-#define CANVAS_BUFFER_WALLPAPER 0x00 
-
+//создание из любого графического файла
 IMGHDR *CreateIMGHDRFromImgFile(const char *path);
-void DrawIMGHDR(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bleed_y);
+//отрисовка
+void DrawIMGHDR(IMGHDR *img, int x, int y, int w, int h);
+//отрисовка по координатам
+void DrawIMGHDR_2(IMGHDR *img, int x, int y, int x2, int y2, int bleed_x, int bleed_y);
+//очистка
 void FreeIMGHDR(IMGHDR *img);
-
+//получение ширины строки
 unsigned int GetWidthWS(WSHDR *ws, const int font);
 
+void patch_rect(RECT*rc, int x, int y, int x2, int y2);
+void patch_header(HEADER_DESC* head);
+void patch_header_small(HEADER_DESC* head);
+void patch_input(INPUTDIA_DESC* inp);
 #endif

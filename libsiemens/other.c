@@ -1,5 +1,13 @@
 #include <swilib.h>
 
+void IPC_SendMessage(IPC_REQ *ipc, const char *name_to, const char *name_from, const int mess, void *data)
+{
+	ipc->name_to   = name_to;
+	ipc->name_from = name_from;
+	ipc->data      = data;
+	GBS_SendMessage(MMI_CEPID, MSG_IPC, mess, ipc);
+}
+
 void ExecEntrypoint(const char *name)
 {
 	typedef void (*voidfunc)(); 
@@ -32,17 +40,6 @@ void ExecFile(const char *path)
 	FreeWS(ws);
 }
 
-
-void DelTimer(GBSTMR *tmr)
-{
-	if (IsTimerProc(tmr))
-	{
-		GBS_StopTimer(tmr);
-		GBS_DelTimer(tmr);
-	}
-}
-
-
 unsigned int GetCSMIDFromAddr(const char *addr)
 {
 	CSM_RAM *p;
@@ -56,4 +53,49 @@ unsigned int GetCSMIDFromAddr(const char *addr)
 	}
 	if (p) return p->id;
 	return 0;
+}
+
+int *SetSWIHook(int swi_num, void *proc) 
+{ 
+	LockSched(); 
+	unsigned int *addr = NULL;
+	unsigned int *lib = (int *)(*((int *)(int*)LIB_TOP())); 
+	if (lib == NULL) return NULL;
+	addr = (unsigned int*)lib[swi_num];
+	lib[swi_num] = (unsigned int)proc; 
+	UnlockSched(); 
+	return addr;
+}
+
+void DestroySWIHook(int swi_num, unsigned int *addr)
+{
+	LockSched();
+	unsigned int *lib = (int *)(*((int *)(int*)LIB_TOP())); 
+	if (lib == NULL) return;
+	lib[swi_num] = (unsigned int)addr;
+	UnlockSched();
+}
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+// Генератор случайных чисел
+// Алгоритм взят из исходников mp3 плеера (c) ILYA_ZX
+// И слегка переделан
+
+#define EPIC_CONST 0x08088405
+
+unsigned int rand(unsigned int *seed)
+{
+	(*seed) = (*seed) * EPIC_CONST;
+	(*seed)++;
+	return ((long long)(*seed) * 100000 ) >> 32;
+}
+
+void srand(unsigned int *seed)
+{
+	TTime time;
+	GetDateTime(NULL, &time);
+	(*seed) = (time.min | (time.sec << 5));
 }
