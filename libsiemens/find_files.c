@@ -85,12 +85,12 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 		}
 		do
 		{
-			strcpy(path, de.folder_name);
-			strcat(path, "\\");
-			strcat(path, de.file_name);
 			//isdir
-			if (isdir(path, &err))
+			if (de.file_attr & FA_DIRECTORY)
 			{
+				strcpy(path, de.folder_name);
+				strcat(path, "\\");
+				strcat(path, de.file_name);
 				strcat(path, "\\");
 				total += FindFilesRec(&ptr, path, fu, CallBack);
 			}
