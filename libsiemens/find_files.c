@@ -56,7 +56,8 @@ unsigned int FindFiles(DIR_ENTRY_LIST **list, const char *dir, const char *mask,
 unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu, void CallBack(DIR_ENTRY_LIST *ptr))
 {
 	DIR_ENTRY_LIST *top = NULL;
-	int total = 0;
+	
+	unsigned int total = 0;
 	
 	char path[256];
 	char find[256];
@@ -70,25 +71,28 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 	LockSched();
 	if (FindFirstFile(&de, find, &err))
 	{
-		DIR_ENTRY_LIST *de_list, *prev;
-		//самый первый запуск фукнции
-		if (*list == NULL)
+		DIR_ENTRY_LIST *ptr = NULL;
+		DIR_ENTRY_LIST *prev = NULL;
+		if (!(*list))
 		{
 			top = malloc(sizeof(DIR_ENTRY_LIST));
-			de_list = top;
+			top->prev = NULL;
+			ptr = top;
 		}
-		//еще где-то в рекурсии
 		else
-			de_list = *list;
+		{
+			ptr = *list;
+		}
 		do
 		{
 			strcpy(path, de.folder_name);
 			strcat(path, "\\");
 			strcat(path, de.file_name);
+			//isdir
 			if (isdir(path, &err))
 			{
 				strcat(path, "\\");
-				total += FindFilesRec(&de_list, path, fu, CallBack);
+				total += FindFilesRec(&ptr, path, fu, CallBack);
 			}
 			else
 			{
@@ -104,41 +108,39 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 				else
 				{
 					COPY_DATA:
-						strcpy(de_list->path, de.folder_name);
-						strcat(de_list->path, "\\");
-						strcat(de_list->path, de.file_name);
-						strcpy(de_list->dir,   de.folder_name);
-						strcpy(de_list->fname, de.file_name);
+						strcpy(ptr->path, de.folder_name);
+						strcat(ptr->path, "\\");
+						strcat(ptr->path, de.file_name);
+						strcpy(ptr->dir, de.folder_name);
+						strcpy(ptr->fname, de.file_name);
+						ptr->file_size        = de.file_size;
+						ptr->file_attr        = de.file_attr;
+						ptr->create_date_time = de.create_date_time;
 						
-						de_list->file_size        = de.file_size;
-						de_list->file_attr        = de.file_attr;
-						de_list->create_date_time = de.create_date_time;
+						if (CallBack) CallBack(ptr);
 						
-						if (CallBack) CallBack(de_list);
+						prev = ptr;
+						ptr->next = malloc(sizeof(DIR_ENTRY_LIST));
+						ptr = ptr->next;
+						ptr->prev = prev;
 						
-						
-						prev = de_list;
-						de_list->next = malloc(sizeof(DIR_ENTRY_LIST));
-						de_list = de_list->next;
-						de_list->prev = prev;
 						total++;
 				}
 			}
 		}
 		while (FindNextFile(&de, &err));
-		//самый первый запуск функции
-		if (*list == NULL)
+		if (!(*list))
 		{
-			top->prev = NULL;
-			mfree(prev->next);
-			prev->next = NULL;
 			*list = top;
+			//delete last element
+			if (prev)
+			{
+				mfree(prev->next);
+				prev->next = NULL;
+			}
 		}
-		//еще где-то в рекурсии
 		else
-		{
-			*list = de_list;
-		}
+			*list = ptr;
 	}
 	UnlockSched();
 	FindClose(&de, &err);
@@ -161,15 +163,11 @@ DIR_ENTRY_LIST *GetDEListPtr(DIR_ENTRY_LIST *top, unsigned int n)
 unsigned int GetDEListTotalItems(DIR_ENTRY_LIST *top)
 {
 	unsigned int i = 0;
-	if (top)
+	DIR_ENTRY_LIST *p = top;
+	while (p)
 	{
 		i++;
-		top = top->next;
-		while(top)
-		{
-			i++;
-			top = top->next;
-		}
+		p = p->next;
 	}
 	return i;
 }
