@@ -1,9 +1,9 @@
 #include <swilib.h>
-#include <libaudio.h>
+#include <libid3.h>
+#include <libapd.h>
 #include "../libsiemens/other.h"
 #include "../libsiemens/obs.h"
 #include "../libsiemens/find_files.h"
-#include "libapd.h"
 
 #define WAY_NEXT 0x00
 #define WAY_PREV 0x01
@@ -389,12 +389,12 @@ int APlayer_SavePlayList(const char *name)
 	strcpy(path, dir_pls);
 	strcat(path, name);
 	strcat(path, ".m3u");
-	return SaveM3U(top, path);
+	return 0;//SaveM3U(top, path);
 }
 
 int APlayer_OpenPlayList(const char *path)
 {
-	DIR_ENTRY_LIST *list = NULL;
+	/*DIR_ENTRY_LIST *list = NULL;
 	
 	int total = OpenM3U(&list, path);
 	if (total == -1) return -1;
@@ -411,7 +411,7 @@ int APlayer_OpenPlayList(const char *path)
 	else
 	{
 		top = list;
-	}
+	}*/
 	return 1;
 }
 
@@ -421,26 +421,26 @@ int APlayer_OpenPlayList(const char *path)
 
 static void CallBackFind(DIR_ENTRY_LIST *ptr)
 {
-	A_TAG *tag = malloc(sizeof(A_TAG));
-	ptr->data = tag;
-	tag->title  = AllocWS(128);
-	tag->artist = AllocWS(128);
-	tag->album  = AllocWS(128);
-	tag->track  = AllocWS(128);
-	tag->genre  = AllocWS(128);
-	
-	GetTagFromFile(tag, ptr->path);
+	ID3 *id3 = malloc(sizeof(ID3));
+	if (GetID3(id3, ptr->path) > 0)
+	{
+		ptr->data = id3;
+	}
+	else
+	{
+		mfree(id3);
+		ptr->data = NULL;
+	}
 }
 
 static void CallBackFree(DIR_ENTRY_LIST *ptr)
 {
-	A_TAG *tag = (A_TAG*)((ptr->data));
-	FreeWS(tag->title);
-	FreeWS(tag->artist);
-	FreeWS(tag->album);
-	FreeWS(tag->track);
-	FreeWS(tag->genre);
-	mfree(tag);
+	ID3 *id3 = ptr->data;
+	if (id3)
+	{
+		FreeID3(id3);
+		mfree(id3);
+	}
 }
 
 void APlayer_ClearPlayList(void)
@@ -462,7 +462,7 @@ void APlayer_FindMusic(void)
 	fu.uid1 = UID_MP3;
 	fu.uid2 = UID_WAV;
 	fu.uid3 = UID_AAC;
-	FindFilesRec(&top, dir_mus, &fu, CallBackFind);
+	int z = FindFilesRec(&top, dir_mus, &fu, CallBackFind);
 }
 
 unsigned int APlayer_Init(const char *mus_dir, const char *pls_dir)
