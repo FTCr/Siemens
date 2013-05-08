@@ -524,15 +524,24 @@ int APlayer_OpenFile(const char *path)
 	if (GetFileStats(path, &fs, &err) == -1) return -1;
 	
 	DIR_ENTRY_LIST *p = top;
-	while(1)
-	{
-		if (p->next) p = p->next;
-		else break;
-	}
 	DIR_ENTRY_LIST *prev;
-	p->next = malloc(sizeof(DIR_ENTRY_LIST));
-	prev = p;
-	p = p->next;
+	if (p)
+	{
+		while(1)
+		{
+			if (p->next) p = p->next;
+			else break;
+		}
+		prev = p;
+		p->next = malloc(sizeof(DIR_ENTRY_LIST));
+		p = p->next;
+	}
+	else
+	{
+		top = malloc(sizeof(DIR_ENTRY_LIST));
+		p = top;
+		prev = NULL;
+	}
 	p->next = NULL;
 	p->prev = prev;
 	strcpy(p->path, path);
