@@ -441,13 +441,14 @@ int APlayer_OpenPlayList(const char *path)
 	unsigned int i = 0, j = 0;
 	unsigned int total = 0;	
 	
+	#define func(x) buffer[x] != '\n' && buffer[x] !='\0'
 	while (i < fs.size)
 	{
-		if (buffer[i] != '\n' && buffer[i] != '\0')
+		if (func(i))
 		{
 			if (buffer[i] == '#')
 			{
-				while(buffer[i] != '\n' && buffer[i] != '\0')
+				while(func(i))
 					i++;
 			}
 			else
@@ -511,6 +512,40 @@ int APlayer_OpenPlayList(const char *path)
 	else
 	{
 		top = m3u_top;
+	}
+	return 1;
+}
+
+
+int APlayer_OpenFile(const char *path)
+{
+	FSTATS fs;
+	unsigned int err;
+	if (GetFileStats(path, &fs, &err) == -1) return -1;
+	
+	DIR_ENTRY_LIST *p = top;
+	while(1)
+	{
+		if (p->next) p = p->next;
+		else break;
+	}
+	DIR_ENTRY_LIST *prev;
+	p->next = malloc(sizeof(DIR_ENTRY_LIST));
+	prev = p;
+	p = p->next;
+	p->next = NULL;
+	p->prev = prev;
+	strcpy(p->path, path);
+	
+	ID3 *id3 = malloc(sizeof(ID3));
+	if (GetID3(id3, p->path) > 0)
+	{
+		p->data = id3;
+	}
+	else
+	{
+		mfree(id3);
+		p->data = NULL;
 	}
 	return 1;
 }

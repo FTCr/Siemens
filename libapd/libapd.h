@@ -50,6 +50,7 @@ unsigned int APlayer_GetPlayBack(void);
 char *APlayer_GetPlsDir(void);
 int APlayer_SavePlayList(const char *name);
 int APlayer_OpenPlayList(const char *path);
+int APlayer_OpenFile(const char *path);
 
 DIR_ENTRY_LIST *APlayer_GetPtr(unsigned int n);
 DIR_ENTRY_LIST *APlayer_GetCurPtr(void);
