@@ -218,7 +218,6 @@ static void DelTimers(void)
 void APlayer_Stop(void)
 {
 	DelTimers();
-	zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 	if (play_status != APLAYER_STOP)
 	{
 		if (obj)
@@ -375,6 +374,7 @@ void APlayer_CutFile(unsigned int n)
 	if (!APlayer_GetTotalTracks())
 	{
 		APlayer_Stop();
+		zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 	}
 }
 
@@ -389,29 +389,129 @@ int APlayer_SavePlayList(const char *name)
 	strcpy(path, dir_pls);
 	strcat(path, name);
 	strcat(path, ".m3u");
-	return 0;//SaveM3U(top, path);
+	
+	#define M3U_HEADER  "#EXTM3U"
+	#define END_OF_LINE "\r\n"
+	FSTATS fs;
+	unsigned int err;
+	
+	if (!top) return -1;
+	
+	if (GetFileStats(path, &fs, &err) != -1) return -1;
+	
+	int fp = _open(path, A_WriteOnly + A_TXT + A_Append + A_Create, P_WRITE, &err);
+	if (fp == -1) return -1;
+	
+	_write(fp, M3U_HEADER, 7, &err);
+	_write(fp, END_OF_LINE, 2, &err);
+	
+	DIR_ENTRY_LIST *p = top;
+	unsigned int len;
+	while(p)
+	{
+		len = strlen(p->path);
+		_write(fp, p->path, len, &err);
+		_write(fp, END_OF_LINE, 2, &err);
+		p = p->next;
+	}
+	_close(fp, &err);
+
+	return 1;
 }
 
 int APlayer_OpenPlayList(const char *path)
 {
-	/*DIR_ENTRY_LIST *list = NULL;
 	
-	int total = OpenM3U(&list, path);
-	if (total == -1) return -1;
+	FSTATS fs;
+	unsigned int err;
 	
+	if (GetFileStats(path, &fs, &err) == -1) return -1;
 	
-	unsigned int i = GetDEListTotalItems(top);
+	int fp = _open(path, A_ReadOnly + A_BIN, P_READ, &err);
+	if (fp == -1) return -1;
 	
-	if (i)
+	char *buffer = malloc(fs.size);
+	_read(fp, buffer, fs.size, &err);
+	buffer[fs.size] = '\0';
+
+	DIR_ENTRY_LIST *prev;
+	DIR_ENTRY_LIST *m3u_list  = malloc(sizeof(DIR_ENTRY_LIST));
+	DIR_ENTRY_LIST *m3u_top = m3u_list;
+	char file_path[256];
+	unsigned int i = 0, j = 0;
+	unsigned int total = 0;	
+	
+	while (i < fs.size)
 	{
-		DIR_ENTRY_LIST *p = GetDEListPtr(top, i - 1);
-		p->next = list;
-		list->prev = p;
+		if (buffer[i] != '\n' && buffer[i] != '\0')
+		{
+			if (buffer[i] == '#')
+			{
+				while(buffer[i] != '\n' && buffer[i] != '\0')
+					i++;
+			}
+			else
+			{
+				if (buffer[i] != '\r')
+					file_path[j++] = buffer[i];
+			}
+		}
+		else
+		{
+			file_path[j] = '\0';
+			j = 0;
+			
+			strcpy(m3u_list->path, file_path);
+			
+			ID3 *id3 = malloc(sizeof(ID3));
+			if (GetID3(id3, m3u_list->path) > 0)
+			{
+				m3u_list->data = id3;
+			}
+			else
+			{
+				mfree(id3);
+				m3u_list->data = NULL;
+			}
+			
+			
+			
+			prev = m3u_list;
+			m3u_list->next = malloc(sizeof(DIR_ENTRY_LIST));
+			m3u_list = m3u_list->next;
+			m3u_list->prev = prev;
+			
+			
+			total++;
+		}
+		i++;
+	}
+	_close(fp, &err);
+	if (total)
+	{
+		m3u_top->prev = NULL;
+		m3u_list = prev;
+		mfree(m3u_list->next);
+		m3u_list->next = NULL;
 	}
 	else
 	{
-		top = list;
-	}*/
+		mfree(m3u_list);
+		return -1;
+	}
+	
+	unsigned int n = GetDEListTotalItems(top);
+	
+	if (n)
+	{
+		DIR_ENTRY_LIST *p = GetDEListPtr(top, n - 1);
+		p->next = m3u_top;
+		m3u_top->prev = p;
+	}
+	else
+	{
+		top = m3u_top;
+	}
 	return 1;
 }
 
@@ -462,7 +562,7 @@ void APlayer_FindMusic(void)
 	fu.uid1 = UID_MP3;
 	fu.uid2 = UID_WAV;
 	fu.uid3 = UID_AAC;
-	int z = FindFilesRec(&top, dir_mus, &fu, CallBackFind);
+	FindFilesRec(&top, dir_mus, &fu, CallBackFind);
 }
 
 unsigned int APlayer_Init(const char *mus_dir, const char *pls_dir)
@@ -483,6 +583,7 @@ unsigned int APlayer_Init(const char *mus_dir, const char *pls_dir)
 		
 		is_launch = 1;
 		srand(&rand_seed);
+		zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 	}
 	return (APlayer_GetTotalTracks()) ? 1 : 0;
 }

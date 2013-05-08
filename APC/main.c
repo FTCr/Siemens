@@ -1,6 +1,6 @@
 #include <swilib.h>
-#include <libaudio.h>
 #include <libapd.h>
+#include <libid3.h>
 #include "../libsiemens/graphics.h"
 #include "../libsiemens/lang.h"
 #include "../libsiemens/strings.h"
@@ -37,42 +37,23 @@ int softkeys[] = {0, 1, 2};
 
 void SetHeader(void)
 {
-	int total = APlayer_GetTotalTracks();
 	DIR_ENTRY_LIST *ptr = APlayer_GetCurPtr();
 	if (ptr)
 	{
-		A_TAG *tag = (A_TAG*)ptr->data;
-		if (tag)
+		ID3 *id3 = ptr->data;
+		if (id3)
 		{
-			int len1 = tag->artist->wsbody[0];
-			int len2 = tag->title->wsbody[0];
-	
-			if (len1 && len2)
-			{
-				WSHDR *ws = AllocWS(len1 + len2 + 5);
-				wsprintf(ws, "%w - %w", tag->artist, tag->title);
-				ws2ascii(str_hdr, ws);
-				FreeWS(ws);
-			}
-			else
-			{
-				if (GetFileNameWithoutExtByFileName(str_hdr, ptr->fname) == -1)
-					strcpy(str_hdr, "Error GetFileNameWithoutExt");
-			}
+			WSHDR *ws = AllocWS(id3->artist->wsbody[0] + id3->title->wsbody[0] + 5);
+			wsprintf(ws, "%w - %w", id3->artist, id3->title);
+			ws2ascii(str_hdr, ws);
+			FreeWS(ws);
 		}
 		else
-		{
 			strcpy(str_hdr, lgp[lgpHeader]);
-		}
 	}
-	else
-	{
-		strcpy(str_hdr, lgp[lgpHeader]);
-	}
-	if (total)
-	{
+	
+	if (APlayer_GetTotalTracks())
 		sprintf(str_hdr2, "%d", APlayer_GetTrack());
-	}
 	else
 		strcpy(str_hdr2, "");
 }

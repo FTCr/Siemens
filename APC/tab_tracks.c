@@ -1,6 +1,6 @@
 #include <swilib.h>
 #include <libapd.h>
-#include <libaudio.h>
+#include <libid3.h>
 #include "../libsiemens/strings.h"
 #include "../libsiemens/obs.h"
 #include "main.h"
@@ -85,31 +85,52 @@ static void Handler_TabTracks(void *data, int cur_item, void *user_pointer)
 	
 	void *item = AllocMLMenuItem(data);
 	DIR_ENTRY_LIST *ptr = APlayer_GetPtr(cur_item);
-	WSHDR *ws1 = AllocMenuWS(data, 256);
-	WSHDR *ws2 = AllocMenuWS(data, 256);
+	WSHDR *ws1;
+	WSHDR *ws2;
+	
+	void SetFname(void)
+	{
+		char fname[128];
+		ws1 = AllocMenuWS(data, 128);
+		ws2 = AllocMenuWS(data, 2);
+		if (GetFileNameWithoutExtByPath(fname, ptr->path) != -1)
+			str_2ws(ws1, fname, strlen(fname));
+		else
+			str_2ws(ws1, "Error GetFileNameWithoutExt", 64);
+	}
+	
 	if (ptr)
 	{
-		A_TAG *tag = (A_TAG*)((ptr->data));
-		if (tag)
+		ID3 *id3 = ptr->data;
+		if (id3)
 		{
-			if (tag->artist->wsbody[0] && tag->title->wsbody[0])
+			#define UTF16_ALIGN_RIGHT (0xE01D)
+			int len;
+			if (id3->album && id3->genre)
 			{
-				#define UTF16_ALIGN_RIGHT (0xE01D)
-				wsprintf(ws1, "%w - %w", tag->artist, tag->title);
-				wsprintf(ws2, "%w%c %w", tag->album, UTF16_ALIGN_RIGHT, tag->genre);
+				len = id3->album->wsbody[0] + id3->genre->wsbody[0] + 2;
+				ws2 = AllocMenuWS(data, len);
+				wsprintf(ws2, "%w%c %w", id3->album, UTF16_ALIGN_RIGHT, id3->genre);
+				
 			}
 			else
 			{
-				char fname[128];
-				if (GetFileNameWithoutExtByPath(fname, ptr->path) != -1)
-					str_2ws(ws1, fname, strlen(fname));
-				else
-					str_2ws(ws1, "Error GetFileNameWithoutExt", 64);
+				ws2 = AllocMenuWS(data, 2);
+			}
+			if (id3->artist && id3->title)
+			{
+				len = id3->artist->wsbody[0] + id3->title->wsbody[0] + 5;
+				ws1 = AllocMenuWS(data, len);
+				wsprintf(ws1, "%w - %w", id3->artist, id3->title);
+			}
+			else
+			{
+				SetFname();
 			}
 		}
 		else
 		{
-			str_2ws(ws1, "Error AUDIO_FILE_INFO", 32);
+			SetFname();
 		}
 		int uid = GetExtUidByFileName(ptr->path);
 		if (uid == UID_MP3)
@@ -121,7 +142,9 @@ static void Handler_TabTracks(void *data, int cur_item, void *user_pointer)
 	}
 	else
 	{
+		ws1 = AllocMenuWS(data, 32);
 		str_2ws(ws1, "Error DIR_ENTRY_LIST", 32);
+		ws2 = AllocMenuWS(data, 2);
 	}
 	SetMLMenuItemText(data, item, ws1, ws2, cur_item);
 }
