@@ -56,6 +56,7 @@ static int OnKey_TabTracks(void *data, GUI_MSG *msg)
 			break;
 			case '6':
 				APlayer_NextTrack();
+			break;
 			case '*':
 				APlayer_MutedToggle();
 			break;
