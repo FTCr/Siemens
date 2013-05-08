@@ -73,15 +73,15 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 	{
 		DIR_ENTRY_LIST *ptr = NULL;
 		DIR_ENTRY_LIST *prev = NULL;
-		if (!(*list))
+		if (*list)
+		{
+			ptr = *list;
+		}
+		else
 		{
 			top = malloc(sizeof(DIR_ENTRY_LIST));
 			top->prev = NULL;
 			ptr = top;
-		}
-		else
-		{
-			ptr = *list;
 		}
 		do
 		{
@@ -93,6 +93,7 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 				strcat(path, de.file_name);
 				strcat(path, "\\");
 				total += FindFilesRec(&ptr, path, fu, CallBack);
+				prev = ptr->prev;
 			}
 			else
 			{
@@ -129,18 +130,19 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 			}
 		}
 		while (FindNextFile(&de, &err));
-		if (!(*list))
+		if (*list)
 		{
-			*list = top;
-			//delete last element
+			*list = ptr;
+		}
+		else
+		{
 			if (prev)
 			{
 				mfree(prev->next);
 				prev->next = NULL;
 			}
+			*list = top;
 		}
-		else
-			*list = ptr;
 	}
 	UnlockSched();
 	FindClose(&de, &err);
