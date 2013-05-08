@@ -1,6 +1,7 @@
 #include <swilib.h>
 #include <libapd.h>
 #include "../libsiemens/strings.h"
+#include "../libsiemens/obs.h"
 #include "conf_loader.h"
 #include "config_data.h"
 
@@ -97,7 +98,7 @@ static void UpdateCSMname(void)
 	wsprintf((WSHDR *)(&MAINCSM.maincsm_name), "APD");
 }
 
-int main(void)
+int main(const char *exe_path, const char *file_path)
 {
 	if (!APlayer_IsLaunch())
 	{
@@ -117,7 +118,20 @@ int main(void)
 	}
 	else
 	{
-		MsgBoxError(1, (int)"APD already started!");
+		unsigned int uid = GetExtUidByFileName(file_path);
+		if (uid == UID_M3U)
+		{
+			APlayer_ClearPlayList();
+			APlayer_OpenPlayList(file_path);
+		}
+		else if (uid == UID_MP3 || uid == UID_WAV || uid == UID_AAC)
+		{
+			APlayer_OpenFile(file_path);
+		}
+		else
+		{
+			MsgBoxError(1, (int)"File is not supported!");
+		}
 		kill_elf();
 	}
 	return 0;
