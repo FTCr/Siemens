@@ -550,6 +550,7 @@ void APlayer_ClearPlayList(void)
 	{
 		FreeDEList(top, CallBackFree);
 		top = NULL;
+		zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 	}
 	track_id = 0;
 }
