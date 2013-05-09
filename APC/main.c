@@ -27,8 +27,8 @@ char str_hdr2[32];
 
 static const int tab_icons[2][4]=
 {
-  0x487, 0x487, 0x487, 0x487,
-  0x489, 0x489, 0x489, 0x489,
+	0x487, 0x487, 0x487, 0x487,
+	0x489, 0x489, 0x489, 0x489,
 };
 
 static HEADER_DESC header = {0, 0, 0, 0, NULL, (int)str_hdr, (int)str_hdr2};
@@ -48,11 +48,13 @@ void SetHeader(void)
 			ws2ascii(str_hdr, ws);
 			FreeWS(ws);
 		}
-		if (GetFileNameWithoutExtByPath(str_hdr, ptr->path) == -1)
+		else if (GetFileNameWithoutExtByPath(str_hdr, ptr->path) == -1)
 			strcpy(str_hdr, lgp[lgpHeader]);
 	}
 	else
+	{
 		strcpy(str_hdr, lgp[lgpHeader]);
+	}
 	
 	if (APlayer_GetTotalTracks())
 		sprintf(str_hdr2, "%d", APlayer_GetTrack());
