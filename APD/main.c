@@ -119,18 +119,25 @@ int main(const char *exe_path, const char *file_path)
 	else
 	{
 		unsigned int uid = GetExtUidByFileName(file_path);
-		if (uid == UID_M3U)
+		if (uid)
 		{
-			APlayer_ClearPlayList();
-			APlayer_OpenPlayList(file_path);
-		}
-		else if (uid == UID_MP3 || uid == UID_WAV || uid == UID_AAC)
-		{
-			APlayer_OpenFile(file_path);
+			if (uid == UID_M3U)
+			{
+				APlayer_ClearPlayList();
+				APlayer_OpenPlayList(file_path);
+			}
+			else if (uid == UID_MP3 || uid == UID_WAV || uid == UID_AAC)
+			{
+				APlayer_OpenFile(file_path);
+			}
+			else
+			{
+				MsgBoxError(1, (int)"File is not supported!");
+			}
 		}
 		else
 		{
-			MsgBoxError(1, (int)"File is not supported!");
+			MsgBoxError(1, (int)"APD already started!");
 		}
 		kill_elf();
 	}
