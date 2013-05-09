@@ -4,9 +4,10 @@
 #include "../libsiemens/find_files.h"
 #include "main.h"
 #include "playback.h"
-#include "info.h"
 #include "tab_tracks.h"
 #include "playlist_save.h"
+#include "help.h"
+#include "about.h"
 
 #define OPTIONS_ITEMS_N   0x0A
 #define OPTIONS_ITEMS_N_2 0x02
@@ -151,13 +152,13 @@ static void DeleteQuest(GUI *data)
 
 void Help(GUI *data)
 {
-	CreateInfoGUI(INFO_GUI_TYPE_HELP);
+	CreateHelpGUI();
 	GeneralFuncF1(2);
 }
 
 void About(GUI *data)
 {
-	CreateInfoGUI(INFO_GUI_TYPE_ABOUT);
+	CreateAboutGUI();
 	GeneralFuncF1(2);
 }
 
