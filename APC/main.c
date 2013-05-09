@@ -48,9 +48,11 @@ void SetHeader(void)
 			ws2ascii(str_hdr, ws);
 			FreeWS(ws);
 		}
-		else
+		if (GetFileNameWithoutExtByPath(str_hdr, ptr->path) == -1)
 			strcpy(str_hdr, lgp[lgpHeader]);
 	}
+	else
+		strcpy(str_hdr, lgp[lgpHeader]);
 	
 	if (APlayer_GetTotalTracks())
 		sprintf(str_hdr2, "%d", APlayer_GetTrack());
