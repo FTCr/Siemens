@@ -146,12 +146,14 @@ void APlayer_Play(void)
 					obj = CreateHObjFromAudioFile(ptr->path);
 					InitTrackData();
 					play_status = APLAYER_PLAY;
+					IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
 					Play();
 				}
 			}
 			else
 			{
 				play_status = APLAYER_PLAY;
+				IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
 				Obs_Resume(obj);
 				AutoSwitcher();
 			}
@@ -226,6 +228,7 @@ void APlayer_Stop(void)
 			obj = 0;
 		}
 		play_status = APLAYER_STOP;
+		IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
 		track_pos_ms = 0;
 		track_dur_ms = 0;
 	}
@@ -237,6 +240,7 @@ void APlayer_Pause(void)
 	if (IsTimerProc(&tmr_auto_switch))
 		GBS_DelTimer(&tmr_auto_switch);
 	play_status = APLAYER_PAUSE;
+	IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
 }
 
 void APlayer_Toggle(void)
@@ -288,6 +292,7 @@ void APlayer_Forward(unsigned int inc_s)
 		}
 		track_pos_ms += inc_s * 1000;
 		play_status = APLAYER_FORWARD;
+		IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
 		if (track_pos_ms > track_dur_ms)
 		{
 			if (IsTimerProc(&tmr_play_after))
@@ -312,6 +317,7 @@ void APlayer_Rewind(unsigned int dec_s)
 		}
 		track_pos_ms -= dec_s * 1000;
 		play_status = APLAYER_REWIND;
+		IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
 		if (track_pos_ms < 0)
 		{
 			if (IsTimerProc(&tmr_play_after))

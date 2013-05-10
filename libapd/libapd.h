@@ -13,13 +13,14 @@
 #define APLAYER_PLAYBACK_RANDOM 0x01
 
 //отсылает мессаги в зависимости от действии
-#define APD_IPC_NAME   "APD_Clients"
+#define APD_IPC_NAME   "APD"
 
-#define APD_IPC_UPDATE_TRACK 0x00
-#define APD_IPC_UPDATE_DUR   0x01
-#define APD_IPC_UPDATE_POS   0x02
-#define APD_IPC_UPDATE_VOL   0x03
-#define APD_IPC_DESTROY      0x04
+#define APD_IPC_UPDATE_TRACK      0x00
+#define APD_IPC_UPDATE_DUR        0x01
+#define APD_IPC_UPDATE_POS        0x02
+#define APD_IPC_UPDATE_VOL        0x03
+#define APD_IPC_UPDATE_PLAYSTATUS 0x04
+#define APD_IPC_DESTROY           0x05
 
 void APlayer_FindMusic(void);        //обновление файлов
 unsigned int APlayer_IsLaunch(void);
