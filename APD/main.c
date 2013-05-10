@@ -18,25 +18,38 @@ typedef struct
 
 int KeyHook(int key, int type)
 {
-	if (type == KEY_DOWN || type == LONG_PRESS)
+	switch (type)
 	{
-		switch (key)
-		{
-			case VOL_UP_BUTTON:
-				if (APlayer_GetPlayStatus() == APLAYER_PLAY)
-				{
-					APlayer_SetVolume(APlayer_GetVolume() + 1);
-					return KEYHOOK_BREAK;
-				}
-			break;
-			case VOL_DOWN_BUTTON:
-				if (APlayer_GetPlayStatus() == APLAYER_PLAY)
-				{
-					APlayer_SetVolume(APlayer_GetVolume() - 1);
-					return KEYHOOK_BREAK;
-				}
-			break;
-		}
+		case KEY_DOWN:
+			switch (key)
+			{
+				case PTT_BUTTON: APlayer_Toggle(); return KEYHOOK_BREAK;
+				case VOL_UP_BUTTON: goto UP;
+				case VOL_DOWN_BUTTON: goto DOWN;
+			}
+		break;
+		case LONG_PRESS:
+			switch (key)
+			{
+				case PTT_BUTTON: APlayer_NextTrack(); return KEYHOOK_BREAK;
+				case VOL_UP_BUTTON:
+					UP:
+						if (APlayer_GetPlayStatus() == APLAYER_PLAY)
+						{
+							APlayer_SetVolume(APlayer_GetVolume() + 1);
+							return KEYHOOK_BREAK;
+						}
+				break;
+				case VOL_DOWN_BUTTON:
+					DOWN:
+						if (APlayer_GetPlayStatus() == APLAYER_PLAY)
+						{
+							APlayer_SetVolume(APlayer_GetVolume() - 1);
+							return KEYHOOK_BREAK;
+						}
+				break;
+			}
+		break;
 	}
 	return KEYHOOK_NEXT;
 }
