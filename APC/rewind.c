@@ -1,6 +1,7 @@
 #include <swilib.h>
 #include "../libapd/libapd.h"
 #include "../libsiemens/graphics.h"
+#include "config_data.h"
 
 typedef struct
 {
@@ -84,7 +85,7 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 			case '1':
 				if (APlayer_GetPlayStatus() != APLAYER_STOP && APlayer_GetPlayStatus() != APLAYER_PAUSE)
 				{
-					APlayer_Rewind(5);
+					APlayer_Rewind(cfg_rewind_speed);
 					DirectRedrawGUI_ID(data->id);
 				}
 				else return 1;
@@ -92,7 +93,7 @@ static int OnKey(MAIN_GUI *data, GUI_MSG *msg)
 			case '3':
 				if (APlayer_GetPlayStatus() != APLAYER_STOP && APlayer_GetPlayStatus() != APLAYER_PAUSE)
 				{
-					APlayer_Forward(5);
+					APlayer_Forward(cfg_rewind_speed);
 					DirectRedrawGUI_ID(data->id);
 				}
 				else return 1;

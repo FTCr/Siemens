@@ -6,6 +6,7 @@
 #include "main.h"
 #include "options_tab_tracks.h"
 #include "rewind.h"
+#include "config_data.h"
 
 void *tab_tracks_gui;
 
@@ -41,11 +42,11 @@ static int OnKey_TabTracks(void *data, GUI_MSG *msg)
 				RefreshGUI();
 			break;
 			case '1':
-				APlayer_Rewind(5);
+				APlayer_Rewind(cfg_rewind_speed);
 				CreateRewindGUI(Key);
 			break;
 			case '3':
-				APlayer_Forward(5);
+				APlayer_Forward(cfg_rewind_speed);
 				CreateRewindGUI(Key);
 			break;
 			case '4':
