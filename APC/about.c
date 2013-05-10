@@ -1,4 +1,5 @@
 #include <swilib.h>
+#include "main.h"
 
 #define ABOUT "APC - client for APD\n\xA9 FIL, 2013"
 
@@ -6,8 +7,8 @@ extern int softkeys[];
 
 static SOFTKEY_DESC sk[]=
 {
-	{0x0018, 0x0000, (int)LGP_NULL},
-	{0x0001, 0x0000, (int)LGP_NULL},
+	{0x0018, 0x0000, (int)"OK"},
+	{0x0001, 0x0000, (int)"Back"},
 	{0x003D, 0x0000, (int)LGP_DOIT_PIC}
 };
 
@@ -40,5 +41,7 @@ static POPUP_DESC desc =
 
 void CreateAboutGUI(void)
 {
+	sk[0].lgp_id = (int)lgp[lgpInfoOK];
+	sk[1].lgp_id = (int)lgp[lgpInfoBack];
 	CreatePopupGUI(0, NULL, &desc, (int)ABOUT);
 }

@@ -11,10 +11,6 @@ enum
 	lgpExit,
 	lgpReplace,
 	
-	
-	
-	//lgpOptionsHeader,
-	
 	lgpOptionsSelect,
 	lgpOptionsBack,
 	
@@ -28,15 +24,8 @@ enum
 	lgpOptionsPlaylistSave,
 	lgpOptionsSend,
 	lgpOptionsDel,
-	//lgpOptionsTrackInfo,
 	lgpOptionsHelp,
 	lgpOptionsAbout,
-	
-	/*lgpTrackInfoTitle,
-	lgpTrackInfoArtist,
-	lgpTrackInfoAlbum,
-	lgpTrackInfoTrack,
-	lgpTrackInfoGenre,*/
 	
 	lgpPlayBackRepeat,
 	lgpPlayBackRando,
@@ -44,7 +33,10 @@ enum
 	lgpPlaylistSaveHead,
 	lgpPlaylistSave,
 	
-	lgpDelQ
+	lgpDelQ,
+	
+	lgpInfoOK,
+	lgpInfoBack
 };
 
 void RefreshMainGUI(void);
