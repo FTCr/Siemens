@@ -48,6 +48,22 @@ int maincsm_onmessage(CSM_RAM* data, GBS_MSG* msg)
 		if (strcmp_nocase(successed_config_filename, (char *)msg->data0) == 0)
 			InitConfig();
 	}
+	if (msg->msg == MSG_IPC)
+	{
+		IPC_REQ *ipc = (IPC_REQ*)msg->data0;
+		if (ipc)
+		{
+			if (strcmp_nocase(ipc->name_to, APD_IPC_NAME) == 0)
+			{
+				switch (msg->submess)
+				{
+					case APD_IPC_UPDATE_PLAYSTATUS:
+						GBS_SendMessage(MMI_CEPID, MSG_REFRESH_ICONBAR);
+					break;
+				}
+			}
+		}
+	}
 	return 1;
 }
 
@@ -61,12 +77,40 @@ static void maincsm_onclose(CSM_RAM *csm)
 	kill_elf();
 }
 
+void IconBar(short* num)
+{
+	if (cfg_enable_iconbar)
+	{
+		int icon = 0;
+		switch (APlayer_GetPlayStatus())
+		{
+			case APLAYER_PLAY:
+				icon = cfg_play_icon;
+			break;
+			case APLAYER_STOP:
+				icon = cfg_stop_icon;
+			break;
+			case APLAYER_PAUSE:
+				icon = cfg_pause_icon;
+			break;
+			case APLAYER_FORWARD:
+				icon = cfg_forward_icon;
+			break;
+			case APLAYER_REWIND:
+				icon = cfg_rewind_icon;
+			break;
+		}
+		AddIconToIconBar(icon, num);
+	}
+}
+
 static unsigned short maincsm_name_body[140];
 
-static const struct
+static struct
 {
 	CSM_DESC maincsm;
 	WSHDR maincsm_name;
+	ICONBAR_H iconbar_handler;
 } MAINCSM =
 {
 	{
@@ -90,6 +134,10 @@ static const struct
 		0x0,
 		139,
 		0x0
+	},
+	{
+		"IconBar",
+		(int)IconBar
 	}
 };
 
