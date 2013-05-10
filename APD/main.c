@@ -18,6 +18,7 @@ typedef struct
 
 int KeyHook(int key, int type)
 {
+	static int ptt_flag;
 	switch (type)
 	{
 		case KEY_DOWN:
@@ -31,7 +32,7 @@ int KeyHook(int key, int type)
 		case LONG_PRESS:
 			switch (key)
 			{
-				case PTT_BUTTON: APlayer_NextTrack(); return KEYHOOK_BREAK;
+				case PTT_BUTTON: ptt_flag = 1; return KEYHOOK_BREAK;
 				case VOL_UP_BUTTON:
 					UP:
 						if (APlayer_GetPlayStatus() == APLAYER_PLAY)
@@ -48,6 +49,14 @@ int KeyHook(int key, int type)
 							return KEYHOOK_BREAK;
 						}
 				break;
+			}
+		break;
+		case KEY_UP:
+			if (key == PTT_BUTTON && ptt_flag == 1)
+			{
+				ptt_flag = 0;
+				APlayer_NextTrack();
+				return KEYHOOK_BREAK;
 			}
 		break;
 	}
