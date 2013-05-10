@@ -125,6 +125,12 @@ typedef int jmp_buf[11];
 
 #define MSG_REFRESH_ICONBAR 0x642C
 
+typedef struct
+{
+	char check_name[8];
+	int addr;
+} ICONBAR_H;
+
 typedef struct{
   int pid_from;
   int msg; //MSG_USSD_RX
