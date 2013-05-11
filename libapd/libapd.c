@@ -613,10 +613,8 @@ void APlayer_FindMusic(void)
 	fu.uid1 = UID_MP3;
 	fu.uid2 = UID_WAV;
 	fu.uid3 = UID_AAC;
-	if (FindFilesRec(&top, dir_mus, &fu, CallBackFind))
-		memcpy(&cur_track_data, top, sizeof(DIR_ENTRY_LIST));
-	else
-		zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
+	FindFilesRec(&top, dir_mus, &fu, CallBackFind);
+	zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 }
 
 unsigned int APlayer_Init(const char *mus_dir, const char *pls_dir)
