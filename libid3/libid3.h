@@ -12,9 +12,9 @@ typedef struct
 			WSHDR *title;
 			WSHDR *artist;
 			WSHDR *album;
+			WSHDR *track;
 			WSHDR *year;
 			WSHDR *comment;
-			WSHDR *track;
 			WSHDR *genre;
 		};
 		WSHDR *tag[ID3_ARRAY_SIZE];
