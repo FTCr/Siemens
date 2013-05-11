@@ -2,7 +2,7 @@
 #include "../libsiemens/graphics.h"
 #include "main.h"
 
-#define HELP  "HotKeys:\n1: Rewind\n3: Forward\n4: Previous track\n5: Toggle\n6: Next track\nGreen: Move cursor to current track\n*: Mute/Unmute\n#: Cut file"
+#define HELP  "HotKeys:\n1: Rewind\n3: Forward\n4: Previous track\n5: Toggle\n6: Next track\n0: Track info\nGreen: Move cursor to current track\n*: Mute/Unmute\n#: Cut file"
 
 static HEADER_DESC header = {0, 0, 0, 0, NULL, (int)"Help", LGP_NULL};
 

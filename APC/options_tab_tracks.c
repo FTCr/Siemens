@@ -8,8 +8,9 @@
 #include "playlist_save.h"
 #include "help.h"
 #include "about.h"
+#include "tags.h"
 
-#define OPTIONS_ITEMS_N   0x0A
+#define OPTIONS_ITEMS_N   0x0B
 #define OPTIONS_ITEMS_N_2 0x02
 
 const int icon_empty = ICON_EMPTY;
@@ -18,6 +19,7 @@ static HEADER_DESC header = {0, 0, 0, 0, NULL, (int)"Options", LGP_NULL};
 
 static MENUITEM_DESC items[OPTIONS_ITEMS_N] =
 {
+	{(int*)&icon_empty, LGP_NULL, LGP_NULL, 0, NULL, MENU_FLAG3, MENU_FLAG2},
 	{(int*)&icon_empty, LGP_NULL, LGP_NULL, 0, NULL, MENU_FLAG3, MENU_FLAG2},
 	{(int*)&icon_empty, LGP_NULL, LGP_NULL, 0, NULL, MENU_FLAG3, MENU_FLAG2},
 	{(int*)&icon_empty, LGP_NULL, LGP_NULL, 0, NULL, MENU_FLAG3, MENU_FLAG2},
@@ -91,15 +93,6 @@ static void SavePlaylist(GUI *data)
 	GeneralFuncF1(2);
 }
 
-/*static void TrackInfo(GUI *data)
-{
-	unsigned int i = GetCurMenuItem(m_gui);
-	DIR_ENTRY_LIST *ptr = APlayer_GetPtr(i);
-	if (!CreateTrackInfoGUI(ptr->data))
-		MsgBoxError(1, (int)"Empty tag!");
-	GeneralFuncF1(2);
-}*/
-
 static void Send(GUI *data)
 {
 	unsigned int i = GetCurMenuItem(tab_tracks_gui);
@@ -150,6 +143,22 @@ static void DeleteQuest(GUI *data)
 	GeneralFuncF1(2);
 }
 
+void TrackInfo(void)
+{
+	unsigned int i = GetCurMenuItem(tab_tracks_gui);
+	DIR_ENTRY_LIST *ptr = APlayer_GetPtr(i);
+	if (ptr->data)
+		CreateTagsGUI(ptr->data);
+	else
+		MsgBoxError(1, (int)"Empty tag!");
+}
+
+static void TrackInfoO(GUI *data)
+{
+	TrackInfo();
+	GeneralFuncF1(2);
+}
+
 void Help(GUI *data)
 {
 	CreateHelpGUI();
@@ -172,6 +181,7 @@ static const MENUPROCS_DESC procs[OPTIONS_ITEMS_N] =
 	SavePlaylist,
 	Send,
 	DeleteQuest,
+	TrackInfoO,
 	Help,
 	About
 };

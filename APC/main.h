@@ -24,6 +24,7 @@ enum
 	lgpOptionsPlaylistSave,
 	lgpOptionsSend,
 	lgpOptionsDel,
+	lgpOptionsTrackInfo,
 	lgpOptionsHelp,
 	lgpOptionsAbout,
 	
@@ -32,6 +33,14 @@ enum
 	
 	lgpPlaylistSaveHead,
 	lgpPlaylistSave,
+	
+	lgpTagTitle,
+	lgpTagArtist,
+	lgpTagAlbum,
+	lgpTagTrack,
+	lgpTagYear,
+	lgpTagComment,
+	lgpTagGenre,
 	
 	lgpDelQ,
 	
