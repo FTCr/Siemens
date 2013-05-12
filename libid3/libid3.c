@@ -32,17 +32,22 @@ const char *id3_v2_4_frame[ID3_V2_FRAME_COUNT] =
 	"TCON", //genre
 };
 
-int ID3_V2_Helper(const char *buffer, int id)
+int ID3_V2_Helper(const char *buffer)
 {
-	while (id < ID3_V2_FRAME_COUNT)
+	int i = 0;
+	while(i < ID3_V2_FRAME_COUNT)
 	{
-		if (strncmp(buffer, id3_v2_4_frame[id], ID3_V2_4_FRAME_LEN) == 0)
-		{
-			return id;
-		}
-		id++;
+		if (strncmp(buffer, id3_v2_4_frame[i], ID3_V2_4_FRAME_LEN) == 0)
+			return i;
+		i++;
 	}
 	return -1;
+}
+
+//not inline! :-(
+int ID3_V2_4_BitCock(const char *p)
+{
+	return (p[3] & 0xFF) | ((p[2] & 0xFF) << 7 ) | ((p[1] & 0xFF) << 14 ) | ((p[0] & 0xFF) << 21 );
 }
 
 int GetID3(ID3 *id3, const char *path)
@@ -91,7 +96,8 @@ int GetID3(ID3 *id3, const char *path)
 		header.ver   = buffer[0];
 		header.rev   = buffer[1];
 		header.flags = buffer[2];
-		header.size = (buffer[6] & 0xFF) | ((buffer[5] & 0xFF) << 7 ) | ((buffer[4] & 0xFF) << 14 ) | ((buffer[3] & 0xFF) << 21 );
+		header.size  = ID3_V2_4_BitCock(buffer + 3);
+		//header.size = (buffer[6] & 0xFF) | ((buffer[5] & 0xFF) << 7 ) | ((buffer[4] & 0xFF) << 14 ) | ((buffer[3] & 0xFF) << 21 );
 		
 		//only v2.4
 		unsigned int frame_lenght;
@@ -104,8 +110,8 @@ int GetID3(ID3 *id3, const char *path)
 		frame_lenght = 0x0A;
 		
 		mfree(buffer);
-		buffer = malloc(header.size + 1);
-		_read(fp, buffer, header.size, &err);
+		buffer = malloc(header.size + 5);
+		_read(fp, buffer, header.size + 4, &err);
 		zeromem(id3, sizeof(ID3));
 		
 		unsigned int tag_lenght;
@@ -117,22 +123,22 @@ int GetID3(ID3 *id3, const char *path)
 		{
 			if (buffer[i] >= 'A' && buffer[i] <= 'Z')
 			{
-				helper = ID3_V2_Helper(buffer + i, frame_id);
+				helper = ID3_V2_Helper(buffer + i);
 				if (helper != -1)
 				{
 					if (helper == 5) //wtf?
 					{
-						tag_lenght = buffer[i + ID3_V2_4_FRAME_LEN + 2] * 10 + buffer[i + ID3_V2_4_FRAME_LEN + 3] - 5;
+						tag_lenght = ID3_V2_4_BitCock(buffer + i + ID3_V2_4_FRAME_LEN) - 5;
 						i += frame_lenght + 5;
 					}
 					else
 					{
-						tag_lenght = buffer[i + ID3_V2_4_FRAME_LEN + 3] - 1;
+						tag_lenght = ID3_V2_4_BitCock(buffer + i + ID3_V2_4_FRAME_LEN) - 1;
 						i += frame_lenght + 1;
 					}
 					id3->tag[helper] = AllocWS(tag_lenght + 1);
 					utf8_2ws(id3->tag[helper], buffer + i, tag_lenght);
-					frame_id = helper + 1;
+					frame_id++;
 					i += tag_lenght - 1;
 				}
 			}
