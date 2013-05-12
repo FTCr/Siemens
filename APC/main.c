@@ -43,13 +43,21 @@ void SetHeader(void)
 		ID3 *id3 = ptr->data;
 		if (id3)
 		{
-			WSHDR *ws = AllocWS(id3->artist->wsbody[0] + id3->title->wsbody[0] + 5);
-			wsprintf(ws, "%w - %w", id3->artist, id3->title);
-			ws2ascii(str_hdr, ws);
-			FreeWS(ws);
+			if (id3->artist && id3->title)
+			{
+				WSHDR *ws = AllocWS(id3->artist->wsbody[0] + id3->title->wsbody[0] + 5);
+				wsprintf(ws, "%w - %w", id3->artist, id3->title);
+				ws2ascii(str_hdr, ws);
+				FreeWS(ws);
+			}
+			else goto NAME;
 		}
-		else if (GetFileNameWithoutExtByPath(str_hdr, ptr->path) == -1)
-			strcpy(str_hdr, lgp[lgpHeader]);
+		else
+		{
+			NAME:
+				if (GetFileNameWithoutExtByPath(str_hdr, ptr->path) == -1)
+					strcpy(str_hdr, lgp[lgpHeader]);
+		}
 	}
 	else
 	{

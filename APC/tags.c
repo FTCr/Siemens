@@ -65,8 +65,17 @@ void CreateTagsGUI(ID3 *id3)
 		wsprintf(ws, "%t", lgp[lgpTagTitle + i]);
 		ConstructEditControl(&ec, ECT_HEADER, ECF_APPEND_EOL, ws, ws->wsbody[0] + 1);
 		AddEditControlToEditQend(eq, &ec, ma);
-		ConstructEditControl(&ec, ECT_READ_ONLY, ECF_APPEND_EOL, id3->tag[i], id3->tag[i]->wsbody[0] +1);
-		AddEditControlToEditQend(eq, &ec, ma);
+		if (id3->tag[i])
+		{
+			ConstructEditControl(&ec, ECT_READ_ONLY, ECF_APPEND_EOL, id3->tag[i], id3->tag[i]->wsbody[0] +1);
+			AddEditControlToEditQend(eq, &ec, ma);
+		}
+		else
+		{
+			wsprintf(ws, "");
+			ConstructEditControl(&ec, ECT_READ_ONLY, ECF_APPEND_EOL, ws, 1);
+			AddEditControlToEditQend(eq, &ec, ma);
+		}
 	}
 	FreeWS(ws);
 	
