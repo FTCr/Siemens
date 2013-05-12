@@ -73,6 +73,7 @@ int GetID3(ID3 *id3, const char *path)
 	if (strncmp(head, ID3_V1_HEAD, ID3_HEAD_LEN) != 0)
 	{
 		id3_ver = id3_v1;
+		_close(fp, &err);
 		return -1;
 	}
 	else if (strncmp(head, ID3_V2_HDR, ID3_HEAD_LEN) != 0)
