@@ -140,7 +140,7 @@ void maincsm_oncreate(CSM_RAM *data)
 	fu.uid1 = UID_M3U;
 	int total = FindFilesRec(&top, APlayer_GetPlsDir(), &fu, NULL);
 	
-	tab_playlists_gui = m_gui = GetMultiLinesMenuGUI(ma, mf);
+	m_gui = GetMultiLinesMenuGUI(ma, mf);
 	SetMenuToGUI(m_gui, &Desc_TabPlaylists);
 	MenuSetUserPointer(m_gui, top);
 	SetMenuItemCount(m_gui, total);

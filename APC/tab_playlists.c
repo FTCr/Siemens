@@ -7,9 +7,6 @@
 
 const int icon = ICON_M3U_SMALL;
 
-void *tab_playlists_gui;
-
-
 static SOFTKEY_DESC SK_TabPlaylists[]=
 {
 	{0x0018, 0x0000, (int)"Options"},
@@ -28,18 +25,24 @@ static int OnKey_TabPlaylists(void *data, GUI_MSG *msg)
 		{
 			case LEFT_SOFT:
 				p = MenuGetUserPointer(data);
-				APlayer_ClearPlayList();
-				p2 = GetDEListPtr(p, GetCurMenuItem(data));
-				APlayer_OpenPlayList(p2->path);
-				Menu_SetItemCountDyn(tab_tracks_gui, APlayer_GetTotalTracks());
-				RefreshMainGUI();
+				if (p)
+				{
+					APlayer_ClearPlayList();
+					p2 = GetDEListPtr(p, GetCurMenuItem(data));
+					APlayer_OpenPlayList(p2->path);
+					Menu_SetItemCountDyn(tab_tracks_gui, APlayer_GetTotalTracks());
+					RefreshMainGUI();
+				}
 			break;
 			case ENTER_BUTTON:
 				p = MenuGetUserPointer(data);
-				p2 = GetDEListPtr(p, GetCurMenuItem(data));
-				APlayer_OpenPlayList(p2->path);
-				Menu_SetItemCountDyn(tab_tracks_gui, APlayer_GetTotalTracks());
-				RefreshMainGUI();
+				if (p)
+				{
+					p2 = GetDEListPtr(p, GetCurMenuItem(data));
+					APlayer_OpenPlayList(p2->path);
+					Menu_SetItemCountDyn(tab_tracks_gui, APlayer_GetTotalTracks());
+					RefreshMainGUI();
+				}
 			break;
 		}
 	}
@@ -50,7 +53,17 @@ static void GHook_TabPlaylists(void *data, int cmd)
 {
 	if (cmd == TI_CMD_CREATE)
 	{
-		SK_TabPlaylists[0].lgp_id  = (int)lgp[lgpReplace];
+		void *p = MenuGetUserPointer(data);
+		if (p)
+		{
+			SK_TabPlaylists[0].lgp_id  = (int)lgp[lgpReplace];
+		}
+		else
+		{
+			SK_TabPlaylists[0].lgp_id = (int)" ";
+			SK_TabPlaylists[2].lgp_id = (int)" ";
+		}
+		
 		SK_TabPlaylists[1].lgp_id  = (int)lgp[lgpExit];
 	}
 	if (cmd == TI_CMD_DESTROY)
