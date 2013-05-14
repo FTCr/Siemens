@@ -75,6 +75,14 @@ static int OnKey_TabTracks(void *data, GUI_MSG *msg)
 	return 0;
 }
 
+void SetMidIcon(void)
+{
+	if (!APlayer_GetTotalTracks())
+		SK_TabTracks[2].lgp_id = (int)" ";
+	else
+	SK_TabTracks[2].lgp_id = LGP_DOIT_PIC + 4;
+}
+
 static void GHook_TabTracks(void *data, int cmd)
 {
 	if (cmd == TI_CMD_CREATE)

@@ -77,6 +77,12 @@ static void GHook_TabGUI(void *data, int cmd)
 		SetHeader();
 		DisableIDLETMR();
 	}
+	if (cmd == TI_CMD_REDRAW)
+	{
+		int n = GetCursorTab(data);
+		if (n == 0)
+			SetMidIcon();
+	}
 }
 
 static int OnKey_TabGUI(void *data, GUI_MSG *msg)

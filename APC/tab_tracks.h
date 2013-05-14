@@ -5,4 +5,6 @@
 extern ML_MENU_DESC Desc_TabTracks;
 extern void *tab_tracks_gui;
 
+void SetMidIcon(void);
+
 #endif
