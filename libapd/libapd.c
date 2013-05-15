@@ -1,6 +1,7 @@
 #include <swilib.h>
 #include <libid3.h>
 #include <libapd.h>
+#include <stdlib.h>
 #include "../libsiemens/other.h"
 #include "../libsiemens/obs.h"
 #include "../libsiemens/find_files.h"
@@ -101,7 +102,7 @@ static void ChangeTrack(int way)
 			if (APlayer_GetTotalTracks() > 2)
 			{
 				START:
-					track_id = rand(&rand_seed) % APlayer_GetTotalTracks();
+					track_id = random() % APlayer_GetTotalTracks();
 					if (track_id != track_id_prev)
 					{
 						track_id_prev = track_id;
@@ -642,7 +643,7 @@ unsigned int APlayer_Init(const char *mus_dir, const char *pls_dir)
 			playback = APLAYER_PLAYBACK_REPEAT;
 		
 		is_launch = 1;
-		srand(&rand_seed);
+		srandom(tracks_total);
 	}
 	return (APlayer_GetTotalTracks()) ? 1 : 0;
 }
