@@ -758,7 +758,7 @@ typedef struct
 		#define ICON_MP_HDR2   0x489
 		#define ICON_EMPTY     0x538
 		#define ICON_RB_SEL    0x53D
-		#define ICON_RB_UNSEL  0x53C
+		#define ICON_RB_UNSEL  0x53E
 	#else
 		#define ICON_AAC_SMALL 0x3DA
 		#define ICON_MP3_SMALL 0x3F2
