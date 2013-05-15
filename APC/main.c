@@ -27,8 +27,8 @@ char str_hdr2[32];
 
 static const int tab_icons[2][4]=
 {
-	0x487, 0x487, 0x487, 0x487,
-	0x489, 0x489, 0x489, 0x489,
+	ICON_MP_HDR1, ICON_MP_HDR1, ICON_MP_HDR1, ICON_MP_HDR1,
+	ICON_MP_HDR2, ICON_MP_HDR2, ICON_MP_HDR2, ICON_MP_HDR2,
 };
 
 static HEADER_DESC header = {0, 0, 0, 0, NULL, (int)str_hdr, (int)str_hdr2};

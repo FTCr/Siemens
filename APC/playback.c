@@ -5,8 +5,8 @@
 
 #define PLAYBACK_ITEMS_N 0x02
 
-const int icon_sel   = 1341;
-const int icon_unsel = 1342;
+const int icon_sel   = ICON_RB_SEL;
+const int icon_unsel = ICON_RB_UNSEL;
 
 static HEADER_DESC header = {0, 0, 0, 0, NULL, (int)"Playback", LGP_NULL};
 
