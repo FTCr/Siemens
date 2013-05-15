@@ -17,9 +17,4 @@ int *SetSWIHook(int swi_num, void *proc);
 //снятие хука
 void DestroySWIHook(int swi_num, unsigned int *addr);
 
-//получение рандомного числа
-unsigned int rand(unsigned int *seed);
-//инициализация рандома
-void srand(unsigned int *seed);
-
 #endif

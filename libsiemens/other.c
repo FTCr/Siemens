@@ -75,27 +75,3 @@ void DestroySWIHook(int swi_num, unsigned int *addr)
 	lib[swi_num] = (unsigned int)addr;
 	UnlockSched();
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-
-// Генератор случайных чисел
-// Алгоритм взят из исходников mp3 плеера (c) ILYA_ZX
-// И слегка переделан
-
-#define EPIC_CONST 0x08088405
-
-unsigned int rand(unsigned int *seed)
-{
-	(*seed) = (*seed) * EPIC_CONST;
-	(*seed)++;
-	return ((long long)(*seed) * 100000 ) >> 32;
-}
-
-void srand(unsigned int *seed)
-{
-	TTime time;
-	GetDateTime(NULL, &time);
-	(*seed) = (time.min | (time.sec << 5));
-}
