@@ -99,7 +99,7 @@ static void ChangeTrack(int way)
 			}
 		break;
 		case APLAYER_PLAYBACK_RANDOM:
-			if (APlayer_GetTotalTracks() > 2)
+			if (APlayer_GetTotalTracks() > 1)
 			{
 				START:
 					track_id = random() % APlayer_GetTotalTracks();
@@ -110,7 +110,7 @@ static void ChangeTrack(int way)
 					else goto START;
 			}
 			else
-				track_id++;
+				track_id = 0;
 		break;
 	}
 }
