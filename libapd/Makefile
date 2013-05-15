@@ -20,7 +20,7 @@ ELF_LDFLAGS = ${LDFLAGS} -pie
 
 LIBS = -lgcc -lcrt -lcrt_helper -ls -lid3 -lc
 
-CFLAGS += -D__NO_DIRECT_SWI -D__NO_LIBC
+CFLAGS += -D__NO_DIRECT_SWI
 CFLAGS_INPUT =
 
 .PHONY = clean
