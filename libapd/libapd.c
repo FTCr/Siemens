@@ -24,6 +24,7 @@ static int track_dur_ms;
 static int is_muted;
 static int is_launch;
 static int playback;
+static int tracks_total;
 
 static int track_id_prev; // запоминаем предыдущий трэк для рандома, чтобы одинаковые трэки подряд не гонял
 static unsigned int rand_seed;
@@ -347,7 +348,7 @@ unsigned int APlayer_GetPlayStatus(void){return play_status;}
 
 unsigned int APlayer_GetTrack(void){return track_id + 1;}
 
-unsigned int APlayer_GetTotalTracks(void){return GetDEListTotalItems(top);}
+unsigned int APlayer_GetTotalTracks(void){return tracks_total;}
 
 unsigned int APlayer_GetTrackDuration(void){return track_dur_ms;}
 
@@ -376,17 +377,21 @@ static DIR_ENTRY_LIST *buffer;
 
 void APlayer_CutFile(unsigned int n)
 {
-	CutDEListData(&top, &buffer, n);
-	if (!APlayer_GetTotalTracks())
+	if (CutDEListData(&top, &buffer, n) != -1)
 	{
-		APlayer_Stop();
-		zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
+		tracks_total--;
+		if (!APlayer_GetTotalTracks())
+		{
+			APlayer_Stop();
+			zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
+		}
 	}
 }
 
 void APlayer_PasteFile(unsigned int n)
 {
-	PasteDEListData(&top, &buffer, n);
+	if (PasteDEListData(&top, &buffer, n) != -1)
+		tracks_total++;
 }
 
 int APlayer_SavePlayList(const char *name)
@@ -496,6 +501,7 @@ int APlayer_OpenPlayList(const char *path)
 	_close(fp, &err);
 	if (total)
 	{
+		tracks_total += total;
 		m3u_top->prev = NULL;
 		m3u_list = prev;
 		mfree(m3u_list->next);
@@ -562,6 +568,7 @@ int APlayer_OpenFile(const char *path)
 		mfree(id3);
 		p->data = NULL;
 	}
+	tracks_total++;
 	return 1;
 }
 
@@ -602,7 +609,8 @@ void APlayer_ClearPlayList(void)
 		top = NULL;
 		zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 	}
-	track_id = 0;
+	tracks_total = 0;
+	track_id     = 0;
 }
 
 void APlayer_FindMusic(void)
@@ -613,7 +621,7 @@ void APlayer_FindMusic(void)
 	fu.uid1 = UID_MP3;
 	fu.uid2 = UID_WAV;
 	fu.uid3 = UID_AAC;
-	FindFilesRec(&top, dir_mus, &fu, CallBackFind);
+	tracks_total = FindFilesRec(&top, dir_mus, &fu, CallBackFind);
 	zeromem(&cur_track_data, sizeof(DIR_ENTRY_LIST));
 }
 
