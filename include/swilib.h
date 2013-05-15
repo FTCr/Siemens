@@ -748,16 +748,28 @@ typedef struct
 #define UID_TXT  0x57
 #define UID_URL  0x58
 
-#define SWI_ISUNLOCKED 0x43
-#define SWI_KBDLOCK    0xA9
-#define SWI_KBDUNLOCK  0xB9
-
 #ifdef NEWSGOLD
-	#define ICON_AAC_SMALL 0x3BA
-	#define ICON_MP3_SMALL 0x3D3
-	#define ICON_M3U_SMALL 0x3DC
-	#define ICON_WAV_SMALL 0x3F1
-	#define ICON_EMPTY     0x538
+	#ifdef ELKA
+		#define ICON_AAC_SMALL 0x3BA
+		#define ICON_MP3_SMALL 0x3D3
+		#define ICON_M3U_SMALL 0x3DC
+		#define ICON_WAV_SMALL 0x3F1
+		#define ICON_MP_HDR1   0x487
+		#define ICON_MP_HDR2   0x489
+		#define ICON_EMPTY     0x538
+		#define ICON_RB_SEL    0x53D
+		#define ICON_RB_UNSEL  0x53C
+	#else
+		#define ICON_AAC_SMALL 0x3DA
+		#define ICON_MP3_SMALL 0x3F2
+		#define ICON_M3U_SMALL 0x3FB
+		#define ICON_WAV_SMALL 0x410
+		#define ICON_MP_HDR1   0x4B1
+		#define ICON_MP_HDR2   0x4B3
+		#define ICON_EMPTY     0x564
+		#define ICON_RB_SEL    0x569
+		#define ICON_RB_UNSEL  0x56A
+	#endif
 #endif
 
 typedef struct
