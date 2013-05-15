@@ -28,7 +28,6 @@ static int playback;
 static int tracks_total;
 
 static int track_id_prev; // запоминаем предыдущий трэк для рандома, чтобы одинаковые трэки подряд не гонял
-static unsigned int rand_seed;
 
 static GBSTMR tmr_start_playing;
 static GBSTMR tmr_auto_switch;
