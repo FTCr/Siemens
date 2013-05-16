@@ -93,7 +93,7 @@ int maincsm_onmessage(CSM_RAM* data, GBS_MSG* msg)
 int IDLEcsm_onmessage(CSM_RAM *icsm, GBS_MSG *msg)
 {
 	static int flag;
-	if (msg->msg == MSG_STATE_OF_CALL || msg->msg == MSG_INCOMMING_CALL)
+	if ((msg->msg == MSG_STATE_OF_CALL || msg->msg == MSG_INCOMMING_CALL) && msg->submess)
 	{
 		if (APlayer_GetPlayStatus() == APLAYER_PLAY)
 		{
