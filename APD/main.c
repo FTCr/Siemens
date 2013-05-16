@@ -8,6 +8,7 @@
 extern void kill_data(void *p, void (*func_p)(void *));
 
 CSM_RAM *under_idle;
+int (*old_icsm_onMessage)(CSM_RAM*, GBS_MSG *msg);
 
 const int minus11=-11;
 
@@ -89,10 +90,37 @@ int maincsm_onmessage(CSM_RAM* data, GBS_MSG* msg)
 	return 1;
 }
 
+int IDLEcsm_onmessage(CSM_RAM *icsm, GBS_MSG *msg)
+{
+	static int flag;
+	if (msg->msg == MSG_STATE_OF_CALL || msg->msg == MSG_INCOMMING_CALL)
+	{
+		if (APlayer_GetPlayStatus() == APLAYER_PLAY)
+		{
+			flag = 1;
+			APlayer_Pause();
+		}
+	}
+	if (msg->msg == MSG_END_CALL)
+	{
+		if (flag == 1)
+		{
+			APlayer_Play();
+			flag = 0;
+		}
+	}
+	
+	return old_icsm_onMessage(icsm, msg);
+}
+
 static void maincsm_oncreate(CSM_RAM *data){}
 
 static void maincsm_onclose(CSM_RAM *csm)
 {
+	LockSched();
+	CSM_RAM *csm_ram = FindCSMbyID(CSM_root()->idle_id);
+	((CSM_DESC*)csm_ram->constr)->onMessage = old_icsm_onMessage;
+	UnlockSched();
 	extern void APlayer_Destroy();
 	APlayer_Destroy();
 	RemoveKeybMsgHook(KeyHook);
@@ -172,15 +200,20 @@ int main(const char *exe_path, const char *file_path)
 {
 	if (!APlayer_IsLaunch())
 	{
-		CSM_RAM *save_cmpc;
+		CSM_RAM *csm_ram;
 		char dummy[sizeof(MAIN_CSM)];
 		LockSched();
 		UpdateCSMname();
 		InitConfig();
-		save_cmpc = CSM_root()->csm_q->current_msg_processing_csm;
+		csm_ram = CSM_root()->csm_q->current_msg_processing_csm;
 		CSM_root()->csm_q->current_msg_processing_csm = CSM_root()->csm_q->csm.first;
-		CreateCSM(&MAINCSM.maincsm,dummy,0);
-		CSM_root()->csm_q->current_msg_processing_csm = save_cmpc;
+		CreateCSM(&MAINCSM.maincsm, dummy, 0);
+		CSM_root()->csm_q->current_msg_processing_csm = csm_ram;
+		
+		csm_ram = FindCSMbyID(CSM_root()->idle_id);
+		old_icsm_onMessage = ((CSM_DESC*)csm_ram->constr)->onMessage;
+		((CSM_DESC*)csm_ram->constr)->onMessage = IDLEcsm_onmessage;
+		
 		UnlockSched();
 		extern unsigned int APlayer_Init(const char *mus_dir, const char *pls_dir);
 		APlayer_Init(cfg_mus_dir, cfg_pls_dir);
