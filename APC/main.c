@@ -178,7 +178,6 @@ int maincsm_onmessage(CSM_RAM *data, GBS_MSG *msg)
 		if ((unsigned int)msg->data0 == gui_id)
 		{
 			csm->csm.state =- 3;
-			CloseCSM(csm->csm.id); //думаю это здесь и не нужно
 		}
 	}
 	if (msg->msg == MSG_IPC)
@@ -250,12 +249,12 @@ void UpdateCSMname(void)
 	wsprintf((WSHDR *)(&MAINCSM.maincsm_name), "%t", lgp[lgpHeader]);
 }
 
-int main(const char *path)
+int main(const char *exe_path, const char *file_path)
 {
 	char dir[128], l_path[256];
 	unsigned int err;
 	
-	GetDirByPath(dir, path);
+	GetDirByPath(dir, exe_path);
 	strcat(dir, "\\");
 	
 	strcpy(l_path, dir);
