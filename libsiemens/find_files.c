@@ -143,9 +143,14 @@ unsigned int FindFilesRec(DIR_ENTRY_LIST **list, const char *dir, FIND_UIDS *fu,
 			}
 			*list = top;
 		}
+#ifdef NEWSGOLD
+		FindClose(&de, &err);
+#endif
 	}
-	UnlockSched();
+#ifndef NEWSGOLD
 	FindClose(&de, &err);
+#endif
+	UnlockSched();
 	return total;
 }
 

@@ -141,7 +141,7 @@ HObj CreateHObjFromAudioFile(char *path)
 		str_2ws (ws, path, len);
 		Obs_SetInput_File(obj, 0, ws);
 		#ifdef ELKA  
-			Obs_Mam_SetPurpose(obj, 0x16); 
+			Obs_Mam_SetPurpose(obj, 0x016);
 		#else
 			Obs_Sound_SetPurpose(obj, 0x16);
 		#endif
