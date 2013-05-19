@@ -31,7 +31,6 @@ int KeyHook(int key, int style)
 	#define idlegui_id(icsm) (((int *)icsm)[DISPLACE_OF_IDLEGUI_ID/4])
 	#define func(x) style == x && key == (int)cfg_key && !IsCalling() && IsUnlocked()
 	
-	
 	if (cfg_enable_keyhook)
 	{
 		if (cfg_style == 0)
@@ -43,12 +42,25 @@ int KeyHook(int key, int style)
 		}
 		else
 		{
+			static int flag;
+			void *icsm = FindCSMbyID(CSM_root()->idle_id);
+			if (func(KEY_DOWN))
+			{
+				if (flag == 1)
+				{
+					flag = 0;
+				}
+				else
+				{
+					flag = 1;
+					return KEYHOOK_BREAK;
+				}
+			}
 			if (func(LONG_PRESS))
 			{
 				LAUNCH:
 					if (cfg_enable_of_idlescreen)
 					{
-						void *icsm = FindCSMbyID(CSM_root()->idle_id);
 						if (IsGuiOnTop(idlegui_id(icsm)))
 						{
 							CreateClipperGUI();
@@ -57,13 +69,16 @@ int KeyHook(int key, int style)
 					}
 					else
 					{
-						void *icsm = FindCSMbyID(CSM_root()->idle_id);
 						if (!IsGuiOnTop(idlegui_id(icsm)))
 						{
 							CreateClipperGUI();
 							return KEYHOOK_BREAK;
 						}
 					}
+			}
+			else if (func(KEY_UP) && flag == 1)
+			{
+				GBS_SendMessage(MMI_CEPID, KEY_DOWN, cfg_key);
 			}
 		}
 	}
