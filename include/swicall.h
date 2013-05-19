@@ -1740,6 +1740,9 @@ __swi(0x380);
 int CopyWsToClipboard(WSHDR *src)
 __swi(0x381);
 
+void ClearClipboard(void)
+__swi(0x382);
+
 #ifndef __LOADER_BUILD
 int elfclose(void* ex)
 __swi(0x2EE);
