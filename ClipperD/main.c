@@ -29,7 +29,7 @@ unsigned int not_reading;
 int KeyHook(int key, int style)
 {
 	#define idlegui_id(icsm) (((int *)icsm)[DISPLACE_OF_IDLEGUI_ID/4])
-	#define func(x) style == x && key == (int)cfg_key && !IsCalling() && IsUnlocked
+	#define func(x) style == x && key == (int)cfg_key && !IsCalling() && IsUnlocked()
 	
 	
 	if (cfg_enable_keyhook)
