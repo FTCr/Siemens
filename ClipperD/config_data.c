@@ -16,7 +16,7 @@ __CFG_BEGIN(0)
 		__root const unsigned int cfg_key = GREEN_BUTTON;
 		
 		__root const CFG_HDR cfghdr2_3 = {CFG_CBOX, "Activation style", 0, 2};
-		__root const unsigned int cfg_style = 0;
+		__root const unsigned int cfg_style = 1;
 		__root const CFG_CBOX_ITEM cfgcbox1_3[2] = {"Key Down", "Long press"};
 		
 		__root const CFG_HDR cfghdr2_4 = {CFG_CHECKBOX, "Enable of IdleScreen", 0, 2};
