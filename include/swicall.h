@@ -1734,6 +1734,12 @@ __swi(0x076);
 int ProgressCalculate(int current, int total)
 __swi(0x1EE);
 
+WSHDR *GetClipBoard()
+__swi(0x380);
+
+int CopyWsToClipboard(WSHDR *src)
+__swi(0x381);
+
 #ifndef __LOADER_BUILD
 int elfclose(void* ex)
 __swi(0x2EE);
