@@ -39,6 +39,8 @@ void APlayer_Forward(unsigned int inc_s);
 void APlayer_Rewind(unsigned int dec_s);
 void APlayer_SetPlayBack(unsigned int playback_mode);
 void APlayer_ClearPlayList(void);
+void APlayer_FakePause();
+void APlayer_FakePlay();
 
 unsigned int APlayer_GetVolume(void);
 unsigned int APlayer_GetPlayStatus(void);

@@ -235,14 +235,25 @@ void APlayer_Stop(void)
 	}
 }
 
-void APlayer_Pause(void)
+void APlayer_FakePause(void)
 {
-	if (!IsCalling())
-		Obs_Pause(obj);
 	if (IsTimerProc(&tmr_auto_switch))
 		GBS_DelTimer(&tmr_auto_switch);
 	play_status = APLAYER_PAUSE;
 	IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
+}
+
+void APlayer_FakePlay()
+{
+	AutoSwitcher();
+	play_status = APLAYER_PLAY;
+	IPC_SendMessage(&ipc, APD_IPC_NAME, "libapd", APD_IPC_UPDATE_PLAYSTATUS, 0);
+}
+
+void APlayer_Pause(void)
+{
+	Obs_Pause(obj);
+	APlayer_FakePause();
 }
 
 void APlayer_Toggle(void)
