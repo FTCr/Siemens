@@ -15,6 +15,20 @@ unsigned int gui_csm_id;
 
 HEADER_DESC header = {0, 0, 0, 0, NULL, 0, LGP_NULL};
 
+int softkeys[] = {0, 1, 2};
+
+SOFTKEY_DESC sk[] =
+{
+	{0x0018, 0x0000, (int)"Clear"},
+	{0x0001, 0x0000, (int)"Cancel"},
+	{0x003D, 0x0000, (int)LGP_DOIT_PIC}
+};
+
+SOFTKEYSTAB skt =
+{
+	sk, 0
+};
+
 int OnKey(void *data, GUI_MSG *msg)
 {
 	const int Key   = msg->gbsmsg->submess;
@@ -145,6 +159,19 @@ void GHook(void *data, int cmd)
 	{
 		DisableIDLETMR();
 	}
+	if (cmd == TI_CMD_REDRAW || cmd == TI_CMD_CREATE)
+	{
+		if (total)
+		{
+			sk[0].lgp_id = (int)lgp[lgpClear];
+			sk[2].lgp_id = (int)LGP_DOIT_PIC;
+		}
+		else
+		{
+			sk[0].lgp_id = (int)"";
+			sk[2].lgp_id = (int)" ";
+		}
+	}
 }
 
 void Handler(void *data, int cur_item, void *user_pointer)
@@ -167,20 +194,6 @@ void Handler(void *data, int cur_item, void *user_pointer)
 	SetMenuItemText(data, item, ws, cur_item);
 }
 
-int softkeys[] = {0, 1, 2};
-
-SOFTKEY_DESC sk[] =
-{
-	{0x0018, 0x0000, (int)"Clear"},
-	{0x0001, 0x0000, (int)"Cancel"},
-	{0x003D, 0x0000, (int)LGP_DOIT_PIC}
-};
-
-SOFTKEYSTAB skt =
-{
-	sk,0
-};
-
 MENU_DESC desc =
 {
 	8, OnKey, GHook, NULL,
@@ -200,7 +213,6 @@ void maincsm_oncreate(CSM_RAM *data)
 	static int icon = (int)cfg_icon_path;
 	header.icon = &icon;
 	header.lgp_id = (int)lgp[lgpHeader];
-	sk[0].lgp_id  = (int)lgp[lgpClear];
 	sk[1].lgp_id  = (int)lgp[lgpExit];
 	csm->gui_id = CreateMenu(0, 0, &desc, &header, 0, total, 0, 0);
 }
