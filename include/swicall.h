@@ -116,8 +116,49 @@ __swi(37);
 void DrawImgBW(unsigned int x, unsigned int y, unsigned int picture, char *pen, char *brush)
 __swi(38);
 
+/*
+ *EEPROM
+ */
+
+unsigned int GetEELiteMaxID()
+__swi(0x28);
+
+unsigned int GetEEFullMaxID()
+__swi(0x29);
+
+int StartWriteEELiteBlock(unsigned int iBlock, unsigned int iSize, unsigned int iVersion, int *null)
+__swi(0x2D);
+
+int FinishWriteEELiteBlock(unsigned int iBlock, int *null)
+__swi(0x2E);
+
+int DeleteEELiteBlock(unsigned int iBlock, int *null)
+__swi(0x2F);
+
+int WriteEELiteBlock(unsigned int iBlock, char *cData, unsigned int iBlockStartAddress, unsigned int iLength, int *null)
+__swi(0x30);
+
+int GetEELiteBlockSizeVersion(unsigned int iBlock, int *iSize, char *iVersion)
+__swi(0x2B);
+
+int *GetEELiteBlockAddress(short blocknum)
+__swi(0x2A);
+
+void EEFullReadBlock(int block, void *buf, int offset, int size, int cepid, int msg)
+__swi(0x86);
+
+void EEFullWriteBlock(int block, void *buf, int offset, int size, int cepid, int msg)
+__swi(0x87);
+
+int EEFullDeleteBlock(unsigned int block,int cepid,int msg)
+__swi(0x239);
+
 int EEFullGetBlockInfo(unsigned int block,int *size,char *version)
 __swi(0x2C);
+
+int EEFullCreateBlock(unsigned int block,int size,int version,int cepid,int msg)
+__swi(0x23A);
+
 
 void PlaySound(long param1, long param2, long param3, long tone, long param5)
 __swi(50);
@@ -127,9 +168,6 @@ __swi(0x0034);
 
 void AlarmClockRing()
 __swi(0x0035);
-
-int *GetEELiteBlockAddress(short blocknum)
-__swi(42);
 
 int setfilesize(int FileHandler, unsigned int iNewFileSize, unsigned int *ErrorNumber)
 __swi(60);
@@ -250,12 +288,6 @@ __swi(132);
 
 int strcmpi(const char *s1, const char *s2)
 __swi(0x0085);
-
-void EEFullReadBlock(int block, void *buf, int offset, int size, int cepid, int msg)
-__swi(0x86);
-
-void EEFullWriteBlock(int block, void *buf, int offset, int size, int cepid, int msg)
-__swi(0x87);
 
 int GetFreeFlexSpace(int DriveNum, unsigned int *ErrorNumber)
 __swi(138);
@@ -1312,12 +1344,6 @@ __swi(0x7E);
 
 void SendAutoUSSDack(void)
 __swi(0x238);
-
-int EEFullDeleteBlock(unsigned int block,int cepid,int msg)
-__swi(0x239);
-
-int EEFullCreateBlock(unsigned int block,int size,int version,int cepid,int msg)
-__swi(0x23A);
 
 void DisableIconBar(int disable)
 __swi(0x23B);
