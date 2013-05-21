@@ -31,7 +31,7 @@ elf_sg:   compile_sg   link_elf
 
 lib_elka: compile_elka link_lib
 lib_nsg:  compile_nsg  link_lib
-lib_sg:   compile_sg   ling_lib
+lib_sg:   compile_sg   link_lib
 
 compile_elka:
 	${LC_M} ${CC} ${CFLAGS} -DELKA -DNEWSGOLD -c ${SOURCES}
