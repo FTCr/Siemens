@@ -750,25 +750,29 @@ typedef struct
 
 #ifdef NEWSGOLD
 	#ifdef ELKA
-		#define ICON_AAC_SMALL 0x3BA
-		#define ICON_MP3_SMALL 0x3D3
-		#define ICON_M3U_SMALL 0x3DC
-		#define ICON_WAV_SMALL 0x3F1
-		#define ICON_MP_HDR1   0x487
-		#define ICON_MP_HDR2   0x489
-		#define ICON_EMPTY     0x538
-		#define ICON_RB_SEL    0x53D
-		#define ICON_RB_UNSEL  0x53E
+		#define ICON_AAC_SMALL          0x3BA
+		#define ICON_MP3_SMALL          0x3D3
+		#define ICON_M3U_SMALL          0x3DC
+		#define ICON_WAV_SMALL          0x3F1
+		#define ICON_MP_HDR1            0x487
+		#define ICON_MP_HDR2            0x489
+		#define ICON_EMPTY              0x538
+		#define ICON_CBOX_SEL           0x53A
+		#define ICON_CBOX_UNSEL         0x53C
+		#define ICON_RB_SEL             0x53D
+		#define ICON_RB_UNSEL           0x53E
 	#else
-		#define ICON_AAC_SMALL 0x3DA
-		#define ICON_MP3_SMALL 0x3F2
-		#define ICON_M3U_SMALL 0x3FB
-		#define ICON_WAV_SMALL 0x410
-		#define ICON_MP_HDR1   0x4B1
-		#define ICON_MP_HDR2   0x4B3
-		#define ICON_EMPTY     0x564
-		#define ICON_RB_SEL    0x569
-		#define ICON_RB_UNSEL  0x56A
+		#define ICON_AAC_SMALL          0x3DA
+		#define ICON_MP3_SMALL          0x3F2
+		#define ICON_M3U_SMALL          0x3FB
+		#define ICON_WAV_SMALL          0x410
+		#define ICON_MP_HDR1            0x4B1
+		#define ICON_MP_HDR2            0x4B3
+		#define ICON_EMPTY              0x564
+		#define ICON_CBOX_SEL           0x566
+		#define ICON_CBOX_UNSEL         0x568
+		#define ICON_RB_SEL             0x569
+		#define ICON_RB_UNSEL           0x56A
 	#endif
 #endif
 
