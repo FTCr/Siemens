@@ -5,8 +5,6 @@
 #include "conf_loader.h"
 #include "config_data.h"
 
-extern void kill_data(void *p, void (*func_p)(void *));
-
 CSM_RAM *under_idle;
 int (*old_icsm_onMessage)(CSM_RAM*, GBS_MSG *msg);
 
