@@ -1,0 +1,22 @@
+0,Enable "Security-Last 10 only" menu
+2,Enable "Security-Barrings" menu
+7,Disable "Band selection" menu
+8,Enable "Display-Illumination"
+12,Enable "Divert-Unanswered" 
+13,Enable extended divert ; Not reachable/No reply/Busy
+14,Enable "Divert-Status check"
+15,Enable "Divert-Clear all"
+18,Enable "Divert-Receiving fax"
+19,Enable "Divert-Receiving data"
+25,Enable startup Music/Animation
+27,Disable "Network-Line" menu
+36,Disable DES support (M50/C55)
+38,Enable Network User logo (x45/C55)
+41,Enable WAP Browser in menu
+48,C55,Enable Buddhist year
+48,S75,SMS into mobile than into SIM
+51,Enable/Disable aircraft check
+52,Enable saving USSD-requests in dialed-number list C55/S55
+53,Enable "Security-Babysitter" (x55)
+56,Enable 3 attempts for entering phonecode
+57,Disable Fullscreen FlashSMS
